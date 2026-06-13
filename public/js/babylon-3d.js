@@ -1357,6 +1357,7 @@
   function wirePointerEvents() {
     let touchTapCandidate = null;
     let longPressTimer = null;
+    let suppressNativeContextUntil = 0;
     const clearTouchTap = () => {
       if (longPressTimer) window.clearTimeout(longPressTimer);
       longPressTimer = null;
@@ -1366,6 +1367,7 @@
       const node = pickNodeAtClientPoint(event.clientX, event.clientY);
       if (!node) return;
       if (event.button === 2 || event.buttons === 2) {
+        suppressNativeContextUntil = performance.now() + 1800;
         startCxtmenuGesture(node, event);
         return;
       }
@@ -1417,9 +1419,11 @@
       clearTouchTap();
     }, true);
     const suppressNativeContextMenu = (event) => {
-      if (event.target === canvas || event.target?.id === "renderCanvas") {
+      const isCanvasContext = event.target === canvas || event.target?.id === "renderCanvas";
+      if (isCanvasContext || performance.now() < suppressNativeContextUntil) {
         event.preventDefault();
         event.stopPropagation();
+        event.stopImmediatePropagation?.();
       }
     };
     document.addEventListener("contextmenu", suppressNativeContextMenu, true);

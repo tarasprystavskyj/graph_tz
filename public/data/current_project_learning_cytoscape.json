@@ -814,6 +814,24 @@
         },
         "position": { "x": 3000, "y": -420 },
         "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:real_right_click_regression_agent",
+          "_label": "Task: real right-click regression test",
+          "name": "Task: real right-click regression test",
+          "type": "box",
+          "group": "quality",
+          "group_label": "Quality",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "browser-regression-agent",
+          "detail": "Use real Chrome DevTools right mouse events, not synthetic DOM pointer events, to verify that mouse down opens cytoscape-cxtmenu and the browser native context menu is suppressed on the laptop browser path.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 3000, "y": -260 },
+        "classes": "quality active testing box"
       }
     ],
     "edges": [
@@ -901,7 +919,10 @@
       { "data": { "id": "e82", "source": "task:cognitive_label_density_budget", "target": "test:smoke", "label": "adds assertions" } },
       { "data": { "id": "e83", "source": "branch:implementation", "target": "task:cxtmenu_extension_gesture_agent", "label": "delegates to cxtmenu-extension-agent" } },
       { "data": { "id": "e84", "source": "task:cxtmenu_extension_gesture_agent", "target": "ui:babylon", "label": "replaces menu" } },
-      { "data": { "id": "e85", "source": "task:cxtmenu_extension_gesture_agent", "target": "test:smoke", "label": "tests gestures" } }
+      { "data": { "id": "e85", "source": "task:cxtmenu_extension_gesture_agent", "target": "test:smoke", "label": "tests gestures" } },
+      { "data": { "id": "e86", "source": "branch:implementation", "target": "task:real_right_click_regression_agent", "label": "delegates to browser-regression-agent" } },
+      { "data": { "id": "e87", "source": "task:real_right_click_regression_agent", "target": "task:cxtmenu_extension_gesture_agent", "label": "guards real mouse path" } },
+      { "data": { "id": "e88", "source": "task:real_right_click_regression_agent", "target": "test:smoke", "label": "adds real CDP right-click" } }
     ]
   }
 }

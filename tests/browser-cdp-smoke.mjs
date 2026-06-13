@@ -125,31 +125,17 @@ try {
     returnByValue: true,
   });
   const rightClickPoint = rightClickPointResponse.result?.result?.value || point;
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: rightClickPoint.x, y: rightClickPoint.y });
+  await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed", button: "right", buttons: 2, clickCount: 1, x: rightClickPoint.x, y: rightClickPoint.y });
   const rightPressResult = await cdp.send("Runtime.evaluate", {
-    expression: `(() => {
-      const canvas = document.getElementById("renderCanvas");
-      const event = new PointerEvent("pointerdown", {
-        bubbles: true,
-        cancelable: true,
-        clientX: ${rightClickPoint.x},
-        clientY: ${rightClickPoint.y},
-        pointerId: 9,
-        pointerType: "mouse",
-        button: 2,
-        buttons: 2
-      });
-      const prevented = !canvas.dispatchEvent(event);
-      return {
-        prevented,
-        visible: window.__graphUi3dTest?.cxtmenuVisible?.() === true,
-        ready: window.__graphUi3dTest?.cxtmenuReady?.() === true
-      };
-    })()`,
+    expression: `(() => ({
+      visible: window.__graphUi3dTest?.cxtmenuVisible?.() === true,
+      ready: window.__graphUi3dTest?.cxtmenuReady?.() === true
+    }))()`,
     returnByValue: true,
   });
   assert.equal(rightPressResult.result?.result?.value?.ready, true, "cytoscape-cxtmenu bridge should be ready");
-  assert.equal(rightPressResult.result?.result?.value?.prevented, true, "right-button pointerdown should be prevented before the browser native menu");
-  assert.equal(rightPressResult.result?.result?.value?.visible, true, "right-button pointerdown should open cytoscape-cxtmenu");
+  assert.equal(rightPressResult.result?.result?.value?.visible, true, "real right-button mousePressed should open cytoscape-cxtmenu");
   const nativeContextResult = await cdp.send("Runtime.evaluate", {
     expression: `(() => {
       const canvas = document.getElementById("renderCanvas");
@@ -166,33 +152,8 @@ try {
     returnByValue: true,
   });
   assert.equal(nativeContextResult.result?.result?.value?.prevented, true, "native contextmenu should still be prevented");
-  await cdp.send("Runtime.evaluate", {
-    expression: `(() => {
-      const canvas = document.getElementById("renderCanvas");
-      canvas.dispatchEvent(new PointerEvent("pointermove", {
-        bubbles: true,
-        cancelable: true,
-        pointerType: "mouse",
-        pointerId: 9,
-        clientX: ${rightClickPoint.x - 44},
-        clientY: ${rightClickPoint.y - 100},
-        button: 2,
-        buttons: 2
-      }));
-      canvas.dispatchEvent(new PointerEvent("pointerup", {
-        bubbles: true,
-        cancelable: true,
-        pointerType: "mouse",
-        pointerId: 9,
-        clientX: ${rightClickPoint.x - 44},
-        clientY: ${rightClickPoint.y - 100},
-        button: 2,
-        buttons: 0
-      }));
-      return window.__graphUi3dTest?.cxtmenuVisible?.() === true;
-    })()`,
-    returnByValue: true,
-  });
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", button: "right", buttons: 2, x: rightClickPoint.x - 44, y: rightClickPoint.y - 100 });
+  await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased", button: "right", buttons: 0, clickCount: 1, x: rightClickPoint.x - 44, y: rightClickPoint.y - 100 });
   const touchTapResult = await cdp.send("Runtime.evaluate", {
     expression: `(async () => {
       const canvas = document.getElementById("renderCanvas");

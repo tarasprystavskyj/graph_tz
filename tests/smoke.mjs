@@ -263,6 +263,7 @@ try {
     "task:zoom_wheel_sensitivity",
     "task:cognitive_label_density_budget",
     "task:cxtmenu_extension_gesture_agent",
+    "task:real_right_click_regression_agent",
   ]) {
     assert.ok(
       learningRawJson.elements.nodes.some((node) => node.data?.id === id && node.data?.is_new === true),
