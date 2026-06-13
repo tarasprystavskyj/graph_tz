@@ -4,7 +4,16 @@
   const graphId = new URLSearchParams(window.location.search).get("graph") || "job-apply-full";
   const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
   const appUrl = (path) => `${BASE_PATH}${path}`;
-  const model = await fetch(appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" }).then((res) => res.json());
+  const i18n = window.GraphUiI18n || {
+    lang: "uk",
+    t: (key) => key,
+    apiUrl: (path) => appUrl(path),
+    translatePage() {},
+    wireLanguageSelect() {},
+  };
+  i18n.translatePage();
+  i18n.wireLanguageSelect();
+  const model = await fetch(i18n.apiUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" }).then((res) => res.json());
   const board = document.getElementById("board");
   const svg = document.getElementById("edges");
   const minimap = document.getElementById("minimap");
@@ -55,11 +64,11 @@
         <span>${escapeHtml(node.label)}</span>
       </header>
       <div class="node-body">
-        <div>${escapeHtml(node.status)} | ${escapeHtml(node.owner || "system")}</div>
-        <div>${escapeHtml(node.agentBranch?.subtreeRoot || "agent branch attach point")}</div>
+        <div>${escapeHtml(node.status)} | ${i18n.lang === "uk" ? "власник" : "owner"}=${escapeHtml(node.owner || "system")}</div>
+        <div>${escapeHtml(node.agentBranch?.subtreeRoot || i18n.t("agentBranchAttachPoint"))}</div>
         <div class="preview">
           <span class="preview-badge" style="--vk-bg:${escapeHtml(node.visualKey?.bg || node.color)}; --vk-fg:${escapeHtml(node.visualKey?.fg || "#ffffff")}">${escapeHtml(node.visualKey?.symbol || node.icon || "ND")}</span>
-          <span>${escapeHtml(node.visualKey?.label || "visual key pending")}</span>
+          <span>${escapeHtml(node.visualKey?.label || i18n.t("visualKeyPending"))}</span>
         </div>
       </div>
     `;
@@ -118,16 +127,16 @@
 
   function setDetails(node) {
     if (!node) {
-      details.innerHTML = `<strong>Readable branch cards</strong>${model.nodes.length} nodes arranged by group. Search narrows the board without reading the whole TZ.`;
+      details.innerHTML = `<strong>${escapeHtml(i18n.t("readableCards"))}</strong>${model.nodes.length} ${i18n.t("nodesArranged")}`;
       return;
     }
     details.innerHTML = `
       <strong>${escapeHtml(node.label)}</strong>
-      <div>${escapeHtml(node.groupLabel)} | ${escapeHtml(node.status)} | owner=${escapeHtml(node.owner || "system")}</div>
-      <div>branch overlay: ${escapeHtml(node.agentBranch?.overlayClass || "agent_branch")}</div>
+      <div>${escapeHtml(node.groupLabel)} | ${escapeHtml(node.status)} | ${i18n.lang === "uk" ? "власник" : "owner"}=${escapeHtml(node.owner || "system")}</div>
+      <div>${i18n.lang === "uk" ? "оверлей гілки" : "branch overlay"}: ${escapeHtml(node.agentBranch?.overlayClass || "agent_branch")}</div>
       <div>CLI agent: ${escapeHtml(node.agentBranch?.cliAgentType || "codex")}</div>
-      <div>visual key: ${escapeHtml(node.visualKey?.label || "pending")}</div>
-      <p>${escapeHtml(node.detail || "No detail attached.")}</p>
+      <div>${i18n.lang === "uk" ? "візуальний ключ" : "visual key"}: ${escapeHtml(node.visualKey?.label || "pending")}</div>
+      <p>${escapeHtml(node.detail || i18n.t("noDetailAttached"))}</p>
     `;
   }
 

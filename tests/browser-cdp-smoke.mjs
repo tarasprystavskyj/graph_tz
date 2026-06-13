@@ -73,7 +73,7 @@ try {
       expression: `(() => {
         const status = document.getElementById("statusbar")?.textContent || "";
         return {
-          ready: status.includes("Loaded") && !!window.__graphUi3dTest,
+          ready: (status.includes("Loaded") || status.includes("Завантажено")) && !!window.__graphUi3dTest,
           title: document.title,
           hasCanvas: !!document.getElementById("renderCanvas"),
           hasCognitiveSlider: !!document.getElementById("cognitiveSlider"),
@@ -81,6 +81,8 @@ try {
           hasContextSearch: !!document.getElementById("contextSearchBox"),
           hasMenuToggle: !!document.getElementById("menuToggle"),
           hasCxtmenuBridge: !!document.getElementById("cxtmenuBridge"),
+          hasLanguageSelect: !!document.getElementById("languageSelect"),
+          language: document.documentElement.lang,
           physicsChecked: !!document.getElementById("togglePhysics")?.checked,
           hasTreeButtonsSource: [...document.scripts].some((script) => script.src.includes("babylon-3d.js")),
           babylonLoaded: !!window.BABYLON,
@@ -99,6 +101,8 @@ try {
   assert.equal(result.hasContextSearch, true, "3D page should include context search");
   assert.equal(result.hasMenuToggle, true, "3D page should include menu collapse toggle");
   assert.equal(result.hasCxtmenuBridge, true, "3D page should include cxtmenu bridge");
+  assert.equal(result.hasLanguageSelect, true, "3D page should include language selector");
+  assert.match(result.language, /^(uk|en)$/, "3D page should set document language");
   assert.equal(result.physicsChecked, false, "browser tests should start with physics checkbox off");
   assert.equal(result.hasTreeButtonsSource, true, "3D page should load local script");
   assert.equal(result.babylonLoaded, true, "Babylon CDN should load in browser");

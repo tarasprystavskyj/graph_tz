@@ -850,6 +850,24 @@
         },
         "position": { "x": 3280, "y": -260 },
         "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:ua_en_localization",
+          "_label": "Task: Ukrainian and English localization",
+          "name": "Task: Ukrainian and English localization",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "localization-agent",
+          "detail": "Translate graph labels and UI menus into Ukrainian, keep English localization available through settings, and hide the settings button when the general menu is collapsed.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 3560, "y": -100 },
+        "classes": "ui active testing box"
       }
     ],
     "edges": [
@@ -943,7 +961,10 @@
       { "data": { "id": "e88", "source": "task:real_right_click_regression_agent", "target": "test:smoke", "label": "adds real CDP right-click" } },
       { "data": { "id": "e89", "source": "branch:implementation", "target": "task:trash_node_context_menu", "label": "delegates to graph-ui-agent" } },
       { "data": { "id": "e90", "source": "task:trash_node_context_menu", "target": "ui:babylon", "label": "adds soft-delete menu" } },
-      { "data": { "id": "e91", "source": "task:trash_node_context_menu", "target": "test:smoke", "label": "adds assertions" } }
+      { "data": { "id": "e91", "source": "task:trash_node_context_menu", "target": "test:smoke", "label": "adds assertions" } },
+      { "data": { "id": "e92", "source": "branch:implementation", "target": "task:ua_en_localization", "label": "delegates to localization-agent" } },
+      { "data": { "id": "e93", "source": "task:ua_en_localization", "target": "ui:babylon", "label": "localizes menus" } },
+      { "data": { "id": "e94", "source": "task:ua_en_localization", "target": "data:model_api", "label": "localizes graph data" } }
     ]
   }
 }

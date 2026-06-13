@@ -6,7 +6,15 @@
   const startWithPhysicsPaused = ["off", "paused", "false", "0"].includes(String(params.get("physics") || "").toLowerCase());
   const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
   const appUrl = (path) => `${BASE_PATH}${path}`;
-  const GRAPH_URL = appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`);
+  const i18n = window.GraphUiI18n || {
+    lang: "uk",
+    t: (key) => key,
+    withLang: (url) => url,
+    apiUrl: (path) => appUrl(path),
+    translatePage() {},
+    wireLanguageSelect() {},
+  };
+  const GRAPH_URL = i18n.apiUrl(`/api/graph-model/${encodeURIComponent(graphId)}`);
   const INITIAL_SPREAD = 0.044;
   const Z_SPREAD = 46;
   const CENTER_GRAVITY = 0.0035;
@@ -108,13 +116,13 @@
   let pendingTrashNode = null;
   let contextMenuStyle = localStorage.getItem("graphUiContextMenuStyle") === "html" ? "html" : "cytoscape";
   const workflowDescriptions = {
-    not_done: "Feature/task is known but not implemented yet.",
-    approved: "Owner or lead approved it for implementation.",
-    in_progress: "Agent is actively working; outline animates orange to yellow.",
-    ready_for_test: "Implementation is ready for a focused test pass.",
-    testing_agent: "Agent is testing it now; outline animates yellow to light green.",
-    tested_agent: "Agent verified it and recorded evidence or a test result.",
-    tested_human: "Human verified it; this is the strongest done signal.",
+    not_done: i18n.lang === "uk" ? "Фіча або задача відома, але ще не реалізована." : "Feature/task is known but not implemented yet.",
+    approved: i18n.lang === "uk" ? "Власник або lead заапрувив її в роботу." : "Owner or lead approved it for implementation.",
+    in_progress: i18n.lang === "uk" ? "Агент активно працює; контур анімується з оранжевого у жовтий." : "Agent is actively working; outline animates orange to yellow.",
+    ready_for_test: i18n.lang === "uk" ? "Реалізація готова для фокусного тестування." : "Implementation is ready for a focused test pass.",
+    testing_agent: i18n.lang === "uk" ? "Агент тестує зараз; контур анімується з жовтого у салатовий." : "Agent is testing it now; outline animates yellow to light green.",
+    tested_agent: i18n.lang === "uk" ? "Агент перевірив і записав evidence або результат тесту." : "Agent verified it and recorded evidence or a test result.",
+    tested_human: i18n.lang === "uk" ? "Людина перевірила; це найсильніший done-сигнал." : "Human verified it; this is the strongest done signal.",
   };
 
   function setStatus(message) {
@@ -509,21 +517,21 @@
       details.innerHTML = `
         <h1>${escapeHtml(graphId)} graph</h1>
         <div class="meta">
-          <span class="pill">${graphState.nodes.length} nodes</span>
-          <span class="pill">${graphState.edges.length} edges</span>
-          <span class="pill">${physicsPaused ? "paused" : "running"}</span>
+          <span class="pill">${graphState.nodes.length} ${i18n.lang === "uk" ? "вузлів" : "nodes"}</span>
+          <span class="pill">${graphState.edges.length} ${i18n.lang === "uk" ? "ребер" : "edges"}</span>
+          <span class="pill">${physicsPaused ? (i18n.lang === "uk" ? "пауза" : "paused") : (i18n.lang === "uk" ? "працює" : "running")}</span>
         </div>
-        <p>Search/filter first. Right-click a node for context actions. Click a node to inspect or edit it.</p>
+        <p>${i18n.lang === "uk" ? "Спочатку пошук/фільтр. Правий клік по вузлу відкриває контекстні дії. Клік по вузлу дає перегляд або редагування." : "Search/filter first. Right-click a node for context actions. Click a node to inspect or edit it."}</p>
       `;
       return;
     }
 
     const parts = [
       node.groupLabel || node.group,
-      node.status || "no status",
-        node.workflowState ? `state: ${workflowStateFor(node.workflowState).label}` : "",
+      node.status || (i18n.lang === "uk" ? "без статусу" : "no status"),
+        node.workflowState ? `${i18n.lang === "uk" ? "стан" : "state"}: ${workflowStateFor(node.workflowState).label}` : "",
       `degree: ${node.degree}`,
-      node.owner ? `owner: ${node.owner}` : "",
+      node.owner ? `${i18n.lang === "uk" ? "власник" : "owner"}: ${node.owner}` : "",
     ].filter(Boolean);
     const attachments = (node.attachments || [])
       .map((item) => `<a href="${escapeHtml(assetUrl(item.url))}" target="_blank" rel="noreferrer">${escapeHtml(item.name)}</a>`)
@@ -535,15 +543,15 @@
 
     if (editMode) {
       details.innerHTML = `
-        <h1>Edit node</h1>
+        <h1>${i18n.lang === "uk" ? "Редагувати вузол" : "Edit node"}</h1>
         <form id="nodeEditForm" class="edit-form">
-          <label>Title<input id="editLabel" value="${escapeHtml(node.label)}"></label>
-          <label>Detail<textarea id="editDetail">${escapeHtml(node.detail)}</textarea></label>
-          <label>Paste screenshot here or upload file<input id="editFiles" type="file" multiple></label>
-          <button type="submit">Save node</button>
-          <div id="editHint">Clipboard paste supports image files while this panel is open.</div>
+          <label>${i18n.lang === "uk" ? "Назва" : "Title"}<input id="editLabel" value="${escapeHtml(node.label)}"></label>
+          <label>${i18n.lang === "uk" ? "Деталі" : "Detail"}<textarea id="editDetail">${escapeHtml(node.detail)}</textarea></label>
+          <label>${i18n.lang === "uk" ? "Встав скріншот тут або завантаж файл" : "Paste screenshot here or upload file"}<input id="editFiles" type="file" multiple></label>
+          <button type="submit">${i18n.lang === "uk" ? "Зберегти вузол" : "Save node"}</button>
+          <div id="editHint">${i18n.lang === "uk" ? "Вставка з буфера підтримує зображення, поки ця панель відкрита." : "Clipboard paste supports image files while this panel is open."}</div>
         </form>
-        <div class="attachment-list">${attachments || "No attachments yet."}</div>
+        <div class="attachment-list">${attachments || (i18n.lang === "uk" ? "Вкладень ще немає." : "No attachments yet.")}</div>
       `;
       wireEditForm(node);
       return;
@@ -552,22 +560,22 @@
     details.innerHTML = `
       <h1>${escapeHtml(node.label)}</h1>
       <div class="meta">${parts.map((part) => `<span class="pill">${escapeHtml(part)}</span>`).join("")}</div>
-      <p>${escapeHtml(node.detail || "No detail is attached to this graph node.")}</p>
+      <p>${escapeHtml(node.detail || (i18n.lang === "uk" ? "Деталі до цього вузла графа ще не додані." : "No detail is attached to this graph node."))}</p>
       <div class="attachment-list">
-        <strong>Visual key</strong>
-        ${escapeHtml(node.visualKey?.label || "visual key pending")}
-        <strong>Keywords</strong>
-        ${(node.keywords || []).map((item) => `<span><i class="${escapeHtml(item.faClass || "fa-solid fa-tag")}"></i> ${escapeHtml(item.term)}</span>`).join("") || "No keywords"}
-        ${attachments ? `<strong>Attachments</strong>${attachments}` : ""}
+        <strong>${i18n.lang === "uk" ? "Візуальний ключ" : "Visual key"}</strong>
+        ${escapeHtml(node.visualKey?.label || i18n.t("visualKeyPending"))}
+        <strong>${i18n.lang === "uk" ? "Ключові слова" : "Keywords"}</strong>
+        ${(node.keywords || []).map((item) => `<span><i class="${escapeHtml(item.faClass || "fa-solid fa-tag")}"></i> ${escapeHtml(item.term)}</span>`).join("") || (i18n.lang === "uk" ? "Ключових слів немає" : "No keywords")}
+        ${attachments ? `<strong>${i18n.lang === "uk" ? "Вкладення" : "Attachments"}</strong>${attachments}` : ""}
       </div>
       <div class="work-key" aria-label="Work state color key">
         ${(graphState.workflowStates || workflowStateFallbacks).map((state) => `<span title="${escapeHtml(workflowDescriptions[state.id] || "")}"><i class="work-dot" style="background:${escapeHtml(state.color)}"></i>${escapeHtml(state.label)}</span>`).join("")}
       </div>
-      <button id="editNodeButton" type="button">Edit title/detail/files</button>
-      <button id="treeTextButton" type="button">Tree text</button>
-      <button id="treeTableButton" type="button">Tree table</button>
-      ${canComment ? `<button id="testCommentButton" type="button">Add test comment</button>` : ""}
-      <div class="attachment-list">${comments ? `<strong>Test comments</strong>${comments}` : ""}</div>
+      <button id="editNodeButton" type="button">${i18n.lang === "uk" ? "Редагувати назву/деталі/файли" : "Edit title/detail/files"}</button>
+      <button id="treeTextButton" type="button">${i18n.lang === "uk" ? "Текст дерева" : "Tree text"}</button>
+      <button id="treeTableButton" type="button">${i18n.lang === "uk" ? "Таблиця дерева" : "Tree table"}</button>
+      ${canComment ? `<button id="testCommentButton" type="button">${i18n.lang === "uk" ? "Додати тест-коментар" : "Add test comment"}</button>` : ""}
+      <div class="attachment-list">${comments ? `<strong>${i18n.lang === "uk" ? "Тест-коментарі" : "Test comments"}</strong>${comments}` : ""}</div>
       <div id="treeOutput" class="attachment-list"></div>
     `;
     document.getElementById("editNodeButton").addEventListener("click", () => showNodeDetails(node, true));
@@ -579,16 +587,16 @@
   function showTestCommentForm(node) {
     const target = document.getElementById("treeOutput");
     target.innerHTML = `
-      <strong>Testing comment</strong>
+      <strong>${i18n.lang === "uk" ? "Коментар тестування" : "Testing comment"}</strong>
       <form id="testCommentForm" class="edit-form">
-        <label>Author role
+        <label>${i18n.lang === "uk" ? "Роль автора" : "Author role"}
           <select id="testCommentRole">
-            <option value="human">Human</option>
-            <option value="agent">Agent</option>
+            <option value="human">${i18n.lang === "uk" ? "Людина" : "Human"}</option>
+            <option value="agent">${i18n.lang === "uk" ? "Агент" : "Agent"}</option>
           </select>
         </label>
-        <label>Comment<textarea id="testCommentText" placeholder="What was tested, what passed, what remains unclear"></textarea></label>
-        <button type="submit">Save comment</button>
+        <label>${i18n.lang === "uk" ? "Коментар" : "Comment"}<textarea id="testCommentText" placeholder="${i18n.lang === "uk" ? "Що тестувалось, що пройшло, що лишилось незрозумілим" : "What was tested, what passed, what remains unclear"}"></textarea></label>
+        <button type="submit">${i18n.lang === "uk" ? "Зберегти коментар" : "Save comment"}</button>
       </form>
     `;
     document.getElementById("testCommentForm").addEventListener("submit", async (event) => {
@@ -615,13 +623,13 @@
       body: JSON.stringify(payload),
     });
     if (!response.ok) {
-      setStatus(`Could not save test comment for ${node.label}.`);
+      setStatus(i18n.lang === "uk" ? `Не вдалось зберегти тест-коментар для ${node.label}.` : `Could not save test comment for ${node.label}.`);
       return;
     }
     const result = await response.json();
     node.testComments = result.edit.testComments || node.testComments || [];
     showNodeDetails(node);
-    setStatus(`Saved test comment for ${node.label}.`);
+    setStatus(i18n.lang === "uk" ? `Тест-коментар для ${node.label} збережено.` : `Saved test comment for ${node.label}.`);
   }
 
   function updateTrashButton() {
@@ -630,8 +638,8 @@
     trashCount.textContent = String(count);
     trashButton.classList.toggle("active", count > 0);
     const title = count
-      ? `Trash: ${count} deleted node${count === 1 ? "" : "s"}`
-      : "Trash is empty";
+      ? (i18n.lang === "uk" ? `Кошик: ${count} видалених вузлів` : `Trash: ${count} deleted node${count === 1 ? "" : "s"}`)
+      : i18n.t("trashEmpty");
     trashButton.title = title;
     trashButton.setAttribute("aria-label", title);
     if (!count) trashPanel.classList.remove("open");
@@ -644,7 +652,7 @@
       return;
     }
     trashPanel.innerHTML = `
-      <strong>Trash</strong>
+      <strong>${i18n.t("trashTitle")}</strong>
       <ul>
         ${trashed.map((node) => `<li><strong>${escapeHtml(node.label || node.id)}</strong><br><span class="muted">${escapeHtml(node.deletedAt || "")}</span></li>`).join("")}
       </ul>
@@ -658,7 +666,9 @@
     pendingTrashNode = node;
     hideHtmlContextMenu();
     trashPanel.classList.remove("open");
-    trashConfirmText.textContent = `${node.label} will be hidden from the active graph and kept in trash.`;
+    trashConfirmText.textContent = i18n.lang === "uk"
+      ? `${node.label} буде приховано з активного графа і збережено в кошику.`
+      : `${node.label} will be hidden from the active graph and kept in trash.`;
     trashConfirm.classList.add("open");
   }
 
@@ -680,7 +690,7 @@
       }),
     });
     if (!response.ok) {
-      setStatus(`Could not move ${node.label} to trash.`);
+      setStatus(i18n.lang === "uk" ? `Не вдалось перемістити ${node.label} у кошик.` : `Could not move ${node.label} to trash.`);
       return;
     }
     graphState.trash ||= { nodes: [] };
@@ -692,7 +702,7 @@
     updateTrashButton();
     applyFilters();
     showNodeDetails(null);
-    setStatus(`${node.label} moved to trash.`);
+    setStatus(i18n.lang === "uk" ? `${node.label} переміщено у кошик.` : `${node.label} moved to trash.`);
   }
 
   function removeNodeFromScene(node) {
@@ -981,21 +991,21 @@
   }
 
   async function populateGraphSelect() {
-    const response = await fetch(appUrl("/api/graphs"), { cache: "no-store" });
+    const response = await fetch(i18n.apiUrl("/api/graphs"), { cache: "no-store" });
     const graphs = await response.json();
     graphSelect.innerHTML = Object.entries(graphs)
       .map(([id, graph]) => `<option value="${escapeHtml(id)}"${id === graphId ? " selected" : ""}>${escapeHtml(graph.label)}</option>`)
       .join("");
     graphSelect.addEventListener("change", () => {
-      window.location.href = appUrl(`/babylon-3d.html?graph=${encodeURIComponent(graphSelect.value)}`);
+      window.location.href = i18n.withLang(appUrl(`/babylon-3d.html?graph=${encodeURIComponent(graphSelect.value)}`));
     });
   }
 
   function populateControls() {
     const groups = Object.entries(graphState.groups).sort((a, b) => a[1].label.localeCompare(b[1].label));
-    groupFilter.innerHTML = `<option value="">All groups</option>${groups.map(([id, group]) => `<option value="${escapeHtml(id)}">${escapeHtml(group.label)}</option>`).join("")}`;
+    groupFilter.innerHTML = `<option value="">${escapeHtml(i18n.t("allGroups"))}</option>${groups.map(([id, group]) => `<option value="${escapeHtml(id)}">${escapeHtml(group.label)}</option>`).join("")}`;
     const states = graphState.workflowStates || workflowStateFallbacks;
-    workflowFilter.innerHTML = `<option value="">All workflow states</option>${states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("")}`;
+    workflowFilter.innerHTML = `<option value="">${escapeHtml(i18n.t("allWorkflowStates"))}</option>${states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("")}`;
     contextWorkflowState.innerHTML = states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("");
     legend.innerHTML = groups
       .map(([id, group]) => `<span class="legend-item" title="${escapeHtml(group.label)}"><span class="swatch" style="background:${escapeHtml(group.color || fallbackColors[id] || "#6b7280")}"></span>${escapeHtml(group.label)}</span>`)
@@ -1217,7 +1227,6 @@
 
   async function runCytoscapeLayout() {
     physicsPaused = true;
-    togglePhysics.textContent = "Resume";
     const visibleNodes = graphState.nodes.filter((node) => node.visibleByFilter);
     const visibleIds = new Set(visibleNodes.map((node) => node.id));
     if (applyManualLayout(layoutSelect.value, visibleNodes)) {
@@ -1370,15 +1379,15 @@
       zIndex: 9999,
       outsideMenuCancel: 32,
       commands: () => [
-        { content: cxtIcon("fa-solid fa-crosshairs", "Focus"), select: () => focusLinkedBranch(contextNode) },
-        { content: cxtIcon("fa-solid fa-pen-to-square", "Edit"), select: () => showNodeDetails(contextNode, true) },
-        { content: cxtIcon("fa-solid fa-tags", "Labels"), select: () => toggleLabelLayer() },
-        { content: cxtIcon("fa-regular fa-copy", "Copy"), select: () => copyContextNodeId() },
-        { content: cxtIcon("fa-solid fa-vial-circle-check", "Testing"), fillColor: "rgba(250,204,21,0.86)", select: () => setNodeWorkState(contextNode, "testing") },
-        { content: cxtIcon("fa-solid fa-circle-exclamation", "Needed"), fillColor: "rgba(239,68,68,0.86)", select: () => setNodeWorkState(contextNode, "needed") },
-        { content: cxtIcon("fa-solid fa-check", "Done"), fillColor: "rgba(34,197,94,0.86)", select: () => setNodeWorkState(contextNode, "done") },
-        { content: cxtIcon("fa-solid fa-user-check", "Human"), fillColor: "rgba(20,184,166,0.86)", select: () => setNodeWorkflowState(contextNode, "tested_human") },
-        { content: cxtIcon("fa-solid fa-trash", "Trash"), fillColor: "rgba(153,27,27,0.9)", select: () => requestTrashConfirmation(contextNode) },
+        { content: cxtIcon("fa-solid fa-crosshairs", i18n.t("focus")), select: () => focusLinkedBranch(contextNode) },
+        { content: cxtIcon("fa-solid fa-pen-to-square", i18n.t("edit")), select: () => showNodeDetails(contextNode, true) },
+        { content: cxtIcon("fa-solid fa-tags", i18n.t("labels")), select: () => toggleLabelLayer() },
+        { content: cxtIcon("fa-regular fa-copy", i18n.t("copy")), select: () => copyContextNodeId() },
+        { content: cxtIcon("fa-solid fa-vial-circle-check", i18n.t("testing")), fillColor: "rgba(250,204,21,0.86)", select: () => setNodeWorkState(contextNode, "testing") },
+        { content: cxtIcon("fa-solid fa-circle-exclamation", i18n.t("needed")), fillColor: "rgba(239,68,68,0.86)", select: () => setNodeWorkState(contextNode, "needed") },
+        { content: cxtIcon("fa-solid fa-check", i18n.t("done")), fillColor: "rgba(34,197,94,0.86)", select: () => setNodeWorkState(contextNode, "done") },
+        { content: cxtIcon("fa-solid fa-user-check", i18n.lang === "uk" ? "Людина" : "Human"), fillColor: "rgba(20,184,166,0.86)", select: () => setNodeWorkflowState(contextNode, "tested_human") },
+        { content: cxtIcon("fa-solid fa-trash", i18n.t("trash")), fillColor: "rgba(153,27,27,0.9)", select: () => requestTrashConfirmation(contextNode) },
       ],
     });
     cxtmenuBridge.addEventListener("contextmenu", (event) => event.preventDefault(), true);
@@ -1659,7 +1668,9 @@
     renderTimePanel();
     drawMap();
     installTestHooks();
-    setStatus(`Loaded ${graphState.nodes.length} nodes and ${graphState.edges.length} edges from ${graphId}.`);
+    setStatus(i18n.lang === "uk"
+      ? `Завантажено ${graphState.nodes.length} вузлів і ${graphState.edges.length} ребер з ${graphId}.`
+      : `Loaded ${graphState.nodes.length} nodes and ${graphState.edges.length} edges from ${graphId}.`);
   }
 
   function installTestHooks() {
@@ -1741,10 +1752,11 @@
 
   function wireControls() {
     menuToggle.addEventListener("click", () => {
-      topbar.classList.toggle("collapsed");
+      const collapsed = topbar.classList.toggle("collapsed");
+      if (collapsed) settingsPanel.classList.remove("open");
     });
     switchView.addEventListener("click", () => {
-      window.location.href = appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphId)}`);
+      window.location.href = i18n.withLang(appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphId)}`));
     });
     layoutSelect.addEventListener("change", runCytoscapeLayout);
     togglePhysics.addEventListener("change", () => {
@@ -1787,7 +1799,7 @@
       showAllLabels.checked = labelsVisible;
       for (const node of graphState.nodes) refreshLabel(node);
       applyFilters();
-      setStatus(`Viewport information density set to ${cognitiveLevel}.`);
+      setStatus(i18n.lang === "uk" ? `Інформаційну щільність встановлено на ${cognitiveLevel}.` : `Viewport information density set to ${cognitiveLevel}.`);
     });
     searchBox.addEventListener("input", () => {
       activeSearch = searchBox.value;
@@ -1854,7 +1866,9 @@
       contextMenuStyle = contextMenuStyleSelect.value === "html" ? "html" : "cytoscape";
       localStorage.setItem("graphUiContextMenuStyle", contextMenuStyle);
       hideHtmlContextMenu();
-      setStatus(`Context menu style set to ${contextMenuStyle === "html" ? "HTML buttons" : "cytoscape radial"}.`);
+      setStatus(i18n.lang === "uk"
+        ? `Стиль контекстного меню: ${contextMenuStyle === "html" ? "HTML кнопки" : "радіальне Cytoscape"}.`
+        : `Context menu style set to ${contextMenuStyle === "html" ? "HTML buttons" : "cytoscape radial"}.`);
     });
   }
 
@@ -1874,7 +1888,9 @@
         attachments: [],
       }),
     });
-    setStatus(response.ok ? `${node.label} workflow state changed.` : `Could not save workflow state for ${node.label}.`);
+    setStatus(response.ok
+      ? (i18n.lang === "uk" ? `Workflow-стан ${node.label} змінено.` : `${node.label} workflow state changed.`)
+      : (i18n.lang === "uk" ? `Не вдалось зберегти workflow-стан для ${node.label}.` : `Could not save workflow state for ${node.label}.`));
   }
 
   async function markNodeSeen(node) {
@@ -1892,13 +1908,17 @@
         attachments: [],
       }),
     });
-    if (!response.ok) setStatus(`Seen state was not saved for ${node.label}.`);
+    if (!response.ok) setStatus(i18n.lang === "uk" ? `Seen-стан не збережено для ${node.label}.` : `Seen state was not saved for ${node.label}.`);
   }
 
   async function main() {
+    i18n.translatePage();
+    i18n.wireLanguageSelect();
     if (!window.BABYLON) {
-      setStatus("Babylon.js did not load. Check network access to https://cdn.babylonjs.com/babylon.js.");
-      details.innerHTML = `<h1>Babylon.js unavailable</h1><p>This prototype uses the Babylon.js CDN. Start the Node sidecar and allow that CDN script, or vendor Babylon locally later.</p>`;
+      setStatus(i18n.lang === "uk" ? "Babylon.js не завантажився. Перевір доступ до https://cdn.babylonjs.com/babylon.js." : "Babylon.js did not load. Check network access to https://cdn.babylonjs.com/babylon.js.");
+      details.innerHTML = i18n.lang === "uk"
+        ? "<h1>Babylon.js недоступний</h1><p>Цей прототип використовує Babylon.js CDN. Запусти Node sidecar і дозволь цей CDN script, або пізніше завендор Babylon локально.</p>"
+        : "<h1>Babylon.js unavailable</h1><p>This prototype uses the Babylon.js CDN. Start the Node sidecar and allow that CDN script, or vendor Babylon locally later.</p>";
       return;
     }
     togglePhysics.checked = !physicsPaused;
@@ -1913,6 +1933,6 @@
   main().catch((error) => {
     console.error(error);
     setStatus(error.message);
-    details.innerHTML = `<h1>Graph load failed</h1><p>${escapeHtml(error.message)}</p>`;
+    details.innerHTML = `<h1>${i18n.lang === "uk" ? "Граф не завантажився" : "Graph load failed"}</h1><p>${escapeHtml(error.message)}</p>`;
   });
 })();

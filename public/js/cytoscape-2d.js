@@ -4,7 +4,17 @@
   const graphId = new URLSearchParams(window.location.search).get("graph") || "job-apply-full";
   const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
   const appUrl = (path) => `${BASE_PATH}${path}`;
-  const response = await fetch(appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" });
+  const i18n = window.GraphUiI18n || {
+    lang: "uk",
+    t: (key) => key,
+    withLang: (url) => url,
+    apiUrl: (path) => appUrl(path),
+    translatePage() {},
+    wireLanguageSelect() {},
+  };
+  i18n.translatePage();
+  i18n.wireLanguageSelect();
+  const response = await fetch(i18n.apiUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" });
   const model = await response.json();
   const details = document.getElementById("details");
   const status = document.getElementById("status");
@@ -16,7 +26,7 @@
   const searchBox = document.getElementById("searchBox");
   const encodedGraphId = encodeURIComponent(graphId);
 
-  fetch(appUrl("/api/graphs"), { cache: "no-store" })
+  fetch(i18n.apiUrl("/api/graphs"), { cache: "no-store" })
     .then((res) => res.json())
     .then((graphs) => {
       graphSelect.innerHTML = Object.entries(graphs)
@@ -24,15 +34,15 @@
         .join("");
     });
   graphSelect.addEventListener("change", () => {
-    window.location.href = appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphSelect.value)}`);
+    window.location.href = i18n.withLang(appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphSelect.value)}`));
   });
   switch3d.addEventListener("click", () => {
-    window.location.href = appUrl(`/babylon-3d.html?graph=${encodedGraphId}`);
+    window.location.href = i18n.withLang(appUrl(`/babylon-3d.html?graph=${encodedGraphId}`));
   });
 
   document.querySelectorAll("[data-export]").forEach((link) => {
     const kind = link.getAttribute("data-export");
-    link.href = kind === "model" ? appUrl(`/api/graph-model/${encodedGraphId}`) : appUrl(`/api/exports/${encodedGraphId}/${kind}`);
+    link.href = kind === "model" ? i18n.apiUrl(`/api/graph-model/${encodedGraphId}`) : appUrl(`/api/exports/${encodedGraphId}/${kind}`);
   });
 
   const groups = Object.values(model.groups || {}).sort((a, b) => a.label.localeCompare(b.label));
@@ -154,16 +164,16 @@
 
   function setDetails(node) {
     if (!node) {
-      details.innerHTML = `<strong>Modern Cytoscape.js TZ view</strong>${model.nodes.length} nodes, ${model.edges.length} edges. Filter first, then inspect gradually.`;
+      details.innerHTML = `<strong>${escapeHtml(i18n.t("cytoscapeView"))}</strong>${model.nodes.length} ${i18n.lang === "uk" ? "вузлів" : "nodes"}, ${model.edges.length} ${i18n.lang === "uk" ? "ребер" : "edges"}. ${i18n.lang === "uk" ? "Спочатку фільтруй, потім поступово інспектуй." : "Filter first, then inspect gradually."}`;
       return;
     }
     const data = node.data();
     details.innerHTML = `
       <strong>${escapeHtml(data.label)}</strong>
-      <div>${escapeHtml(data.groupLabel)} | ${escapeHtml(data.status)}${data.workState ? ` | work=${escapeHtml(data.workState)}` : ""} | owner=${escapeHtml(data.owner || "system")}</div>
-      <div>branch: ${escapeHtml(data.branch || "attach pending")}</div>
-      <div>visual key: ${escapeHtml(data.visualSymbol)} - ${escapeHtml(data.visualKey || "visual key pending")}</div>
-      <p>${escapeHtml(data.detail || "No detail attached.")}</p>
+      <div>${escapeHtml(data.groupLabel)} | ${escapeHtml(data.status)}${data.workState ? ` | work=${escapeHtml(data.workState)}` : ""} | ${i18n.lang === "uk" ? "власник" : "owner"}=${escapeHtml(data.owner || "system")}</div>
+      <div>${i18n.lang === "uk" ? "гілка" : "branch"}: ${escapeHtml(data.branch || (i18n.lang === "uk" ? "прив'язка очікує" : "attach pending"))}</div>
+      <div>${i18n.lang === "uk" ? "візуальний ключ" : "visual key"}: ${escapeHtml(data.visualSymbol)} - ${escapeHtml(data.visualKey || i18n.t("visualKeyPending"))}</div>
+      <p>${escapeHtml(data.detail || i18n.t("noDetailAttached"))}</p>
     `;
   }
 
@@ -186,7 +196,7 @@
         edge.toggleClass("hidden", edge.source().hasClass("hidden") || edge.target().hasClass("hidden"));
       });
     });
-    status.textContent = `${visible}/${model.nodes.length} nodes visible.`;
+    status.textContent = `${visible}/${model.nodes.length} ${i18n.t("nodesVisible")}`;
   }
 
   function focusNeighborhood() {
@@ -209,7 +219,7 @@
   layoutSelect.addEventListener("change", () => {
     if (layoutSelect.value === "development-flow") applyDevelopmentFlow();
     cy.layout(layoutOptions(layoutSelect.value)).run();
-    status.textContent = `Layout switched to ${layoutSelect.value}.`;
+    status.textContent = i18n.lang === "uk" ? `Розкладку переключено на ${layoutSelect.value}.` : `Layout switched to ${layoutSelect.value}.`;
   });
   document.getElementById("focusNeighborhood").addEventListener("click", focusNeighborhood);
   document.getElementById("showAll").addEventListener("click", () => {
@@ -219,12 +229,12 @@
     cy.elements().removeClass("hidden dimmed focused");
     cy.fit(undefined, 64);
     setDetails(null);
-    status.textContent = `${model.nodes.length}/${model.nodes.length} nodes visible.`;
+    status.textContent = `${model.nodes.length}/${model.nodes.length} ${i18n.t("nodesVisible")}`;
   });
   groupFilter.addEventListener("change", applyFilters);
   statusFilter.addEventListener("change", applyFilters);
   searchBox.addEventListener("input", applyFilters);
-  cy.ready(() => status.textContent = `${model.nodes.length}/${model.nodes.length} nodes visible.`);
+  cy.ready(() => status.textContent = `${model.nodes.length}/${model.nodes.length} ${i18n.t("nodesVisible")}`);
 
   function escapeHtml(value) {
     return String(value ?? "")

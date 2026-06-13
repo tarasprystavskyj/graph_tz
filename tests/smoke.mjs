@@ -119,6 +119,9 @@ try {
   assert.match(page.body, /cdn\.babylonjs\.com\/babylon\.js/, "page documents Babylon CDN usage");
   assert.match(page.body, /cytoscape@3\.34\.0/, "3D page should load Cytoscape.js under the hood");
   assert.match(page.body, /\/js\/babylon-3d\.js/, "page should load local graph script");
+  assert.match(page.body, /\/js\/i18n\.js/, "3D page should load local i18n script");
+  assert.match(page.body, /id="languageSelect"/, "3D settings should include language selector");
+  assert.match(page.body, /\.topbar\.collapsed #settingsToggle \{\s+display: none;/, "settings button should hide when the general menu is collapsed");
   assert.match(page.body, /degreeFilter/, "3D page should include degree filter control");
   assert.match(page.body, /workflowFilter/, "3D page should include workflow status filter");
   assert.match(page.body, /font-awesome\/6\.7\.2/, "3D page should load Font Awesome icons from CDN");
@@ -135,6 +138,8 @@ try {
   const cytoscapePage = await request(port, "/cytoscape-2d.html");
   assert.equal(cytoscapePage.statusCode, 200, "cytoscape page should be served");
   assert.match(cytoscapePage.body, /cytoscape\.min\.js/, "cytoscape page should load modern Cytoscape.js");
+  assert.match(cytoscapePage.body, /\/js\/i18n\.js/, "cytoscape page should load local i18n script");
+  assert.match(cytoscapePage.body, /id="languageSelect"/, "cytoscape page should include language selector");
   assert.match(cytoscapePage.body, /graphSelect/, "cytoscape page should include graph menu");
   assert.match(cytoscapePage.body, /switch3d/, "cytoscape page should include 3D switch");
   assert.match(cytoscapePage.body, /development-flow/, "cytoscape page should include development flow layout");
@@ -143,6 +148,8 @@ try {
   const flowPage = await request(port, "/flow-variant-b.html");
   assert.equal(flowPage.statusCode, 200, "flow variant B page should be served");
   assert.match(flowPage.body, /flow-variant-b\.js/, "variant B should load local script");
+  assert.match(flowPage.body, /\/js\/i18n\.js/, "variant B page should load local i18n script");
+  assert.match(flowPage.body, /id="languageSelect"/, "variant B should include language selector");
 
   const learningCytoscapePage = await request(port, "/cytoscape-2d.html?graph=current-project-learning");
   assert.equal(learningCytoscapePage.statusCode, 200, "learning cytoscape page should be served");
@@ -232,6 +239,22 @@ try {
   assert.ok(graphModelJson.nodes.every((node) => Array.isArray(node.keywords) && node.keywords.length), "graph-model nodes should have keyword icon cues");
   assert.ok(Array.isArray(graphModelJson.workflowStates) && graphModelJson.workflowStates.length >= 7, "graph-model should expose workflow states");
 
+  const graphsUk = await request(port, "/api/graphs?lang=uk");
+  assert.equal(graphsUk.statusCode, 200, "localized Ukrainian graph registry should be served");
+  assert.match(JSON.parse(graphsUk.body)["job-apply-full"].label, /Повний TZ граф JobApply/);
+
+  const graphsEn = await request(port, "/api/graphs?lang=en");
+  assert.equal(graphsEn.statusCode, 200, "localized English graph registry should be served");
+  assert.equal(JSON.parse(graphsEn.body)["job-apply-full"].label, "JobApply full TZ graph");
+
+  const graphModelUk = await request(port, "/api/graph-model/job-apply-full?lang=uk");
+  assert.equal(graphModelUk.statusCode, 200, "Ukrainian graph model should be served");
+  assert.match(JSON.parse(graphModelUk.body).nodes.find((node) => node.id === "main:source_scan").label, /Сканування/);
+
+  const graphModelEn = await request(port, "/api/graph-model/job-apply-full?lang=en");
+  assert.equal(graphModelEn.statusCode, 200, "English graph model should be served");
+  assert.equal(JSON.parse(graphModelEn.body).nodes.find((node) => node.id === "main:source_scan").label, "All-sites scan");
+
   const learningRaw = await request(port, "/api/graphs/current-project-learning");
   assert.equal(learningRaw.statusCode, 200, "learning raw graph API should be served");
   const learningRawJson = JSON.parse(learningRaw.body);
@@ -275,6 +298,7 @@ try {
     "task:cxtmenu_extension_gesture_agent",
     "task:real_right_click_regression_agent",
     "task:trash_node_context_menu",
+    "task:ua_en_localization",
   ]) {
     assert.ok(
       learningRawJson.elements.nodes.some((node) => node.data?.id === id && node.data?.is_new === true),

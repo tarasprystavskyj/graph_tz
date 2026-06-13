@@ -26,25 +26,29 @@
   <div id="cy"></div>
   <section class="panel" aria-label="Cytoscape controls">
     <div class="toolbar">
-      <select id="graphSelect" title="Graph/project menu"></select>
-      <button id="switch3d" type="button">3D</button>
-      <select id="layoutSelect" title="Layout">
+      <select id="graphSelect" title="Graph/project menu" data-i18n-title="graphProjectMenu"></select>
+      <button id="switch3d" type="button" data-i18n="switch3d">3D</button>
+      <select id="languageSelect" title="Language" aria-label="Language" data-i18n-title="language" data-i18n-aria="language">
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+      </select>
+      <select id="layoutSelect" title="Layout" data-i18n-title="rearrangeLayout">
         <option value="cose">cose force</option>
-        <option value="development-flow">development flow</option>
+        <option value="development-flow" data-i18n="developmentFlow">development flow</option>
         <option value="breadthfirst">breadthfirst</option>
         <option value="concentric">concentric</option>
         <option value="circle">circle</option>
         <option value="grid">grid</option>
       </select>
-      <select id="groupFilter" title="Group filter"><option value="">All groups</option></select>
-      <select id="statusFilter" title="Status filter"><option value="">All statuses</option></select>
-      <input id="searchBox" class="wide" type="search" placeholder="Focus by label, detail, group, status">
-      <button id="focusNeighborhood" type="button">Focus linked</button>
-      <button id="showAll" type="button">Show all</button>
+      <select id="groupFilter" title="Group filter" data-i18n-title="groupFilter"><option value="" data-i18n="allGroups">All groups</option></select>
+      <select id="statusFilter" title="Status filter" data-i18n-title="statusFilter"><option value="" data-i18n="allStatuses">All statuses</option></select>
+      <input id="searchBox" class="wide" type="search" placeholder="Focus by label, detail, group, status" data-i18n-placeholder="searchLong">
+      <button id="focusNeighborhood" type="button" data-i18n="focusLinked">Focus linked</button>
+      <button id="showAll" type="button" data-i18n="showAll">Show all</button>
     </div>
     <div id="details" class="details">
-      <strong>Modern Cytoscape.js TZ view</strong>
-      Filter first, then inspect one node or its linked neighborhood.
+      <strong data-i18n="cytoscapeView">Modern Cytoscape.js TZ view</strong>
+      <span data-i18n="cytoscapeHint">Filter first, then inspect one node or its linked neighborhood.</span>
     </div>
     <div class="exports">
       <a data-export="markmap" href="./api/exports/job-apply-full/markmap">Markmap MD</a>
@@ -53,11 +57,12 @@
       <a data-export="model" href="./api/graph-model/job-apply-full">Graph model JSON</a>
     </div>
   </section>
-  <div id="status" class="status">Loading graph.</div>
+  <div id="status" class="status" data-i18n="loadingGraphShort">Loading graph.</div>
   <script src="https://unpkg.com/cytoscape@3.34.0/dist/cytoscape.min.js"></script>
   <script>
     window.GRAPH_UI_BASE_PATH = location.pathname.includes("/job_apply_automation/") ? "/job_apply_automation" : "";
   </script>
+  <script src="./js/i18n.js"></script>
   <script src="./js/cytoscape-2d.js"></script>
 </body>
 </html>
