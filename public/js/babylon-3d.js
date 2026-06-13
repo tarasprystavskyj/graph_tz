@@ -49,6 +49,11 @@
   const statusbar = document.getElementById("statusbar");
   const hoverLabel = document.getElementById("hoverLabel");
   const cxtmenuBridge = document.getElementById("cxtmenuBridge");
+  const contextMenu = document.getElementById("contextMenu");
+  const contextWorkflowState = document.getElementById("contextWorkflowState");
+  const settingsToggle = document.getElementById("settingsToggle");
+  const settingsPanel = document.getElementById("settingsPanel");
+  const contextMenuStyleSelect = document.getElementById("contextMenuStyleSelect");
   const topbar = document.getElementById("topbar");
   const menuToggle = document.getElementById("menuToggle");
   const timePanel = document.getElementById("timePanel");
@@ -93,6 +98,7 @@
   let cognitiveLevel = 3;
   let contextSearchTerms = [];
   let cameraTween = null;
+  let contextMenuStyle = localStorage.getItem("graphUiContextMenuStyle") === "html" ? "html" : "cytoscape";
   const workflowDescriptions = {
     not_done: "Feature/task is known but not implemented yet.",
     approved: "Owner or lead approved it for implementation.",
@@ -895,6 +901,7 @@
     groupFilter.innerHTML = `<option value="">All groups</option>${groups.map(([id, group]) => `<option value="${escapeHtml(id)}">${escapeHtml(group.label)}</option>`).join("")}`;
     const states = graphState.workflowStates || workflowStateFallbacks;
     workflowFilter.innerHTML = `<option value="">All workflow states</option>${states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("")}`;
+    contextWorkflowState.innerHTML = states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("");
     legend.innerHTML = groups
       .map(([id, group]) => `<span class="legend-item" title="${escapeHtml(group.label)}"><span class="swatch" style="background:${escapeHtml(group.color || fallbackColors[id] || "#6b7280")}"></span>${escapeHtml(group.label)}</span>`)
       .join("");
@@ -1354,6 +1361,35 @@
     return true;
   }
 
+  function showHtmlContextMenu(event, node) {
+    if (!contextMenu || !node) return false;
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    contextNode = node;
+    contextWorkflowState.value = node.workflowState || "not_done";
+    const center = contextMenu.querySelector(".menu-center");
+    if (center) {
+      const title = String(node.label || node.id);
+      const state = workflowStateFor(node.workflowState);
+      center.textContent = `${title.slice(0, 34)}${title.length > 34 ? "..." : ""}\n${state?.label || node.status || "node"}`;
+    }
+    const x = Math.min(Math.max(event.clientX, 112), window.innerWidth - 112);
+    const y = Math.min(Math.max(event.clientY, 112), window.innerHeight - 112);
+    contextMenu.style.left = `${x}px`;
+    contextMenu.style.top = `${y}px`;
+    contextMenu.style.display = "block";
+    return true;
+  }
+
+  function hideHtmlContextMenu() {
+    if (contextMenu) contextMenu.style.display = "none";
+  }
+
+  function openContextMenu(node, event) {
+    if (contextMenuStyle === "html") return showHtmlContextMenu(event, node);
+    return startCxtmenuGesture(node, event);
+  }
+
   async function setNodeWorkState(node, workState) {
     if (!node) return;
     node.workState = workState;
@@ -1394,7 +1430,7 @@
       if (!node) return;
       if (event.button === 2 || event.buttons === 2) {
         suppressNativeContextUntil = performance.now() + 1800;
-        startCxtmenuGesture(node, event);
+        openContextMenu(node, event);
         return;
       }
       if (["touch", "pen"].includes(event.pointerType)) {
@@ -1408,7 +1444,7 @@
         };
         longPressTimer = window.setTimeout(() => {
           if (!touchTapCandidate) return;
-          touchTapCandidate.longPressOpened = startCxtmenuGesture(node, event);
+          touchTapCandidate.longPressOpened = openContextMenu(node, event);
         }, 520);
       }
     }, true);
@@ -1470,6 +1506,7 @@
           return;
         }
         if (["touch", "pen"].includes(pointerInfo.event.pointerType)) return;
+        hideHtmlContextMenu();
         if (node) {
           focusNodeAndPullTree(node);
         } else {
@@ -1561,6 +1598,17 @@
       cxtmenuReady() {
         return Boolean(cxtmenuCy && cxtmenuProxy && cxtmenuBridge.querySelector(".cxtmenu"));
       },
+      htmlCxtmenuVisible() {
+        return contextMenu.style.display === "block";
+      },
+      contextMenuStyle() {
+        return contextMenuStyle;
+      },
+      setContextMenuStyle(style) {
+        contextMenuStyleSelect.value = style === "html" ? "html" : "cytoscape";
+        contextMenuStyleSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        return contextMenuStyle;
+      },
       labelDetailLevels() {
         return graphState.nodes
           .filter((node) => node.labelPlane?.isEnabled())
@@ -1635,6 +1683,42 @@
     contextSearchButton.addEventListener("click", runContextSearch);
     contextSearchBox.addEventListener("keydown", (event) => {
       if (event.key === "Enter") runContextSearch();
+    });
+    contextMenu.addEventListener("click", async (event) => {
+      const actionButton = event.target?.closest?.("button[data-action]");
+      const action = actionButton?.dataset?.action;
+      hideHtmlContextMenu();
+      if (!contextNode || !action) return;
+      if (action === "focus") focusLinkedBranch(contextNode);
+      if (action === "edit") showNodeDetails(contextNode, true);
+      if (action === "labels") toggleLabelLayer();
+      if (action === "copy-id") await copyContextNodeId();
+      if (action === "mark-testing") await setNodeWorkState(contextNode, "testing");
+      if (action === "mark-needed") await setNodeWorkState(contextNode, "needed");
+      if (action === "mark-done") await setNodeWorkState(contextNode, "done");
+    });
+    contextWorkflowState.addEventListener("change", async () => {
+      if (!contextNode) return;
+      await setNodeWorkflowState(contextNode, contextWorkflowState.value);
+      hideHtmlContextMenu();
+    });
+    contextWorkflowState.addEventListener("click", (event) => event.stopPropagation());
+    document.addEventListener("click", (event) => {
+      if (contextMenu.style.display === "block" && !contextMenu.contains(event.target)) hideHtmlContextMenu();
+      if (settingsPanel.classList.contains("open") && !settingsPanel.contains(event.target) && !settingsToggle.contains(event.target)) {
+        settingsPanel.classList.remove("open");
+      }
+    });
+    settingsToggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      settingsPanel.classList.toggle("open");
+    });
+    contextMenuStyleSelect.value = contextMenuStyle;
+    contextMenuStyleSelect.addEventListener("change", () => {
+      contextMenuStyle = contextMenuStyleSelect.value === "html" ? "html" : "cytoscape";
+      localStorage.setItem("graphUiContextMenuStyle", contextMenuStyle);
+      hideHtmlContextMenu();
+      setStatus(`Context menu style set to ${contextMenuStyle === "html" ? "HTML buttons" : "cytoscape radial"}.`);
     });
   }
 

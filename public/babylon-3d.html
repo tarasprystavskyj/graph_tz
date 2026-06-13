@@ -72,6 +72,10 @@
       gap: 8px;
     }
 
+    #settingsToggle {
+      margin-left: auto;
+    }
+
     .toolbar-body {
       display: grid;
       gap: 8px;
@@ -327,6 +331,151 @@
       opacity: 0.38;
     }
 
+    .context-menu {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      width: 252px;
+      height: 252px;
+      color: #17202a;
+      transform: translate(-50%, -50%);
+      user-select: none;
+      --menu-radius: 92px;
+      --menu-item: 66px;
+    }
+
+    .context-menu::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15,23,42,0.2) 0 31%, rgba(15,23,42,0.78) 32% 33%, rgba(15,23,42,0.15) 34% 35%, rgba(15,23,42,0.02) 36% 100%);
+      pointer-events: none;
+    }
+
+    .context-menu button {
+      position: absolute;
+      width: var(--menu-item);
+      height: var(--menu-item);
+      min-width: 0;
+      margin: 0;
+      padding: 0 5px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 50%;
+      background: rgba(17, 24, 39, 0.88);
+      box-shadow: 0 13px 28px rgba(15, 23, 42, 0.3);
+      color: #ffffff;
+      font-size: 10px;
+      line-height: 1.12;
+      text-align: center;
+      white-space: normal;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+    }
+
+    .context-menu button:hover {
+      background: rgba(37, 99, 235, 0.94);
+      box-shadow: 0 16px 32px rgba(37, 99, 235, 0.34);
+      transform: scale(1.08);
+    }
+
+    .context-menu .cxtmenu-content {
+      display: grid;
+      gap: 3px;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .context-menu .cxtmenu-content i {
+      font-size: 17px;
+    }
+
+    .context-menu .cxtmenu-content span {
+      display: block;
+      max-width: 56px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .context-menu .menu-center {
+      position: absolute;
+      left: 84px;
+      top: 84px;
+      width: 84px;
+      height: 84px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.82);
+      background: rgba(15, 23, 42, 0.96);
+      color: #ffffff;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.36);
+      font-size: 10px;
+      line-height: 1.15;
+      text-align: center;
+      white-space: pre-line;
+      pointer-events: none;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    .context-menu button[data-action="focus"] { left: 93px; top: 0; }
+    .context-menu button[data-action="edit"] { left: 167px; top: 31px; }
+    .context-menu button[data-action="labels"] { left: 186px; top: 110px; }
+    .context-menu button[data-action="copy-id"] { left: 135px; top: 184px; }
+    .context-menu button[data-action="mark-done"] { left: 51px; top: 184px; border-color: #22c55e; }
+    .context-menu button[data-action="mark-needed"] { left: 0; top: 110px; border-color: #ef4444; }
+    .context-menu button[data-action="mark-testing"] { left: 19px; top: 31px; border-color: #facc15; }
+
+    .context-menu .status-ring {
+      position: absolute;
+      left: 54px;
+      top: 222px;
+      width: 144px;
+      height: 30px;
+      border: 1px solid rgba(148, 163, 184, 0.82);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.98);
+      color: #17202a;
+      font-size: 11px;
+      padding: 0 8px;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+    }
+
+    .settings-panel {
+      display: none;
+      position: fixed;
+      z-index: 11;
+      top: 14px;
+      right: 14px;
+      min-width: 240px;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(248, 250, 252, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.56);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+      color: #17202a;
+      font-size: 13px;
+    }
+
+    .settings-panel.open {
+      display: grid;
+    }
+
+    .settings-panel strong {
+      font-size: 14px;
+    }
+
+    .settings-panel label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: #475569;
+    }
+
     .work-key {
       display: flex;
       gap: 6px;
@@ -447,6 +596,9 @@
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="brand">JobApply TZ graph 3D</div>
+      <button id="settingsToggle" class="icon-button" type="button" title="Settings" aria-label="Settings">
+        <i class="fa-solid fa-gear"></i>
+      </button>
     </div>
     <div id="toolbarBody" class="toolbar-body">
       <div class="toolbar-row">
@@ -508,6 +660,26 @@
   </label>
   <div id="hoverLabel" class="label-pop"></div>
   <div id="cxtmenuBridge" class="cxtmenu-bridge" aria-hidden="true"></div>
+  <div id="contextMenu" class="context-menu" role="menu">
+    <button data-action="focus" type="button" title="Focus linked branch"><span class="cxtmenu-content"><i class="fa-solid fa-crosshairs"></i><span>Focus</span></span></button>
+    <button data-action="edit" type="button" title="Edit title/detail/files"><span class="cxtmenu-content"><i class="fa-solid fa-pen-to-square"></i><span>Edit</span></span></button>
+    <button data-action="labels" type="button" title="Show or hide label layer"><span class="cxtmenu-content"><i class="fa-solid fa-tags"></i><span>Labels</span></span></button>
+    <button data-action="copy-id" type="button" title="Copy node id"><span class="cxtmenu-content"><i class="fa-regular fa-copy"></i><span>Copy</span></span></button>
+    <button data-action="mark-testing" type="button" title="Yellow: currently being tested"><span class="cxtmenu-content"><i class="fa-solid fa-vial-circle-check"></i><span>Testing</span></span></button>
+    <button data-action="mark-needed" type="button" title="Red: needs implementation or update"><span class="cxtmenu-content"><i class="fa-solid fa-circle-exclamation"></i><span>Needed</span></span></button>
+    <button data-action="mark-done" type="button" title="Green: implemented and merged"><span class="cxtmenu-content"><i class="fa-solid fa-check"></i><span>Done</span></span></button>
+    <select id="contextWorkflowState" class="status-ring" title="Set workflow state"></select>
+    <div class="menu-center">Node<br>actions</div>
+  </div>
+  <div id="settingsPanel" class="settings-panel" role="region" aria-label="Settings">
+    <strong>Settings</strong>
+    <label>Context menu style
+      <select id="contextMenuStyleSelect" aria-label="Context menu style">
+        <option value="cytoscape">Radial menu (cytoscape)</option>
+        <option value="html">Radial menu (HTML buttons)</option>
+      </select>
+    </label>
+  </div>
   <div id="timePanel" class="time-panel"></div>
   <div id="mapPanel" class="map-panel"></div>
 
