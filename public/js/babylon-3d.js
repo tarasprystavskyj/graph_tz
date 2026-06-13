@@ -1229,6 +1229,8 @@
       autoungrabify: true,
     });
     cxtmenuProxy = cxtmenuCy.$id("proxy");
+    cxtmenuCy.zoom(1);
+    cxtmenuCy.pan({ x: 0, y: 0 });
     cxtmenuCy.cxtmenu({
       selector: "node",
       openMenuEvents: "cxttapstart taphold",
@@ -1301,6 +1303,8 @@
     const point = { x: event.clientX, y: event.clientY };
     cxtmenuProxy.position(point);
     cxtmenuCy.resize();
+    cxtmenuCy.zoom(1);
+    cxtmenuCy.pan({ x: 0, y: 0 });
     cxtmenuProxy.emit(makeCxtmenuEvent("cxttapstart", point, event));
     cxtmenuGesture = { node, started: performance.now(), startPoint: point, lastPoint: point, moved: false };
     return true;
