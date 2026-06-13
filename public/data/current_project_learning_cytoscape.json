@@ -832,6 +832,24 @@
         },
         "position": { "x": 3000, "y": -260 },
         "classes": "quality active testing box"
+      },
+      {
+        "data": {
+          "id": "task:trash_node_context_menu",
+          "_label": "Task: context-menu node trash",
+          "name": "Task: context-menu node trash",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "graph-ui-agent",
+          "detail": "Add a right-click context menu command that moves a node to trash only after confirmation. The trash icon is visible only when trash is non-empty and sits at the bottom-right of the general toolbar menu, not on the viewport.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 3280, "y": -260 },
+        "classes": "ui active testing box"
       }
     ],
     "edges": [
@@ -922,7 +940,10 @@
       { "data": { "id": "e85", "source": "task:cxtmenu_extension_gesture_agent", "target": "test:smoke", "label": "tests gestures" } },
       { "data": { "id": "e86", "source": "branch:implementation", "target": "task:real_right_click_regression_agent", "label": "delegates to browser-regression-agent" } },
       { "data": { "id": "e87", "source": "task:real_right_click_regression_agent", "target": "task:cxtmenu_extension_gesture_agent", "label": "guards real mouse path" } },
-      { "data": { "id": "e88", "source": "task:real_right_click_regression_agent", "target": "test:smoke", "label": "adds real CDP right-click" } }
+      { "data": { "id": "e88", "source": "task:real_right_click_regression_agent", "target": "test:smoke", "label": "adds real CDP right-click" } },
+      { "data": { "id": "e89", "source": "branch:implementation", "target": "task:trash_node_context_menu", "label": "delegates to graph-ui-agent" } },
+      { "data": { "id": "e90", "source": "task:trash_node_context_menu", "target": "ui:babylon", "label": "adds soft-delete menu" } },
+      { "data": { "id": "e91", "source": "task:trash_node_context_menu", "target": "test:smoke", "label": "adds assertions" } }
     ]
   }
 }

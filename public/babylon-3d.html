@@ -86,6 +86,10 @@
       display: none;
     }
 
+    .topbar.collapsed #settingsToggle {
+      display: none;
+    }
+
     .brand {
       font-weight: 700;
       color: #17202a;
@@ -428,6 +432,7 @@
     .context-menu button[data-action="mark-done"] { left: 51px; top: 184px; border-color: #22c55e; }
     .context-menu button[data-action="mark-needed"] { left: 0; top: 110px; border-color: #ef4444; }
     .context-menu button[data-action="mark-testing"] { left: 19px; top: 31px; border-color: #facc15; }
+    .context-menu button[data-action="trash"] { left: 93px; top: 184px; border-color: #ef4444; background: rgba(127, 29, 29, 0.92); }
 
     .context-menu .status-ring {
       position: absolute;
@@ -463,6 +468,97 @@
 
     .settings-panel.open {
       display: grid;
+    }
+
+    .trash-button {
+      min-width: 42px;
+      height: 42px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.94);
+      color: #64748b;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.18);
+      font-weight: 700;
+      margin-left: auto;
+    }
+
+    .trash-button.active {
+      display: inline-flex;
+      border-color: #ef4444;
+      background: #fff7f7;
+      color: #991b1b;
+    }
+
+    .trash-button span {
+      font-size: 12px;
+    }
+
+    .trash-panel {
+      display: none;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #17202a;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.22);
+      font-size: 13px;
+    }
+
+    .trash-confirm {
+      display: none;
+      position: fixed;
+      z-index: 12;
+      right: 14px;
+      bottom: 64px;
+      width: min(320px, calc(100vw - 28px));
+      padding: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #17202a;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.22);
+      font-size: 13px;
+    }
+
+    .trash-panel.open,
+    .trash-confirm.open {
+      display: grid;
+      gap: 8px;
+    }
+
+    .trash-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      max-height: 180px;
+      overflow: auto;
+    }
+
+    .toolbar-footer {
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .trash-confirm p {
+      margin: 0;
+      line-height: 1.35;
+      color: #334155;
+    }
+
+    .trash-confirm .confirm-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .trash-confirm .danger {
+      border-color: #ef4444;
+      background: #991b1b;
+      color: #ffffff;
     }
 
     .settings-panel strong {
@@ -592,22 +688,22 @@
 
   <div id="topbar" class="topbar" role="region" aria-label="Graph controls">
     <div class="toolbar-head">
-      <button id="menuToggle" class="icon-button" type="button" title="Collapse or expand menu" aria-label="Collapse or expand menu">
+      <button id="menuToggle" class="icon-button" type="button" title="Collapse or expand menu" aria-label="Collapse or expand menu" data-i18n-title="toggleMenu" data-i18n-aria="toggleMenu">
         <i class="fa-solid fa-bars"></i>
       </button>
-      <div class="brand">JobApply TZ graph 3D</div>
-      <button id="settingsToggle" class="icon-button" type="button" title="Settings" aria-label="Settings">
+      <div class="brand" data-i18n="appTitle3d">JobApply TZ graph 3D</div>
+      <button id="settingsToggle" class="icon-button" type="button" title="Settings" aria-label="Settings" data-i18n-title="settings" data-i18n-aria="settings">
         <i class="fa-solid fa-gear"></i>
       </button>
     </div>
     <div id="toolbarBody" class="toolbar-body">
       <div class="toolbar-row">
-        <select id="graphSelect" aria-label="Graph/project menu"></select>
-        <button id="switchView" class="icon-button" type="button" title="Switch to 2D"><i class="fa-solid fa-layer-group"></i><span>2D</span></button>
+        <select id="graphSelect" aria-label="Graph/project menu" data-i18n-aria="graphProjectMenu"></select>
+        <button id="switchView" class="icon-button" type="button" title="Switch to 2D" data-i18n-title="switch2d"><i class="fa-solid fa-layer-group"></i><span data-i18n="switch2d">2D</span></button>
       </div>
       <div class="toolbar-row">
-        <select id="layoutSelect" aria-label="Re-arrange layout">
-          <option value="development-flow">Development flow</option>
+        <select id="layoutSelect" aria-label="Re-arrange layout" data-i18n-aria="rearrangeLayout">
+          <option value="development-flow" data-i18n="developmentFlow">Development flow</option>
           <option value="cola">Cola (inf)</option>
           <option value="cose">Cose</option>
           <option value="breadthfirst">Breadthfirst</option>
@@ -615,73 +711,94 @@
           <option value="circle">Circle</option>
           <option value="grid">Grid</option>
         </select>
-        <button id="resetLayout" class="icon-button" type="button" title="Reset layout"><i class="fa-solid fa-rotate-left"></i><span>Reset</span></button>
+        <button id="resetLayout" class="icon-button" type="button" title="Reset layout" data-i18n-title="resetLayout"><i class="fa-solid fa-rotate-left"></i><span data-i18n="reset">Reset</span></button>
       </div>
       <div class="toolbar-row">
-        <label class="toggle-control" title="Pause or resume force physics"><input id="togglePhysics" type="checkbox" checked><i class="fa-solid fa-play"></i><span>Physics</span></label>
-        <label class="toggle-control" title="Show all labels"><input id="showAllLabels" type="checkbox"><i class="fa-solid fa-tags"></i><span>Labels</span></label>
-        <label class="toggle-control" title="Show time/status panel"><input id="showTimePanel" type="checkbox"><i class="fa-solid fa-clock"></i><span>Time</span></label>
-        <label class="toggle-control" title="Show map panel"><input id="showMap" type="checkbox"><i class="fa-regular fa-map"></i><span>Map</span></label>
+        <label class="toggle-control" title="Pause or resume force physics" data-i18n-title="physicsTitle"><input id="togglePhysics" type="checkbox" checked><i class="fa-solid fa-play"></i><span data-i18n="physics">Physics</span></label>
+        <label class="toggle-control" title="Show all labels" data-i18n-title="labelsTitle"><input id="showAllLabels" type="checkbox"><i class="fa-solid fa-tags"></i><span data-i18n="labels">Labels</span></label>
+        <label class="toggle-control" title="Show time/status panel" data-i18n-title="timeTitle"><input id="showTimePanel" type="checkbox"><i class="fa-solid fa-clock"></i><span data-i18n="time">Time</span></label>
+        <label class="toggle-control" title="Show map panel" data-i18n-title="mapTitle"><input id="showMap" type="checkbox"><i class="fa-regular fa-map"></i><span data-i18n="map">Map</span></label>
       </div>
       <div class="toolbar-row">
-        <select id="groupFilter" aria-label="Group filter">
-          <option value="">All groups</option>
+        <select id="groupFilter" aria-label="Group filter" data-i18n-aria="groupFilter">
+          <option value="" data-i18n="allGroups">All groups</option>
         </select>
-        <select id="workflowFilter" aria-label="Workflow status filter">
-          <option value="">All workflow states</option>
+        <select id="workflowFilter" aria-label="Workflow status filter" data-i18n-aria="workflowStatusFilter">
+          <option value="" data-i18n="allWorkflowStates">All workflow states</option>
         </select>
       </div>
       <div class="toolbar-row">
-        <input id="degreeFilter" type="number" min="0" step="1" value="0" aria-label="Minimum degree filter" title="Search Filter: degree">
-        <input id="searchBox" type="search" placeholder="Search nodes" aria-label="Search nodes">
+        <input id="degreeFilter" type="number" min="0" step="1" value="0" aria-label="Minimum degree filter" title="Search Filter: degree" data-i18n-aria="degreeFilter" data-i18n-title="degreeFilterTitle">
+        <input id="searchBox" type="search" placeholder="Search nodes" aria-label="Search nodes" data-i18n-placeholder="searchNodes" data-i18n-aria="searchNodes">
       </div>
       <div class="toolbar-row">
-        <input id="contextSearchBox" type="search" placeholder="Ask context search" aria-label="Context search question">
-        <button id="contextSearchButton" class="icon-button" type="button" title="Highlight related nodes"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Find</span></button>
+        <input id="contextSearchBox" type="search" placeholder="Ask context search" aria-label="Context search question" data-i18n-placeholder="contextSearch" data-i18n-aria="contextSearchQuestion">
+        <button id="contextSearchButton" class="icon-button" type="button" title="Highlight related nodes" data-i18n-title="highlightRelatedNodes"><i class="fa-solid fa-wand-magic-sparkles"></i><span data-i18n="find">Find</span></button>
       </div>
       <div id="legend" class="legend" aria-label="Group legend"></div>
+      <div class="toolbar-row toolbar-footer">
+        <button id="trashButton" class="trash-button" type="button" title="Trash is empty" aria-label="Trash is empty" data-i18n-title="trashEmpty" data-i18n-aria="trashEmpty">
+          <i class="fa-solid fa-trash"></i><span id="trashCount">0</span>
+        </button>
+      </div>
+      <div id="trashPanel" class="trash-panel" aria-live="polite"></div>
     </div>
   </div>
 
   <aside id="details" class="details" aria-live="polite">
-    <h1>Loading graph...</h1>
+    <h1 data-i18n="loadingGraph">Loading graph...</h1>
     <div class="meta">
       <span class="pill">Babylon.js</span>
-      <span class="pill">3D force-directed</span>
+      <span class="pill" data-i18n="force3d">3D force-directed</span>
     </div>
-    <p>Drag to orbit, wheel to zoom, hover or click a node for details.</p>
+    <p data-i18n="dragHint">Drag to orbit, wheel to zoom, hover or click a node for details.</p>
   </aside>
 
-  <div id="statusbar" class="statusbar">Starting 3D scene.</div>
-  <label class="cognitive-control" title="Viewport information density">
-    <span>Info</span>
-    <input id="cognitiveSlider" type="range" min="1" max="5" step="1" value="3" aria-label="Cognitive load level">
+  <div id="statusbar" class="statusbar" data-i18n="startingScene">Starting 3D scene.</div>
+  <label class="cognitive-control" title="Viewport information density" data-i18n-title="viewportInformationDensity">
+    <span data-i18n="info">Info</span>
+    <input id="cognitiveSlider" type="range" min="1" max="5" step="1" value="3" aria-label="Cognitive load level" data-i18n-aria="cognitiveLoadLevel">
     <span id="cognitiveValue">3</span>
   </label>
   <div id="hoverLabel" class="label-pop"></div>
   <div id="cxtmenuBridge" class="cxtmenu-bridge" aria-hidden="true"></div>
   <div id="contextMenu" class="context-menu" role="menu">
-    <button data-action="focus" type="button" title="Focus linked branch"><span class="cxtmenu-content"><i class="fa-solid fa-crosshairs"></i><span>Focus</span></span></button>
-    <button data-action="edit" type="button" title="Edit title/detail/files"><span class="cxtmenu-content"><i class="fa-solid fa-pen-to-square"></i><span>Edit</span></span></button>
-    <button data-action="labels" type="button" title="Show or hide label layer"><span class="cxtmenu-content"><i class="fa-solid fa-tags"></i><span>Labels</span></span></button>
-    <button data-action="copy-id" type="button" title="Copy node id"><span class="cxtmenu-content"><i class="fa-regular fa-copy"></i><span>Copy</span></span></button>
-    <button data-action="mark-testing" type="button" title="Yellow: currently being tested"><span class="cxtmenu-content"><i class="fa-solid fa-vial-circle-check"></i><span>Testing</span></span></button>
-    <button data-action="mark-needed" type="button" title="Red: needs implementation or update"><span class="cxtmenu-content"><i class="fa-solid fa-circle-exclamation"></i><span>Needed</span></span></button>
-    <button data-action="mark-done" type="button" title="Green: implemented and merged"><span class="cxtmenu-content"><i class="fa-solid fa-check"></i><span>Done</span></span></button>
-    <select id="contextWorkflowState" class="status-ring" title="Set workflow state"></select>
-    <div class="menu-center">Node<br>actions</div>
+    <button data-action="focus" type="button" title="Focus linked branch" data-i18n-title="focusLinkedBranch"><span class="cxtmenu-content"><i class="fa-solid fa-crosshairs"></i><span data-i18n="focus">Focus</span></span></button>
+    <button data-action="edit" type="button" title="Edit title/detail/files" data-i18n-title="editTitleDetailFiles"><span class="cxtmenu-content"><i class="fa-solid fa-pen-to-square"></i><span data-i18n="edit">Edit</span></span></button>
+    <button data-action="labels" type="button" title="Show or hide label layer" data-i18n-title="showHideLabelLayer"><span class="cxtmenu-content"><i class="fa-solid fa-tags"></i><span data-i18n="labels">Labels</span></span></button>
+    <button data-action="copy-id" type="button" title="Copy node id" data-i18n-title="copyNodeId"><span class="cxtmenu-content"><i class="fa-regular fa-copy"></i><span data-i18n="copy">Copy</span></span></button>
+    <button data-action="mark-testing" type="button" title="Yellow: currently being tested" data-i18n-title="testingTitle"><span class="cxtmenu-content"><i class="fa-solid fa-vial-circle-check"></i><span data-i18n="testing">Testing</span></span></button>
+    <button data-action="mark-needed" type="button" title="Red: needs implementation or update" data-i18n-title="neededTitle"><span class="cxtmenu-content"><i class="fa-solid fa-circle-exclamation"></i><span data-i18n="needed">Needed</span></span></button>
+    <button data-action="mark-done" type="button" title="Green: implemented and merged" data-i18n-title="doneTitle"><span class="cxtmenu-content"><i class="fa-solid fa-check"></i><span data-i18n="done">Done</span></span></button>
+    <button data-action="trash" type="button" title="Move node to trash" data-i18n-title="moveNodeToTrash"><span class="cxtmenu-content"><i class="fa-solid fa-trash"></i><span data-i18n="trash">Trash</span></span></button>
+    <select id="contextWorkflowState" class="status-ring" title="Set workflow state" data-i18n-title="setWorkflowState"></select>
+    <div class="menu-center" data-i18n="nodeActions">Node<br>actions</div>
   </div>
-  <div id="settingsPanel" class="settings-panel" role="region" aria-label="Settings">
-    <strong>Settings</strong>
-    <label>Context menu style
-      <select id="contextMenuStyleSelect" aria-label="Context menu style">
-        <option value="cytoscape">Radial menu (cytoscape)</option>
-        <option value="html">Radial menu (HTML buttons)</option>
+  <div id="settingsPanel" class="settings-panel" role="region" aria-label="Settings" data-i18n-aria="settings">
+    <strong data-i18n="settings">Settings</strong>
+    <label><span data-i18n="language">Language</span>
+      <select id="languageSelect" aria-label="Language" data-i18n-aria="language">
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+    <label><span data-i18n="contextMenuStyle">Context menu style</span>
+      <select id="contextMenuStyleSelect" aria-label="Context menu style" data-i18n-aria="contextMenuStyle">
+        <option value="cytoscape" data-i18n="radialCytoscape">Radial menu (cytoscape)</option>
+        <option value="html" data-i18n="radialHtml">Radial menu (HTML buttons)</option>
       </select>
     </label>
   </div>
   <div id="timePanel" class="time-panel"></div>
   <div id="mapPanel" class="map-panel"></div>
+  <div id="trashConfirm" class="trash-confirm" role="dialog" aria-modal="false" aria-label="Confirm moving node to trash" data-i18n-aria="confirmMoveNodeToTrash">
+    <strong data-i18n="moveNodeToTrashQuestion">Move node to trash?</strong>
+    <p id="trashConfirmText"></p>
+    <div class="confirm-row">
+      <button id="trashCancel" type="button" data-i18n="cancel">Cancel</button>
+      <button id="trashConfirmButton" class="danger" type="button" data-i18n="moveToTrash">Move to trash</button>
+    </div>
+  </div>
 
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script src="https://unpkg.com/cytoscape@3.34.0/dist/cytoscape.min.js"></script>
@@ -689,6 +806,7 @@
   <script>
     window.GRAPH_UI_BASE_PATH = location.pathname.includes("/job_apply_automation/") ? "/job_apply_automation" : "";
   </script>
+  <script src="./js/i18n.js"></script>
   <script src="./js/babylon-3d.js"></script>
 </body>
 </html>

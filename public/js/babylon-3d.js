@@ -75,6 +75,13 @@
   const contextSearchBox = document.getElementById("contextSearchBox");
   const contextSearchButton = document.getElementById("contextSearchButton");
   const legend = document.getElementById("legend");
+  const trashButton = document.getElementById("trashButton");
+  const trashCount = document.getElementById("trashCount");
+  const trashPanel = document.getElementById("trashPanel");
+  const trashConfirm = document.getElementById("trashConfirm");
+  const trashConfirmText = document.getElementById("trashConfirmText");
+  const trashCancel = document.getElementById("trashCancel");
+  const trashConfirmButton = document.getElementById("trashConfirmButton");
 
   let engine;
   let scene;
@@ -98,6 +105,7 @@
   let cognitiveLevel = 3;
   let contextSearchTerms = [];
   let cameraTween = null;
+  let pendingTrashNode = null;
   let contextMenuStyle = localStorage.getItem("graphUiContextMenuStyle") === "html" ? "html" : "cytoscape";
   const workflowDescriptions = {
     not_done: "Feature/task is known but not implemented yet.",
@@ -189,6 +197,7 @@
       edges,
       groups,
       workflowStates: payload.workflowStates || workflowStateFallbacks,
+      trash: payload.trash || { nodes: [] },
       nodeById: new Map(nodes.map((node) => [node.id, node])),
     };
   }
@@ -613,6 +622,92 @@
     node.testComments = result.edit.testComments || node.testComments || [];
     showNodeDetails(node);
     setStatus(`Saved test comment for ${node.label}.`);
+  }
+
+  function updateTrashButton() {
+    const trashed = Array.isArray(graphState?.trash?.nodes) ? graphState.trash.nodes : [];
+    const count = trashed.length;
+    trashCount.textContent = String(count);
+    trashButton.classList.toggle("active", count > 0);
+    const title = count
+      ? `Trash: ${count} deleted node${count === 1 ? "" : "s"}`
+      : "Trash is empty";
+    trashButton.title = title;
+    trashButton.setAttribute("aria-label", title);
+    if (!count) trashPanel.classList.remove("open");
+  }
+
+  function showTrashPanel() {
+    const trashed = Array.isArray(graphState?.trash?.nodes) ? graphState.trash.nodes : [];
+    if (!trashed.length) {
+      trashPanel.classList.remove("open");
+      return;
+    }
+    trashPanel.innerHTML = `
+      <strong>Trash</strong>
+      <ul>
+        ${trashed.map((node) => `<li><strong>${escapeHtml(node.label || node.id)}</strong><br><span class="muted">${escapeHtml(node.deletedAt || "")}</span></li>`).join("")}
+      </ul>
+    `;
+    trashPanel.classList.toggle("open");
+    trashConfirm.classList.remove("open");
+  }
+
+  function requestTrashConfirmation(node) {
+    if (!node) return;
+    pendingTrashNode = node;
+    hideHtmlContextMenu();
+    trashPanel.classList.remove("open");
+    trashConfirmText.textContent = `${node.label} will be hidden from the active graph and kept in trash.`;
+    trashConfirm.classList.add("open");
+  }
+
+  async function moveNodeToTrash(node) {
+    if (!node) return;
+    const deletedAt = new Date().toISOString();
+    const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        label: node.label,
+        detail: node.detail,
+        workflowState: node.workflowState,
+        workState: node.workState,
+        seenAt: node.seenAt || "",
+        attachments: [],
+        deletedAt,
+        deletedBy: "human",
+      }),
+    });
+    if (!response.ok) {
+      setStatus(`Could not move ${node.label} to trash.`);
+      return;
+    }
+    graphState.trash ||= { nodes: [] };
+    graphState.trash.nodes ||= [];
+    graphState.trash.nodes.push({ id: node.id, label: node.label, group: node.group, deletedAt, deletedBy: "human" });
+    removeNodeFromScene(node);
+    trashConfirm.classList.remove("open");
+    pendingTrashNode = null;
+    updateTrashButton();
+    applyFilters();
+    showNodeDetails(null);
+    setStatus(`${node.label} moved to trash.`);
+  }
+
+  function removeNodeFromScene(node) {
+    pinnedNode = pinnedNode?.id === node.id ? null : pinnedNode;
+    hoveredNode = hoveredNode?.id === node.id ? null : hoveredNode;
+    contextNode = contextNode?.id === node.id ? null : contextNode;
+    if (node.labelPlane) node.labelPlane.dispose();
+    if (node.mesh) node.mesh.dispose();
+    const removedEdges = graphState.edges.filter((edge) => edge.source === node.id || edge.target === node.id);
+    for (const edge of removedEdges) edge.mesh?.dispose();
+    graphState.edges = graphState.edges.filter((edge) => edge.source !== node.id && edge.target !== node.id);
+    graphState.nodes = graphState.nodes.filter((item) => item.id !== node.id);
+    graphState.nodeById.delete(node.id);
+    renderTimePanel();
+    drawMap();
   }
 
   function showTreeText(node) {
@@ -1283,6 +1378,7 @@
         { content: cxtIcon("fa-solid fa-circle-exclamation", "Needed"), fillColor: "rgba(239,68,68,0.86)", select: () => setNodeWorkState(contextNode, "needed") },
         { content: cxtIcon("fa-solid fa-check", "Done"), fillColor: "rgba(34,197,94,0.86)", select: () => setNodeWorkState(contextNode, "done") },
         { content: cxtIcon("fa-solid fa-user-check", "Human"), fillColor: "rgba(20,184,166,0.86)", select: () => setNodeWorkflowState(contextNode, "tested_human") },
+        { content: cxtIcon("fa-solid fa-trash", "Trash"), fillColor: "rgba(153,27,27,0.9)", select: () => requestTrashConfirmation(contextNode) },
       ],
     });
     cxtmenuBridge.addEventListener("contextmenu", (event) => event.preventDefault(), true);
@@ -1557,6 +1653,7 @@
     for (const node of graphState.nodes) createNodeMesh(node);
     for (const edge of graphState.edges) createEdgeMesh(edge);
     populateControls();
+    updateTrashButton();
     applyFilters();
     showNodeDetails(null);
     renderTimePanel();
@@ -1603,6 +1700,24 @@
       },
       contextMenuStyle() {
         return contextMenuStyle;
+      },
+      trashCount() {
+        return Number(trashCount.textContent || "0");
+      },
+      trashButtonActive() {
+        return trashButton.classList.contains("active");
+      },
+      requestTrashForFirstVisibleNode() {
+        const point = this.firstVisibleNodePoint();
+        const node = point ? graphState.nodeById.get(point.id) : graphState.nodes.find((item) => item.visibleByFilter);
+        requestTrashConfirmation(node);
+        return node ? { id: node.id, label: node.label } : null;
+      },
+      confirmTrash() {
+        trashConfirmButton.click();
+      },
+      trashConfirmVisible() {
+        return trashConfirm.classList.contains("open");
       },
       setContextMenuStyle(style) {
         contextMenuStyleSelect.value = style === "html" ? "html" : "cytoscape";
@@ -1696,6 +1811,7 @@
       if (action === "mark-testing") await setNodeWorkState(contextNode, "testing");
       if (action === "mark-needed") await setNodeWorkState(contextNode, "needed");
       if (action === "mark-done") await setNodeWorkState(contextNode, "done");
+      if (action === "trash") requestTrashConfirmation(contextNode);
     });
     contextWorkflowState.addEventListener("change", async () => {
       if (!contextNode) return;
@@ -1703,8 +1819,28 @@
       hideHtmlContextMenu();
     });
     contextWorkflowState.addEventListener("click", (event) => event.stopPropagation());
+    trashButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      showTrashPanel();
+    });
+    trashCancel.addEventListener("click", () => {
+      pendingTrashNode = null;
+      trashConfirm.classList.remove("open");
+    });
+    trashConfirmButton.addEventListener("click", async () => {
+      const node = pendingTrashNode;
+      if (!node) return;
+      await moveNodeToTrash(node);
+    });
     document.addEventListener("click", (event) => {
       if (contextMenu.style.display === "block" && !contextMenu.contains(event.target)) hideHtmlContextMenu();
+      if (trashPanel.classList.contains("open") && !trashPanel.contains(event.target) && !trashButton.contains(event.target)) {
+        trashPanel.classList.remove("open");
+      }
+      if (trashConfirm.classList.contains("open") && !trashConfirm.contains(event.target)) {
+        trashConfirm.classList.remove("open");
+        pendingTrashNode = null;
+      }
       if (settingsPanel.classList.contains("open") && !settingsPanel.contains(event.target) && !settingsToggle.contains(event.target)) {
         settingsPanel.classList.remove("open");
       }

@@ -3,6 +3,7 @@ import { createServer as createHttpServer } from "node:http";
 import { extname, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { graphFiles, readGraphModel, readGraphPayload } from "./lib/graph-model.mjs";
+import { localizeGraphModel, localizeGraphRegistry, normalizeLanguage } from "./lib/localization.mjs";
 import { exportFreeMind, exportMarkmapMarkdown, exportOpml } from "./lib/mindmap-export.mjs";
 import {
   defaultSuperpowerFlow,
@@ -154,6 +155,8 @@ async function saveGraphEdit(res, req, graphId, nodeId) {
     testFlow: payload.testFlow && typeof payload.testFlow === "object" ? payload.testFlow : existing.testFlow || null,
     attachments,
     testComments,
+    deletedAt: typeof payload.deletedAt === "string" ? payload.deletedAt : existing.deletedAt || "",
+    deletedBy: typeof payload.deletedBy === "string" ? payload.deletedBy : existing.deletedBy || "",
     updatedAt,
   };
   if (attachments.length) {
@@ -216,9 +219,9 @@ async function serveGraph(res, graphId) {
   }
 }
 
-async function serveGraphModel(res, graphId) {
+async function serveGraphModel(res, graphId, lang) {
   try {
-    sendJson(res, 200, await readGraphModel(graphId));
+    sendJson(res, 200, localizeGraphModel(await readGraphModel(graphId), lang));
   } catch (error) {
     if (error.code === "UNKNOWN_GRAPH") {
       sendJson(res, 404, { error: "unknown_graph", graphId });
@@ -379,6 +382,7 @@ export function createServer() {
   return createHttpServer(async (req, res) => {
     const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
     const routePath = stripBasePath(requestUrl.pathname);
+    const lang = normalizeLanguage(requestUrl.searchParams.get("lang"));
 
     const editMatch = routePath.match(/^\/api\/graph-edits\/([a-z0-9-]+)\/(.+)$/);
     if (req.method === "POST" && editMatch) {
@@ -414,12 +418,12 @@ export function createServer() {
       sendJson(
         res,
         200,
-        Object.fromEntries(
+        localizeGraphRegistry(Object.fromEntries(
           Object.entries(graphFiles).map(([id, graph]) => [
             id,
             { label: graph.label, url: `/api/graphs/${id}` },
           ]),
-        ),
+        ), lang),
       );
       return;
     }
@@ -431,7 +435,7 @@ export function createServer() {
 
     const modelMatch = routePath.match(/^\/api\/graph-model\/([a-z0-9-]+)$/);
     if (modelMatch) {
-      await serveGraphModel(res, modelMatch[1]);
+      await serveGraphModel(res, modelMatch[1], lang);
       return;
     }
 

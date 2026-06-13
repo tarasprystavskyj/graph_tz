@@ -125,6 +125,11 @@ try {
   assert.match(page.body, /cxtmenuBridge/, "3D page should include cxtmenu bridge");
   assert.match(page.body, /cytoscape-cxtmenu@3\.5\.0/, "3D page should load the cytoscape-cxtmenu extension");
   assert.match(page.body, /cxtmenu-content/, "3D cxtmenu commands should use extension content slots");
+  assert.match(page.body, /id="trashButton"/, "3D page should include trash button in the general menu");
+  assert.match(page.body, /class="toolbar-row toolbar-footer"/, "trash button should live in the toolbar footer");
+  assert.match(page.body, /display: none;\s+align-items: center;[\s\S]+\.trash-button\.active \{\s+display: inline-flex;/, "trash button should only render when trash has nodes");
+  assert.doesNotMatch(page.body, /\.trash-button \{[\s\S]{0,160}position: fixed;/, "trash button should not be viewport-fixed");
+  assert.match(page.body, /data-action="trash"/, "context menu should include a trash action");
   assert.doesNotMatch(page.body, /id="runLayout"/, "3D page should switch layouts directly from select");
 
   const cytoscapePage = await request(port, "/cytoscape-2d.html");
@@ -180,6 +185,10 @@ try {
   assert.match(script.body, /setNodeWorkState\(contextNode, "testing"\)/, "3D cxtmenu should include testing state action");
   assert.match(script.body, /setNodeWorkState\(contextNode, "needed"\)/, "3D cxtmenu should include needed state action");
   assert.match(script.body, /setNodeWorkState\(contextNode, "done"\)/, "3D cxtmenu should include done state action");
+  assert.match(script.body, /requestTrashConfirmation/, "3D context menu should request confirmation before trashing a node");
+  assert.match(script.body, /moveNodeToTrash/, "3D script should move nodes to trash through graph edits");
+  assert.match(script.body, /deletedAt/, "3D script should persist deleted nodes as soft-delete graph edits");
+  assert.match(script.body, /trashButton\.classList\.toggle\("active", count > 0\)/, "3D trash button should activate only when non-empty");
   assert.match(script.body, /pointerType/, "3D context menu should support touch or pen long-press");
   assert.match(script.body, /startWithPhysicsPaused/, "3D script should allow browser tests to start with physics paused");
   assert.match(script.body, /runContextSearch/, "3D script should include contextual agent search");
@@ -265,6 +274,7 @@ try {
     "task:cognitive_label_density_budget",
     "task:cxtmenu_extension_gesture_agent",
     "task:real_right_click_regression_agent",
+    "task:trash_node_context_menu",
   ]) {
     assert.ok(
       learningRawJson.elements.nodes.some((node) => node.data?.id === id && node.data?.is_new === true),
@@ -336,6 +346,8 @@ try {
     workState: "testing",
     workflowState: "ready_for_test",
     seenAt: "2026-06-13T00:00:00.000Z",
+    deletedAt: "2026-06-13T00:00:01.000Z",
+    deletedBy: "human",
     testFlow: {
       actor: "browser-qa-agent",
       selectors: ["#renderCanvas", "#details"],
@@ -358,6 +370,8 @@ try {
   assert.equal(editJson.edit.workState, "testing");
   assert.equal(editJson.edit.workflowState, "ready_for_test");
   assert.equal(editJson.edit.seenAt, "2026-06-13T00:00:00.000Z");
+  assert.equal(editJson.edit.deletedAt, "2026-06-13T00:00:01.000Z");
+  assert.equal(editJson.edit.deletedBy, "human");
   assert.equal(editJson.edit.testFlow.actor, "browser-qa-agent");
   assert.equal(editJson.edit.testComments[0].text, "Smoke human verification comment");
   assert.ok(editJson.edit.attachments[0].url.includes("/graph-data/uploads/smoke-test/"));
