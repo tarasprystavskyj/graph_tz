@@ -796,6 +796,24 @@
         },
         "position": { "x": 2720, "y": 60 },
         "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:cxtmenu_extension_gesture_agent",
+          "_label": "Task: replace radial menu with cytoscape-cxtmenu",
+          "name": "Task: replace radial menu with cytoscape-cxtmenu",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "cxtmenu-extension-agent",
+          "detail": "Use the ready cytoscape.js-cxtmenu extension instead of a custom DOM radial menu. Open on mouse down, select command on release after drag, prevent the browser native menu, and split mobile gestures: short tap focuses on release, long press opens cxtmenu.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 3000, "y": -420 },
+        "classes": "ui active testing box"
       }
     ],
     "edges": [
@@ -880,7 +898,10 @@
       { "data": { "id": "e79", "source": "task:zoom_wheel_sensitivity", "target": "ui:babylon", "label": "tunes camera" } },
       { "data": { "id": "e80", "source": "branch:implementation", "target": "task:cognitive_label_density_budget", "label": "delegates to ux-agent" } },
       { "data": { "id": "e81", "source": "task:cognitive_label_density_budget", "target": "ui:babylon", "label": "controls labels" } },
-      { "data": { "id": "e82", "source": "task:cognitive_label_density_budget", "target": "test:smoke", "label": "adds assertions" } }
+      { "data": { "id": "e82", "source": "task:cognitive_label_density_budget", "target": "test:smoke", "label": "adds assertions" } },
+      { "data": { "id": "e83", "source": "branch:implementation", "target": "task:cxtmenu_extension_gesture_agent", "label": "delegates to cxtmenu-extension-agent" } },
+      { "data": { "id": "e84", "source": "task:cxtmenu_extension_gesture_agent", "target": "ui:babylon", "label": "replaces menu" } },
+      { "data": { "id": "e85", "source": "task:cxtmenu_extension_gesture_agent", "target": "test:smoke", "label": "tests gestures" } }
     ]
   }
 }

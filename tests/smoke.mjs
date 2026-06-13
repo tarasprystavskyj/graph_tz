@@ -122,13 +122,10 @@ try {
   assert.match(page.body, /degreeFilter/, "3D page should include degree filter control");
   assert.match(page.body, /workflowFilter/, "3D page should include workflow status filter");
   assert.match(page.body, /font-awesome\/6\.7\.2/, "3D page should load Font Awesome icons from CDN");
-  assert.match(page.body, /contextMenu/, "3D page should include context menu");
-  assert.match(page.body, /contextWorkflowState/, "3D context menu should include workflow state selector");
-  assert.match(page.body, /cxtmenu-content/, "3D context menu should inherit cxtmenu-style command content");
+  assert.match(page.body, /cxtmenuBridge/, "3D page should include cxtmenu bridge");
+  assert.match(page.body, /cytoscape-cxtmenu@3\.5\.0/, "3D page should load the cytoscape-cxtmenu extension");
+  assert.match(page.body, /cxtmenu-content/, "3D cxtmenu commands should use extension content slots");
   assert.doesNotMatch(page.body, /id="runLayout"/, "3D page should switch layouts directly from select");
-  assert.match(page.body, /mark-testing/, "3D context menu should include testing state action");
-  assert.match(page.body, /mark-needed/, "3D context menu should include needed state action");
-  assert.match(page.body, /mark-done/, "3D context menu should include done state action");
 
   const cytoscapePage = await request(port, "/cytoscape-2d.html");
   assert.equal(cytoscapePage.statusCode, 200, "cytoscape page should be served");
@@ -176,6 +173,12 @@ try {
   assert.match(script.body, /isNodeInViewport/, "3D script should prioritize labels in the viewport");
   assert.match(script.body, /cognitiveLevel >= 4 && node\.detail/, "3D labels should add descriptions at high density");
   assert.match(script.body, /camera\.wheelPrecision = 24/, "3D mouse wheel zoom should be 50 percent more active");
+  assert.match(script.body, /initCxtmenuBridge/, "3D script should initialise the cytoscape-cxtmenu bridge");
+  assert.match(script.body, /cxttapstart/, "3D script should open cxtmenu on press start");
+  assert.match(script.body, /cxttapend/, "3D script should select cxtmenu commands on release");
+  assert.match(script.body, /setNodeWorkState\(contextNode, "testing"\)/, "3D cxtmenu should include testing state action");
+  assert.match(script.body, /setNodeWorkState\(contextNode, "needed"\)/, "3D cxtmenu should include needed state action");
+  assert.match(script.body, /setNodeWorkState\(contextNode, "done"\)/, "3D cxtmenu should include done state action");
   assert.match(script.body, /pointerType/, "3D context menu should support touch or pen long-press");
   assert.match(script.body, /startWithPhysicsPaused/, "3D script should allow browser tests to start with physics paused");
   assert.match(script.body, /runContextSearch/, "3D script should include contextual agent search");
@@ -259,6 +262,7 @@ try {
     "task:mobile_long_press_menu",
     "task:zoom_wheel_sensitivity",
     "task:cognitive_label_density_budget",
+    "task:cxtmenu_extension_gesture_agent",
   ]) {
     assert.ok(
       learningRawJson.elements.nodes.some((node) => node.data?.id === id && node.data?.is_new === true),

@@ -48,7 +48,7 @@
   const details = document.getElementById("details");
   const statusbar = document.getElementById("statusbar");
   const hoverLabel = document.getElementById("hoverLabel");
-  const contextMenu = document.getElementById("contextMenu");
+  const cxtmenuBridge = document.getElementById("cxtmenuBridge");
   const topbar = document.getElementById("topbar");
   const menuToggle = document.getElementById("menuToggle");
   const timePanel = document.getElementById("timePanel");
@@ -63,7 +63,6 @@
   const showMap = document.getElementById("showMap");
   const groupFilter = document.getElementById("groupFilter");
   const workflowFilter = document.getElementById("workflowFilter");
-  const contextWorkflowState = document.getElementById("contextWorkflowState");
   const cognitiveSlider = document.getElementById("cognitiveSlider");
   const cognitiveValue = document.getElementById("cognitiveValue");
   const degreeFilter = document.getElementById("degreeFilter");
@@ -81,6 +80,9 @@
   let pinnedNode = null;
   let hoveredNode = null;
   let contextNode = null;
+  let cxtmenuCy = null;
+  let cxtmenuProxy = null;
+  let cxtmenuGesture = null;
   let focusPullRoot = null;
   let focusPullDistances = new Map();
   let activeGroup = "";
@@ -892,7 +894,6 @@
     groupFilter.innerHTML = `<option value="">All groups</option>${groups.map(([id, group]) => `<option value="${escapeHtml(id)}">${escapeHtml(group.label)}</option>`).join("")}`;
     const states = graphState.workflowStates || workflowStateFallbacks;
     workflowFilter.innerHTML = `<option value="">All workflow states</option>${states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("")}`;
-    contextWorkflowState.innerHTML = states.map((state) => `<option value="${escapeHtml(state.id)}">${escapeHtml(state.label)}</option>`).join("");
     legend.innerHTML = groups
       .map(([id, group]) => `<span class="legend-item" title="${escapeHtml(group.label)}"><span class="swatch" style="background:${escapeHtml(group.color || fallbackColors[id] || "#6b7280")}"></span>${escapeHtml(group.label)}</span>`)
       .join("");
@@ -1197,22 +1198,134 @@
     drawLabelTexture(node.labelPlane.material.diffuseTexture, node, node.labelMetrics || labelMetrics(node));
   }
 
-  function showContextMenu(event, node) {
-    event?.preventDefault?.();
-    event?.stopPropagation?.();
-    contextNode = node;
-    contextWorkflowState.value = node.workflowState || "not_done";
-    const center = contextMenu.querySelector(".menu-center");
-    if (center) {
-      const title = String(node.label || node.id);
-      const state = workflowStateFor(node.workflowState);
-      center.textContent = `${title.slice(0, 34)}${title.length > 34 ? "..." : ""}\n${state?.label || node.status || "node"}`;
+  function cxtIcon(icon, label) {
+    return `<span class="cxtmenu-content"><i class="${icon}"></i><span>${escapeHtml(label)}</span></span>`;
+  }
+
+  function initCxtmenuBridge() {
+    if (!window.cytoscape || !window.cytoscapeCxtmenu || !cxtmenuBridge) {
+      setStatus("cytoscape-cxtmenu did not load; radial context menu is unavailable.");
+      return;
     }
-    const x = Math.min(Math.max(event.clientX, 112), window.innerWidth - 112);
-    const y = Math.min(Math.max(event.clientY, 112), window.innerHeight - 112);
-    contextMenu.style.left = `${x}px`;
-    contextMenu.style.top = `${y}px`;
-    contextMenu.style.display = "block";
+    cxtmenuCy = window.cytoscape({
+      container: cxtmenuBridge,
+      elements: [{ data: { id: "proxy" }, position: { x: 0, y: 0 } }],
+      style: [
+        {
+          selector: "node",
+          style: {
+            width: 58,
+            height: 58,
+            "background-opacity": 0,
+            "border-opacity": 0,
+            label: "",
+          },
+        },
+      ],
+      layout: { name: "preset" },
+      userZoomingEnabled: false,
+      userPanningEnabled: false,
+      boxSelectionEnabled: false,
+      autoungrabify: true,
+    });
+    cxtmenuProxy = cxtmenuCy.$id("proxy");
+    cxtmenuCy.cxtmenu({
+      selector: "node",
+      openMenuEvents: "cxttapstart taphold",
+      menuRadius: 78,
+      activePadding: 18,
+      spotlightPadding: 9,
+      minSpotlightRadius: 30,
+      maxSpotlightRadius: 30,
+      fillColor: "rgba(15, 23, 42, 0.82)",
+      activeFillColor: "rgba(37, 99, 235, 0.9)",
+      itemColor: "#ffffff",
+      itemTextShadowColor: "rgba(15,23,42,0.65)",
+      zIndex: 9999,
+      outsideMenuCancel: 32,
+      commands: () => [
+        { content: cxtIcon("fa-solid fa-crosshairs", "Focus"), select: () => focusLinkedBranch(contextNode) },
+        { content: cxtIcon("fa-solid fa-pen-to-square", "Edit"), select: () => showNodeDetails(contextNode, true) },
+        { content: cxtIcon("fa-solid fa-tags", "Labels"), select: () => toggleLabelLayer() },
+        { content: cxtIcon("fa-regular fa-copy", "Copy"), select: () => copyContextNodeId() },
+        { content: cxtIcon("fa-solid fa-vial-circle-check", "Testing"), fillColor: "rgba(250,204,21,0.86)", select: () => setNodeWorkState(contextNode, "testing") },
+        { content: cxtIcon("fa-solid fa-circle-exclamation", "Needed"), fillColor: "rgba(239,68,68,0.86)", select: () => setNodeWorkState(contextNode, "needed") },
+        { content: cxtIcon("fa-solid fa-check", "Done"), fillColor: "rgba(34,197,94,0.86)", select: () => setNodeWorkState(contextNode, "done") },
+        { content: cxtIcon("fa-solid fa-user-check", "Human"), fillColor: "rgba(20,184,166,0.86)", select: () => setNodeWorkflowState(contextNode, "tested_human") },
+      ],
+    });
+    cxtmenuBridge.addEventListener("contextmenu", (event) => event.preventDefault(), true);
+  }
+
+  function toggleLabelLayer() {
+    labelsVisible = !labelsVisible;
+    showAllLabels.checked = labelsVisible;
+    applyFilters();
+  }
+
+  async function copyContextNodeId() {
+    if (!contextNode) return;
+    await navigator.clipboard?.writeText(contextNode.id);
+    setStatus(`Copied ${contextNode.id}.`);
+  }
+
+  function makeCxtmenuEvent(type, point, originalEvent) {
+    return {
+      type,
+      target: cxtmenuProxy,
+      cyTarget: cxtmenuProxy,
+      cy: cxtmenuCy,
+      renderedPosition: { x: point.x, y: point.y },
+      cyRenderedPosition: { x: point.x, y: point.y },
+      originalEvent: {
+        pageX: point.x + window.pageXOffset,
+        pageY: point.y + window.pageYOffset,
+        clientX: point.x,
+        clientY: point.y,
+        button: originalEvent?.button || 0,
+        buttons: originalEvent?.buttons || 1,
+        preventDefault() {},
+        stopPropagation() {},
+      },
+      preventDefault() {},
+      stopPropagation() {},
+    };
+  }
+
+  function startCxtmenuGesture(node, event) {
+    if (!cxtmenuCy || !cxtmenuProxy || !node) return false;
+    event.preventDefault?.();
+    event.stopPropagation?.();
+    contextNode = node;
+    cxtmenuBridge.style.pointerEvents = "none";
+    const point = { x: event.clientX, y: event.clientY };
+    cxtmenuProxy.position(point);
+    cxtmenuCy.resize();
+    cxtmenuProxy.emit(makeCxtmenuEvent("cxttapstart", point, event));
+    cxtmenuGesture = { node, started: performance.now(), startPoint: point, lastPoint: point, moved: false };
+    return true;
+  }
+
+  function moveCxtmenuGesture(event) {
+    if (!cxtmenuGesture || !cxtmenuCy) return;
+    event.preventDefault?.();
+    event.stopPropagation?.();
+    const point = { x: event.clientX, y: event.clientY };
+    const dx = point.x - cxtmenuGesture.startPoint.x;
+    const dy = point.y - cxtmenuGesture.startPoint.y;
+    cxtmenuGesture.moved = cxtmenuGesture.moved || Math.hypot(dx, dy) > 8;
+    cxtmenuGesture.lastPoint = point;
+    cxtmenuProxy.emit(makeCxtmenuEvent("cxtdrag", point, event));
+  }
+
+  function endCxtmenuGesture(event) {
+    if (!cxtmenuGesture || !cxtmenuCy) return false;
+    event.preventDefault?.();
+    event.stopPropagation?.();
+    const point = { x: event.clientX, y: event.clientY };
+    cxtmenuProxy.emit(makeCxtmenuEvent("cxttapend", point, event));
+    cxtmenuGesture = null;
+    return true;
   }
 
   async function setNodeWorkState(node, workState) {
@@ -1242,38 +1355,71 @@
   }
 
   function wirePointerEvents() {
+    let touchTapCandidate = null;
     let longPressTimer = null;
-    let longPressStart = null;
-    const clearLongPress = () => {
+    const clearTouchTap = () => {
       if (longPressTimer) window.clearTimeout(longPressTimer);
       longPressTimer = null;
-      longPressStart = null;
+      touchTapCandidate = null;
     };
     canvas.addEventListener("pointerdown", (event) => {
-      if (!["touch", "pen"].includes(event.pointerType)) return;
       const node = pickNodeAtClientPoint(event.clientX, event.clientY);
       if (!node) return;
-      longPressStart = { x: event.clientX, y: event.clientY, node };
-      longPressTimer = window.setTimeout(() => {
+      if (event.button === 2 || event.buttons === 2) {
+        startCxtmenuGesture(node, event);
+        return;
+      }
+      if (["touch", "pen"].includes(event.pointerType)) {
         event.preventDefault();
-        showContextMenu(event, node);
-        longPressTimer = null;
-      }, 560);
+        touchTapCandidate = {
+          node,
+          pointerId: event.pointerId,
+          startPoint: { x: event.clientX, y: event.clientY },
+          moved: false,
+          longPressOpened: false,
+        };
+        longPressTimer = window.setTimeout(() => {
+          if (!touchTapCandidate) return;
+          touchTapCandidate.longPressOpened = startCxtmenuGesture(node, event);
+        }, 520);
+      }
     }, true);
     canvas.addEventListener("pointermove", (event) => {
-      if (!longPressStart) return;
-      const dx = event.clientX - longPressStart.x;
-      const dy = event.clientY - longPressStart.y;
-      if (Math.hypot(dx, dy) > 14) clearLongPress();
+      if (cxtmenuGesture) {
+        moveCxtmenuGesture(event);
+        return;
+      }
+      if (!touchTapCandidate || touchTapCandidate.pointerId !== event.pointerId) return;
+      const dx = event.clientX - touchTapCandidate.startPoint.x;
+      const dy = event.clientY - touchTapCandidate.startPoint.y;
+      if (Math.hypot(dx, dy) > 12) {
+        touchTapCandidate.moved = true;
+        if (!touchTapCandidate.longPressOpened) {
+          if (longPressTimer) window.clearTimeout(longPressTimer);
+          longPressTimer = null;
+        }
+      }
     }, true);
-    canvas.addEventListener("pointerup", clearLongPress, true);
-    canvas.addEventListener("pointercancel", clearLongPress, true);
+    canvas.addEventListener("pointerup", (event) => {
+      if (cxtmenuGesture) {
+        endCxtmenuGesture(event);
+        clearTouchTap();
+        return;
+      }
+      if (touchTapCandidate && touchTapCandidate.pointerId === event.pointerId) {
+        const candidate = touchTapCandidate;
+        clearTouchTap();
+        if (!candidate.longPressOpened && !candidate.moved) focusNodeAndPullTree(candidate.node);
+      }
+    }, true);
+    canvas.addEventListener("pointercancel", () => {
+      if (cxtmenuGesture) cxtmenuGesture = null;
+      clearTouchTap();
+    }, true);
     const suppressNativeContextMenu = (event) => {
       if (event.target === canvas || event.target?.id === "renderCanvas") {
         event.preventDefault();
         event.stopPropagation();
-        const node = pickNodeAtClientPoint(event.clientX, event.clientY);
-        if (node) showContextMenu(event, node);
       }
     };
     document.addEventListener("contextmenu", suppressNativeContextMenu, true);
@@ -1288,13 +1434,12 @@
         updateHoverLabel(pointerInfo.event, node);
       }
       if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN) {
-        contextMenu.style.display = "none";
         if (pointerInfo.event.button === 2 && node) {
           pointerInfo.event.preventDefault?.();
           pointerInfo.event.stopPropagation?.();
-          showContextMenu(pointerInfo.event, node);
           return;
         }
+        if (["touch", "pen"].includes(pointerInfo.event.pointerType)) return;
         if (node) {
           focusNodeAndPullTree(node);
         } else {
@@ -1380,6 +1525,12 @@
       detailsTitle() {
         return details.querySelector("h1")?.textContent || "";
       },
+      cxtmenuVisible() {
+        return [...cxtmenuBridge.querySelectorAll(".cxtmenu > div")].some((item) => item.style.display === "block");
+      },
+      cxtmenuReady() {
+        return Boolean(cxtmenuCy && cxtmenuProxy && cxtmenuBridge.querySelector(".cxtmenu"));
+      },
     };
   }
 
@@ -1449,35 +1600,6 @@
     contextSearchBox.addEventListener("keydown", (event) => {
       if (event.key === "Enter") runContextSearch();
     });
-    contextMenu.addEventListener("click", async (event) => {
-      const actionButton = event.target?.closest?.("button[data-action]");
-      const action = actionButton?.dataset?.action;
-      contextMenu.style.display = "none";
-      if (!contextNode || !action) return;
-      if (action === "focus") focusLinkedBranch(contextNode);
-      if (action === "edit") showNodeDetails(contextNode, true);
-      if (action === "labels") {
-        labelsVisible = !labelsVisible;
-        showAllLabels.checked = labelsVisible;
-        applyFilters();
-      }
-      if (action === "copy-id") {
-        await navigator.clipboard?.writeText(contextNode.id);
-        setStatus(`Copied ${contextNode.id}.`);
-      }
-      if (action === "mark-testing") await setNodeWorkState(contextNode, "testing");
-      if (action === "mark-needed") await setNodeWorkState(contextNode, "needed");
-      if (action === "mark-done") await setNodeWorkState(contextNode, "done");
-    });
-    contextWorkflowState.addEventListener("change", async () => {
-      if (!contextNode) return;
-      await setNodeWorkflowState(contextNode, contextWorkflowState.value);
-      contextMenu.style.display = "none";
-    });
-    contextWorkflowState.addEventListener("click", (event) => event.stopPropagation());
-    document.addEventListener("click", (event) => {
-      if (!contextMenu.contains(event.target)) contextMenu.style.display = "none";
-    });
   }
 
   async function setNodeWorkflowState(node, workflowState) {
@@ -1527,6 +1649,7 @@
     initScene();
     await populateGraphSelect();
     wireControls();
+    initCxtmenuBridge();
     wirePointerEvents();
     await loadGraph();
   }
