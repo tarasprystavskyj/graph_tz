@@ -73,7 +73,7 @@ try {
       expression: `(() => {
         const status = document.getElementById("statusbar")?.textContent || "";
         return {
-          ready: status.includes("Loaded") || document.querySelectorAll("canvas").length > 0,
+          ready: status.includes("Loaded") && !!window.__graphUi3dTest,
           title: document.title,
           hasCanvas: !!document.getElementById("renderCanvas"),
           hasCognitiveSlider: !!document.getElementById("cognitiveSlider"),
