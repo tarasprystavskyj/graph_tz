@@ -688,6 +688,42 @@
         },
         "position": { "x": 2160, "y": 540 },
         "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:dou_article_agent",
+          "_label": "Task: DOU article draft",
+          "name": "Task: DOU article draft",
+          "type": "box",
+          "group": "agent_branch",
+          "group_label": "Agent branch",
+          "status": "active",
+          "work_state": "tested_agent",
+          "owner": "article-agent",
+          "detail": "Article-agent writes a Ukrainian DOU draft explaining the graph TZ sidecar, agent QA/fixer flow, visual keys, and current limitations.",
+          "is_new": true,
+          "color": "#a3e635"
+        },
+        "position": { "x": 2440, "y": -420 },
+        "classes": "agent_branch active tested_agent box"
+      },
+      {
+        "data": {
+          "id": "task:right_click_context_fix",
+          "_label": "Task: right-click context menu fix",
+          "name": "Task: right-click context menu fix",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "fixer-agent",
+          "detail": "Fix 3D right-click handling so the custom radial context menu opens on node/label right-click and the browser native context menu does not receive the event.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2440, "y": -260 },
+        "classes": "ui active testing box"
       }
     ],
     "edges": [
@@ -758,7 +794,12 @@
       { "data": { "id": "e65", "source": "branch:implementation", "target": "task:left_icon_toolbar", "label": "delegates to ui-agent" } },
       { "data": { "id": "e66", "source": "task:left_icon_toolbar", "target": "ui:babylon", "label": "reworks controls" } },
       { "data": { "id": "e67", "source": "branch:implementation", "target": "task:focus_camera_animation", "label": "delegates to 3d-agent" } },
-      { "data": { "id": "e68", "source": "task:focus_camera_animation", "target": "ui:babylon", "label": "animates focus" } }
+      { "data": { "id": "e68", "source": "task:focus_camera_animation", "target": "ui:babylon", "label": "animates focus" } },
+      { "data": { "id": "e69", "source": "branch:implementation", "target": "task:dou_article_agent", "label": "delegates to article-agent" } },
+      { "data": { "id": "e70", "source": "task:dou_article_agent", "target": "data:exports", "label": "documents" } },
+      { "data": { "id": "e71", "source": "branch:implementation", "target": "task:right_click_context_fix", "label": "delegates to fixer-agent" } },
+      { "data": { "id": "e72", "source": "task:right_click_context_fix", "target": "ui:babylon", "label": "fixes context menu" } },
+      { "data": { "id": "e73", "source": "task:right_click_context_fix", "target": "test:smoke", "label": "adds browser test" } }
     ]
   }
 }

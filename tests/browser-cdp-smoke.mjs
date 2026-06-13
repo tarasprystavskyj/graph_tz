@@ -118,6 +118,32 @@ try {
     return response.result?.result?.value === point.label ? response.result.result.value : null;
   }, 5000);
   assert.equal(clicked, point.label, "clicking a visible node should load that node's details");
+  const rightClickPointResponse = await cdp.send("Runtime.evaluate", {
+    expression: "window.__graphUi3dTest?.firstVisibleNodePoint()",
+    returnByValue: true,
+  });
+  const rightClickPoint = rightClickPointResponse.result?.result?.value || point;
+  const contextResult = await cdp.send("Runtime.evaluate", {
+    expression: `(() => {
+      const canvas = document.getElementById("renderCanvas");
+      const event = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: ${rightClickPoint.x},
+        clientY: ${rightClickPoint.y},
+        button: 2,
+        buttons: 2
+      });
+      const prevented = !canvas.dispatchEvent(event);
+      return {
+        prevented,
+        visible: getComputedStyle(document.getElementById("contextMenu")).display === "block"
+      };
+    })()`,
+    returnByValue: true,
+  });
+  assert.equal(contextResult.result?.result?.value?.prevented, true, "right-click contextmenu should be prevented before the browser native menu");
+  assert.equal(contextResult.result?.result?.value?.visible, true, "right-clicking a visible node should open the custom context menu");
   await cdp.send("Runtime.evaluate", {
     expression: `(() => {
       const labels = document.getElementById("showAllLabels");

@@ -1136,6 +1136,8 @@
   }
 
   function showContextMenu(event, node) {
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
     contextNode = node;
     contextWorkflowState.value = node.workflowState || "not_done";
     const x = Math.min(Math.max(event.clientX, 112), window.innerWidth - 112);
@@ -1172,7 +1174,16 @@
   }
 
   function wirePointerEvents() {
-    canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+    const suppressNativeContextMenu = (event) => {
+      if (event.target === canvas || event.target?.id === "renderCanvas") {
+        event.preventDefault();
+        event.stopPropagation();
+        const node = pickNodeAtClientPoint(event.clientX, event.clientY);
+        if (node) showContextMenu(event, node);
+      }
+    };
+    document.addEventListener("contextmenu", suppressNativeContextMenu, true);
+    canvas.addEventListener("contextmenu", suppressNativeContextMenu, true);
     scene.onPointerObservable.add((pointerInfo) => {
       const pick = scene.pick(scene.pointerX, scene.pointerY);
       const node = pick?.pickedMesh?.metadata?.node || null;
@@ -1185,6 +1196,8 @@
       if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERDOWN) {
         contextMenu.style.display = "none";
         if (pointerInfo.event.button === 2 && node) {
+          pointerInfo.event.preventDefault?.();
+          pointerInfo.event.stopPropagation?.();
           showContextMenu(pointerInfo.event, node);
           return;
         }
@@ -1196,6 +1209,15 @@
         }
       }
     });
+  }
+
+  function pickNodeAtClientPoint(clientX, clientY) {
+    if (!scene || !engine) return null;
+    const rect = canvas.getBoundingClientRect();
+    const x = ((clientX - rect.left) / Math.max(1, rect.width)) * engine.getRenderWidth();
+    const y = ((clientY - rect.top) / Math.max(1, rect.height)) * engine.getRenderHeight();
+    const pick = scene.pick(x, y);
+    return pick?.pickedMesh?.metadata?.node || null;
   }
 
   function renderTimePanel() {
