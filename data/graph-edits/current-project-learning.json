@@ -1,0 +1,1673 @@
+{
+  "schema": "job.graph_ui.edits.v0",
+  "nodes": {
+    "learn:focus_first": {
+      "label": "1. Спочатку фокус",
+      "detail": "Не читати весь TZ. Відкрити граф, відфільтрувати групу або статус, вибрати один вузол і дивитись тільки його найближчі зв'язки.",
+      "workState": "done",
+      "workflowState": "tested_agent",
+      "attachments": [],
+      "updatedAt": "2026-06-13T13:31:39.760Z",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:25.803Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.760Z"
+        }
+      ]
+    },
+    "learn:inspect_node": {
+      "label": "2. Інспектувати вузол",
+      "detail": "Клік по вузлу показує label, group, status, owner, detail, agent branch і visual key. Це замінює довге читання документа.",
+      "workState": "not_done",
+      "workflowState": "not_done",
+      "attachments": [],
+      "updatedAt": "2026-06-13T13:31:39.796Z",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:25.884Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.796Z"
+        }
+      ]
+    },
+    "task:image_preview_label": {
+      "label": "Task: image preview on node label",
+      "detail": "When the owner pastes or uploads an image, the latest image attachment becomes the visual preview badge on the node label, giving a direct visual key for that branch.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "2026-06-13T12:24:40.725Z",
+      "attachments": [],
+      "updatedAt": "2026-06-13T13:31:41.179Z",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.526Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.179Z"
+        }
+      ]
+    },
+    "task:test_comment_form": {
+      "label": "Task: human and agent test comments",
+      "detail": "Node details show an Add test comment action for testing states. Human or agent comments are saved as node test artifacts.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "2026-06-13T12:45:42.208Z",
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.358Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.367Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.367Z",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#testCommentButton",
+          "#testCommentForm",
+          "#testCommentText"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Move the node to a testing workflow state, click Add test comment, write a human/agent note, and verify it persists after reload."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      }
+    },
+    "task:graph_feature_rule": {
+      "label": "Task: every request becomes graph node",
+      "detail": "Project rule: every owner-requested graph-ui feature must be added to the current project graph as a node and connected to the relevant implementation or agent branch.",
+      "workState": "tested_agent",
+      "workflowState": "tested_agent",
+      "seenAt": "2026-06-13T12:45:47.939Z",
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.308Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.108Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.108Z",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      }
+    },
+    "task:new_node_seen_blink": {
+      "label": "Task: unseen new nodes blink red",
+      "detail": "New feature nodes blink with a red label outline until the owner clicks them. The click saves seenAt, so the graph distinguishes newly added work from already seen work.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "2026-06-13T12:46:57.542Z",
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.450Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.144Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.144Z",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      }
+    },
+    "task:contextual_agent_search": {
+      "label": "Task: contextual agent search",
+      "detail": "Add a context question search where the agent highlights graph nodes it estimates are related to the owner's question, without hiding the rest of the graph.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "2026-06-13T13:00:20.105Z",
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.040Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.342Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.342Z",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      }
+    },
+    "learn:goal": {
+      "label": "Навчитись керувати TZ через граф",
+      "detail": "Окремий навчальний граф для поточного graph-ui проекту: фокусуватись на гілках, дивитись деталі поступово, додавати вузли, ребра, візуальні ключі та agent-branch піддерева.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:25.498Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.710Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:39.710Z"
+    },
+    "learn:add_node": {
+      "label": "3. Додати вузол",
+      "detail": "Новий вузол має мати id, label, group, status, owner, detail, color. Він повинен означати одну дію, рішення, артефакт або питання.",
+      "workState": "",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:25.940Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.852Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:39.852Z"
+    },
+    "learn:add_edge": {
+      "label": "4. Додати thread edge",
+      "detail": "Ребро пояснює, як дані, рішення або артефакт рухається між двома вузлами. Label ребра має бути коротким: feeds, verifies, updates, blocks, explains.",
+      "workState": "",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.001Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.909Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:39.909Z"
+    },
+    "ui:babylon": {
+      "label": "Variant A: Babylon 3D",
+      "detail": "3D force graph: корисний для відчуття павутини TZ, spring attraction, repulsion, hover/click details, pause/reset/search/group controls.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.055Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:39.955Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:39.955Z"
+    },
+    "ui:cytoscape": {
+      "label": "Variant 2D: Cytoscape",
+      "detail": "Основний навчальний режим: filters, layouts, node focus, linked neighborhood, group/status/search. Найкращий старт для вдосконалення графа.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.219Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.000Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.000Z"
+    },
+    "ui:flow_b": {
+      "label": "Variant B: Flow cards",
+      "detail": "ReactFlow-style cards without dependency: lanes, handles, SVG edges, minimap, visual preview slots. Для щільного читабельного режиму.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.368Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.051Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.051Z"
+    },
+    "data:graph_json": {
+      "label": "Graph JSON source",
+      "detail": "Цей навчальний граф живе в graph-ui/public/data/current_project_learning_cytoscape.json і доступний як graph id current-project-learning.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.466Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.092Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.092Z"
+    },
+    "data:model_api": {
+      "label": "Graph model API",
+      "detail": "/api/graph-model/current-project-learning додає до raw graph visualKey, agentBranch, groups, dataFlow і superpower placeholder metadata.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.634Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.160Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.160Z"
+    },
+    "data:exports": {
+      "label": "Mind-map exports",
+      "detail": "Markmap, OPML, FreeMind exports дають порівняти, чи зручніше думати через граф або mind-map формат.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.737Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.218Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.218Z"
+    },
+    "branch:owner_learning": {
+      "label": "Agent branch: навчання owner",
+      "detail": "Гілка для поступового навчання: owner пробує фільтри, додає вузол, додає edge, просить agent оновити visual key або export.",
+      "workState": "",
+      "workflowState": "not_done",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:26.920Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.270Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.270Z"
+    },
+    "branch:implementation": {
+      "label": "Agent branch: implementation",
+      "detail": "Гілка для code worker: змінює тільки graph-ui, не торкається submit/upload/secrets/private CV/browser profiles.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.021Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.319Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.319Z"
+    },
+    "visual:placeholder": {
+      "label": "Visual key placeholder",
+      "detail": "Поки немає тестового screenshot artifact, вузол показує placeholder. Далі release/test має оновлювати visualKey artifactRef.",
+      "workState": "",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.117Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.383Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.383Z"
+    },
+    "safety:boundary": {
+      "label": "Safety boundary",
+      "detail": "Graph UI sidecar не читає .env, cookies, browser profiles, private CVs і не викликає submit/upload/send flows.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.270Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.461Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.461Z"
+    },
+    "test:smoke": {
+      "label": "Smoke test",
+      "detail": "npm.cmd run smoke перевіряє routes, pages, graph-model, normalized graph, exports і тепер окремий current-project-learning graph.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#testCommentButton",
+          "#testCommentForm",
+          "#testCommentText"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Move the node to a testing workflow state, click Add test comment, write a human/agent note, and verify it persists after reload."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.455Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.523Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.523Z"
+    },
+    "next:edit_graph": {
+      "label": "Next: редагувати граф",
+      "detail": "Наступний крок: вибрати один вузол, сказати що додати/змінити, і оновити JSON + smoke test. Так owner вчиться покращувати граф через маленькі зміни.",
+      "workState": "",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.623Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.620Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.620Z"
+    },
+    "task:3d_cytoscape_underhood": {
+      "label": "Task: 3D uses Cytoscape under hood",
+      "detail": "Add Search Filter degree, show all labels, time panel, map panel, and Re-Arrange layouts including Cola-like iterative mode through Cytoscape.js headless layout.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.869Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.659Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.659Z"
+    },
+    "task:context_menu": {
+      "label": "Task: right-click context menu",
+      "detail": "Right-click on a 3D node opens local context actions: focus linked branch, edit, toggle labels, copy node id.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton",
+          "#menuToggle",
+          "#topbar",
+          "#toolbarBody",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted.",
+          "Click #menuToggle twice and verify the left menu collapses and expands.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.912Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.701Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.701Z"
+    },
+    "task:graph_project_menu": {
+      "label": "Task: graph/project menu",
+      "detail": "Add a general menu of all graph ids/projects and preserve the active graph through URL query parameters.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#menuToggle",
+          "#topbar",
+          "#toolbarBody"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Click #menuToggle twice and verify the left menu collapses and expands."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:27.982Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.753Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.753Z"
+    },
+    "task:view_switch": {
+      "label": "Task: 2D/3D switch",
+      "detail": "Add a button to switch from 3D to the 2D Cytoscape view for the same active graph.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.186Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.796Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.796Z"
+    },
+    "task:node_edit_attachments": {
+      "label": "Task: edit node + screenshots/files",
+      "detail": "Edit title/detail from the click panel, paste screenshots from clipboard, upload files, and persist sidecar-only edit artifacts.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.379Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.834Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.834Z"
+    },
+    "task:qa_smoke": {
+      "label": "Task: QA smoke",
+      "detail": "Extend smoke checks for new graph routes, edit endpoint, new controls, and learning graph availability.",
+      "workState": "",
+      "workflowState": "in_progress",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.520Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.870Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.870Z"
+    },
+    "task:browser_qa_agent": {
+      "label": "Task: browser QA agent",
+      "detail": "Automate browser smoke checks for the graph-ui sidecar: open 3D learning graph, exercise Re-Arrange modes, verify radial context menu, and capture local evidence without using private browser profiles.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton",
+          "#menuToggle",
+          "#topbar",
+          "#toolbarBody"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted.",
+          "Click #menuToggle twice and verify the left menu collapses and expands."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.768Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.905Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.905Z"
+    },
+    "task:work_state_glow": {
+      "label": "Task: yellow red green graph states",
+      "detail": "Yellow outline/glow means currently tested, red means not done or changed and needs update, green means implemented and merged/main-ready. In 3D this is rendered as outline plus outer glow.",
+      "workState": "done",
+      "workflowState": "tested_agent",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.852Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.942Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.942Z"
+    },
+    "task:visual_key_best_practices": {
+      "label": "Task: visual keys best practices",
+      "detail": "Use short stable visual keys on every node: site logo placeholders for site work, form/screenshot placeholders for web forms, QA symbols for tests, agent badges for delegated branches. Replace placeholders with latest safe visual artifacts when available.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:28.921Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:40.983Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:40.983Z"
+    },
+    "task:keyword_icon_agent": {
+      "label": "Task: keyword icon agent",
+      "detail": "Derive short keywords for each new node and assign a unique Font Awesome icon cue from a public icon base so the owner can recognize feature meaning without reading long text.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.057Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.020Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.020Z"
+    },
+    "task:development_flow_architect": {
+      "label": "Task: development flow architect",
+      "detail": "Development-flow graph uses SDLC order: requirements/TZ, design/architecture, data/model/API, implementation/UI, testing/QA, review/approval, release/maintenance. The layout should show left-to-right sequence.",
+      "workState": "approved",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.219Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.055Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.055Z"
+    },
+    "task:hybrid_text_graph_table": {
+      "label": "Task: hybrid text graph table bridge",
+      "detail": "Add seamless transitions between graph, text, and table. Node details expose generated text and table views of the subtree below the selected node, derived from the graph model.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.781Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.231Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.231Z"
+    },
+    "task:cognitive_load_slider": {
+      "label": "Task: cognitive load slider",
+      "detail": "Right-side vertical slider controls viewport information density: low levels reduce labels and keywords; higher levels show richer label content and more keyword icon cues.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels",
+          "#cognitiveSlider",
+          "#cognitiveValue"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node.",
+          "Move #cognitiveSlider and verify #cognitiveValue plus label density change."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.842Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.277Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.277Z"
+    },
+    "task:current_project_source_truth": {
+      "label": "Task: current graph is source of truth",
+      "detail": "Owner will use the current project graph as the practical source of truth for new graph-ui changes, rather than reading a long textual TZ first.",
+      "workState": "approved",
+      "workflowState": "approved",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:29.954Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.314Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.314Z"
+    },
+    "task:superpowers_flow_research": {
+      "label": "Task: superpowers flow research",
+      "detail": "Research obra/superpowers and compare alternative software development flows: GitHub Flow, feature branch workflow, Gitflow, Shape Up, and SAFe. Recommend a graph-native hybrid.",
+      "workState": "tested_agent",
+      "workflowState": "tested_agent",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#contextSearchBox",
+          "#contextSearchButton"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Type a question in #contextSearchBox, click #contextSearchButton, and verify related nodes get highlighted."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.566Z"
+        },
+        {
+          "text": "browser-qa-agent pass: test flow documented; no direct browser control required for this metadata node",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.395Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.395Z"
+    },
+    "task:labels_camera_front": {
+      "label": "Task: labels stay in front of nodes",
+      "detail": "3D labels are billboard plaques positioned slightly toward the camera from each node, so labels remain visually in front of their nodes.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.713Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.426Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.426Z"
+    },
+    "task:workflow_status_explainer": {
+      "label": "Task: workflow status explainer",
+      "detail": "Clarify that the seven status labels are the development workflow ladder from not done through human verified, and expose meanings as UI hints.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#showAllLabels"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Enable #showAllLabels and click a label plaque; details should load the same node."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.797Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.464Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.464Z"
+    },
+    "task:left_icon_toolbar": {
+      "label": "Task: left icon toolbar",
+      "detail": "Move the top menu to the left, add Font Awesome icons, content-sized buttons, checkbox toggles, and a hamburger collapse/expand control.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details",
+          "#menuToggle",
+          "#topbar",
+          "#toolbarBody"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable.",
+          "Click #menuToggle twice and verify the left menu collapses and expands."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.933Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.495Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.495Z"
+    },
+    "task:focus_camera_animation": {
+      "label": "Task: animated camera focus",
+      "detail": "When focusing a node, animate the camera target and radius so the visual movement path is easier to follow.",
+      "workState": "testing",
+      "workflowState": "ready_for_test",
+      "seenAt": "",
+      "testFlow": {
+        "actor": "browser-qa-agent",
+        "fixer": "fixer-agent",
+        "url": "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+        "selectors": [
+          "#renderCanvas",
+          "#details"
+        ],
+        "steps": [
+          "Open http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning",
+          "Wait until #statusbar contains Loaded.",
+          "Use context search or click the node/label in the canvas.",
+          "Verify #details h1 matches the selected node label and metadata/details are readable."
+        ],
+        "expected": "The feature is visible, clickable, and updates the graph details/status without console exceptions."
+      },
+      "attachments": [],
+      "testComments": [
+        {
+          "text": "browser-qa-agent fail: Timed out waiting for browser condition; fixer-agent next action: inspect and patch graph-ui public UI scripts",
+          "author": "fixer-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:28:30.988Z"
+        },
+        {
+          "text": "browser-qa-agent pass: core browser controls passed",
+          "author": "browser-qa-agent",
+          "role": "agent",
+          "createdAt": "2026-06-13T13:31:41.526Z"
+        }
+      ],
+      "updatedAt": "2026-06-13T13:31:41.526Z"
+    }
+  },
+  "updatedAt": "2026-06-13T13:31:41.526Z"
+}

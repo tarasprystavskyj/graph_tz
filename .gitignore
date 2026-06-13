@@ -1,0 +1,7 @@
+graph-ui-server*.log
+/exports/
+/data/
+!/data/
+/data/*
+!/data/graph-edits/
+!/data/graph-edits/current-project-learning.json

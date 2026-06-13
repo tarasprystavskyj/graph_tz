@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JobApply TZ Cytoscape 2D</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; font-family: Arial, Helvetica, sans-serif; color: #17202a; background: #f7fafc; }
+    #cy { position: fixed; inset: 0; background: #f8fafc; }
+    .panel { position: fixed; z-index: 5; top: 12px; left: 12px; width: min(430px, calc(100vw - 24px)); background: rgba(255,255,255,.96); border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 10px 30px rgba(15,23,42,.14); padding: 10px; }
+    .toolbar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center; }
+    button, select, input { height: 34px; border: 1px solid #9fb3c8; border-radius: 7px; background: #fff; color: #17202a; font: inherit; font-size: 13px; min-width: 0; padding: 0 9px; }
+    button { cursor: pointer; }
+    input, select { width: 100%; }
+    .wide { grid-column: 1 / -1; }
+    .details { margin-top: 9px; border-top: 1px solid #e2e8f0; padding-top: 9px; line-height: 1.38; font-size: 13px; color: #334155; }
+    .details strong { display: block; color: #111827; font-size: 15px; margin-bottom: 5px; }
+    .exports { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    .exports a { color: #256f55; text-decoration: none; font-size: 13px; }
+    .status { position: fixed; z-index: 5; left: 12px; bottom: 12px; max-width: calc(100vw - 24px); background: rgba(255,255,255,.94); border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 10px; color: #475569; font-size: 13px; }
+    @media (max-width: 760px) { .panel { right: 12px; width: auto; } }
+  </style>
+</head>
+<body>
+  <div id="cy"></div>
+  <section class="panel" aria-label="Cytoscape controls">
+    <div class="toolbar">
+      <select id="graphSelect" title="Graph/project menu"></select>
+      <button id="switch3d" type="button">3D</button>
+      <select id="layoutSelect" title="Layout">
+        <option value="cose">cose force</option>
+        <option value="development-flow">development flow</option>
+        <option value="breadthfirst">breadthfirst</option>
+        <option value="concentric">concentric</option>
+        <option value="circle">circle</option>
+        <option value="grid">grid</option>
+      </select>
+      <select id="groupFilter" title="Group filter"><option value="">All groups</option></select>
+      <select id="statusFilter" title="Status filter"><option value="">All statuses</option></select>
+      <input id="searchBox" class="wide" type="search" placeholder="Focus by label, detail, group, status">
+      <button id="focusNeighborhood" type="button">Focus linked</button>
+      <button id="showAll" type="button">Show all</button>
+    </div>
+    <div id="details" class="details">
+      <strong>Modern Cytoscape.js TZ view</strong>
+      Filter first, then inspect one node or its linked neighborhood.
+    </div>
+    <div class="exports">
+      <a data-export="markmap" href="/api/exports/job-apply-full/markmap">Markmap MD</a>
+      <a data-export="opml" href="/api/exports/job-apply-full/opml">OPML</a>
+      <a data-export="freemind" href="/api/exports/job-apply-full/freemind">FreeMind MM</a>
+      <a data-export="model" href="/api/graph-model/job-apply-full">Graph model JSON</a>
+    </div>
+  </section>
+  <div id="status" class="status">Loading graph.</div>
+  <script src="https://unpkg.com/cytoscape@3.34.0/dist/cytoscape.min.js"></script>
+  <script src="/js/cytoscape-2d.js"></script>
+</body>
+</html>

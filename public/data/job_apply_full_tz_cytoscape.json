@@ -1,0 +1,1248 @@
+{
+  "elements": {
+    "nodes": [
+      {
+        "data": {
+          "id": "main:goal",
+          "_label": "MVP job application copilot",
+          "name": "MVP job application copilot",
+          "title": "MVP job application copilot",
+          "type": "diamond",
+          "labelV": "diamond",
+          "group": "product",
+          "group_label": "Product / ТЗ",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Single local system that discovers relevant jobs, prepares tailored messages, asks the owner for approval, and submits only through approved gated flows.",
+          "comment": "Single local system that discovers relevant jobs, prepares tailored messages, asks the owner for approval, and submits only through approved gated flows.",
+          "color": "#256f55"
+        },
+        "position": {
+          "x": 260.0,
+          "y": 0.0
+        },
+        "classes": "product active diamond"
+      },
+      {
+        "data": {
+          "id": "main:graph_tz",
+          "_label": "Graph as ТЗ",
+          "name": "Graph as ТЗ",
+          "title": "Graph as ТЗ",
+          "type": "diamond",
+          "labelV": "diamond",
+          "group": "product",
+          "group_label": "Product / ТЗ",
+          "status": "planned",
+          "owner": "system",
+          "priority": "",
+          "detail": "Evolve this function map into the main source of truth for requirements, owner decisions, blockers, and agent assignments.",
+          "comment": "Evolve this function map into the main source of truth for requirements, owner decisions, blockers, and agent assignments.",
+          "color": "#256f55"
+        },
+        "position": {
+          "x": -260.0,
+          "y": 1.9594348786357652e-14
+        },
+        "classes": "product planned diamond"
+      },
+      {
+        "data": {
+          "id": "main:source_scan",
+          "_label": "All-sites scan",
+          "name": "All-sites scan",
+          "title": "All-sites scan",
+          "type": "box",
+          "labelV": "box",
+          "group": "discovery",
+          "group_label": "Discovery",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Refreshes every configured source: Djinni inbox/recruiter responses, DOU public listings, Work.ua public listings, Robota.ua public listings, then rebuilds the candidate CSV.",
+          "comment": "Refreshes every configured source: Djinni inbox/recruiter responses, DOU public listings, Work.ua public listings, Robota.ua public listings, then rebuilds the candidate CSV.",
+          "color": "#2f855a"
+        },
+        "position": {
+          "x": 680.0,
+          "y": 0.0
+        },
+        "classes": "discovery active box"
+      },
+      {
+        "data": {
+          "id": "main:djinni",
+          "_label": "Djinni",
+          "name": "Djinni",
+          "title": "Djinni",
+          "type": "box",
+          "labelV": "box",
+          "group": "platform",
+          "group_label": "Platforms",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Reads approved public job rows, scans owner-visible inbox, detects profile blockers, and supports gated final application submit.",
+          "comment": "Reads approved public job rows, scans owner-visible inbox, detects profile blockers, and supports gated final application submit.",
+          "color": "#3a9f71"
+        },
+        "position": {
+          "x": 1100.0,
+          "y": 0.0
+        },
+        "classes": "platform active box"
+      },
+      {
+        "data": {
+          "id": "main:workua",
+          "_label": "Work.ua",
+          "name": "Work.ua",
+          "title": "Work.ua",
+          "type": "box",
+          "labelV": "box",
+          "group": "platform",
+          "group_label": "Platforms",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Discovers public vacancies, prepares review rows, supports resume/profile update work, and uses gated browser submit automation for approved exact URLs.",
+          "comment": "Discovers public vacancies, prepares review rows, supports resume/profile update work, and uses gated browser submit automation for approved exact URLs.",
+          "color": "#3a9f71"
+        },
+        "position": {
+          "x": 840.0,
+          "y": 160.0
+        },
+        "classes": "platform active box"
+      },
+      {
+        "data": {
+          "id": "main:dou",
+          "_label": "DOU",
+          "name": "DOU",
+          "title": "DOU",
+          "type": "box",
+          "labelV": "box",
+          "group": "platform",
+          "group_label": "Platforms",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Converts listings into exact vacancy URLs, drafts outreach, and routes exact approved rows through the DOU CSV adapter.",
+          "comment": "Converts listings into exact vacancy URLs, drafts outreach, and routes exact approved rows through the DOU CSV adapter.",
+          "color": "#3a9f71"
+        },
+        "position": {
+          "x": 580.0,
+          "y": 1.9594348786357652e-14
+        },
+        "classes": "platform active box"
+      },
+      {
+        "data": {
+          "id": "main:robotaua",
+          "_label": "Robota.ua",
+          "name": "Robota.ua",
+          "title": "Robota.ua",
+          "type": "box",
+          "labelV": "box",
+          "group": "platform",
+          "group_label": "Platforms",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Discovers public vacancies and handles the live apply form with explicit resume upload and cover-letter gates.",
+          "comment": "Discovers public vacancies and handles the live apply form with explicit resume upload and cover-letter gates.",
+          "color": "#3a9f71"
+        },
+        "position": {
+          "x": 840.0,
+          "y": -160.0
+        },
+        "classes": "platform active box"
+      },
+      {
+        "data": {
+          "id": "main:resume_index",
+          "_label": "Resume index",
+          "name": "Resume index",
+          "title": "Resume index",
+          "type": "cylinder",
+          "labelV": "cylinder",
+          "group": "data",
+          "group_label": "Data",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Maintains local resume metadata and tags for matching. Private content is not read or uploaded unless a bounded task and approval require it.",
+          "comment": "Maintains local resume metadata and tags for matching. Private content is not read or uploaded unless a bounded task and approval require it.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 1520.0,
+          "y": 0.0
+        },
+        "classes": "data active cylinder"
+      },
+      {
+        "data": {
+          "id": "main:shared_db",
+          "_label": "Shared job DB",
+          "name": "Shared job DB",
+          "title": "Shared job DB",
+          "type": "cylinder",
+          "labelV": "cylinder",
+          "group": "data",
+          "group_label": "Data",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "SQLite source of jobs, outreach drafts, status events, blockers, and progress graph rows shared by web and Telegram.",
+          "comment": "SQLite source of jobs, outreach drafts, status events, blockers, and progress graph rows shared by web and Telegram.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 1000.0,
+          "y": 1.9594348786357652e-14
+        },
+        "classes": "data active cylinder"
+      },
+      {
+        "data": {
+          "id": "main:message_qa",
+          "_label": "Message QA gate",
+          "name": "Message QA gate",
+          "title": "Message QA gate",
+          "type": "hex",
+          "labelV": "hex",
+          "group": "safety",
+          "group_label": "Safety gates",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Blocks low-quality cover letters: other people's names, leaked file names, agentic phrases, duplicated salutations, contaminated titles, or missing exact approval.",
+          "comment": "Blocks low-quality cover letters: other people's names, leaked file names, agentic phrases, duplicated salutations, contaminated titles, or missing exact approval.",
+          "color": "#b7791f"
+        },
+        "position": {
+          "x": 260.0,
+          "y": 330.0
+        },
+        "classes": "safety active hex"
+      },
+      {
+        "data": {
+          "id": "main:approval",
+          "_label": "Approval gates",
+          "name": "Approval gates",
+          "title": "Approval gates",
+          "type": "hex",
+          "labelV": "hex",
+          "group": "safety",
+          "group_label": "Safety gates",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Every live send requires exact URL, exact message, salary/profile/resume policy, row approval, and final-submit permission.",
+          "comment": "Every live send requires exact URL, exact message, salary/profile/resume policy, row approval, and final-submit permission.",
+          "color": "#b7791f"
+        },
+        "position": {
+          "x": -260.0,
+          "y": 330.0
+        },
+        "classes": "safety active hex"
+      },
+      {
+        "data": {
+          "id": "main:blockers",
+          "_label": "Blocker loop",
+          "name": "Blocker loop",
+          "title": "Blocker loop",
+          "type": "octagon",
+          "labelV": "octagon",
+          "group": "operations",
+          "group_label": "Operations",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Classifies blockers, writes unresolved blocker artifacts, proposes manual and automatic resolution paths, and surfaces them in progress and Telegram.",
+          "comment": "Classifies blockers, writes unresolved blocker artifacts, proposes manual and automatic resolution paths, and surfaces them in progress and Telegram.",
+          "color": "#c05621"
+        },
+        "position": {
+          "x": 680.0,
+          "y": 330.0
+        },
+        "classes": "operations active octagon"
+      },
+      {
+        "data": {
+          "id": "main:web",
+          "_label": "Web interface",
+          "name": "Web interface",
+          "title": "Web interface",
+          "type": "round",
+          "labelV": "round",
+          "group": "interface",
+          "group_label": "Interfaces",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Local UI for scanning, reviewing, approving, preparing, sending, viewing sent applications, blockers, progress, and this function graph.",
+          "comment": "Local UI for scanning, reviewing, approving, preparing, sending, viewing sent applications, blockers, progress, and this function graph.",
+          "color": "#5a67d8"
+        },
+        "position": {
+          "x": 1100.0,
+          "y": 330.0
+        },
+        "classes": "interface active round"
+      },
+      {
+        "data": {
+          "id": "main:telegram",
+          "_label": "Telegram bot",
+          "name": "Telegram bot",
+          "title": "Telegram bot",
+          "type": "round",
+          "labelV": "round",
+          "group": "interface",
+          "group_label": "Interfaces",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Parallel owner interface for daily 10:00 scans, status, approvals, blocker notices, auto-reply notices, and all-site approved sends.",
+          "comment": "Parallel owner interface for daily 10:00 scans, status, approvals, blocker notices, auto-reply notices, and all-site approved sends.",
+          "color": "#5a67d8"
+        },
+        "position": {
+          "x": 580.0,
+          "y": 330.0
+        },
+        "classes": "interface active round"
+      },
+      {
+        "data": {
+          "id": "main:progress",
+          "_label": "Progress graph",
+          "name": "Progress graph",
+          "title": "Progress graph",
+          "type": "box",
+          "labelV": "box",
+          "group": "observability",
+          "group_label": "Observability",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "LangGraph-style progress view with stages, jobs, outreach drafts, blockers, edges, and recent events.",
+          "comment": "LangGraph-style progress view with stages, jobs, outreach drafts, blockers, edges, and recent events.",
+          "color": "#718096"
+        },
+        "position": {
+          "x": 1520.0,
+          "y": 330.0
+        },
+        "classes": "observability active box"
+      },
+      {
+        "data": {
+          "id": "main:sent",
+          "_label": "Sent applications",
+          "name": "Sent applications",
+          "title": "Sent applications",
+          "type": "box",
+          "labelV": "box",
+          "group": "observability",
+          "group_label": "Observability",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Aggregates successful or post-submit-inferred application events across all platform logs.",
+          "comment": "Aggregates successful or post-submit-inferred application events across all platform logs.",
+          "color": "#718096"
+        },
+        "position": {
+          "x": 1000.0,
+          "y": 330.0
+        },
+        "classes": "observability active box"
+      },
+      {
+        "data": {
+          "id": "main:testing",
+          "_label": "Cross-testing",
+          "name": "Cross-testing",
+          "title": "Cross-testing",
+          "type": "hex",
+          "labelV": "hex",
+          "group": "quality",
+          "group_label": "Quality",
+          "status": "active",
+          "owner": "system",
+          "priority": "",
+          "detail": "Changed functionality must be tested across affected flows before commit: unit tests, compile checks, browser UI smoke, and live-safe dry/prepare paths.",
+          "comment": "Changed functionality must be tested across affected flows before commit: unit tests, compile checks, browser UI smoke, and live-safe dry/prepare paths.",
+          "color": "#805ad5"
+        },
+        "position": {
+          "x": 260.0,
+          "y": 660.0
+        },
+        "classes": "quality active hex"
+      },
+      {
+        "data": {
+          "id": "server:sth-goal",
+          "_label": "Server telemetry hub",
+          "name": "Server telemetry hub",
+          "title": "Server telemetry hub",
+          "type": "system",
+          "labelV": "system",
+          "group": "product",
+          "group_label": "Product / TZ",
+          "status": "review",
+          "owner": "l-jobapply-server",
+          "priority": "high",
+          "detail": "VPS-hosted observability, coordination, and decision hub for job_apply_automation. Local machines keep logged-in browser sessions and live job-site interaction.",
+          "comment": "VPS-hosted observability, coordination, and decision hub for job_apply_automation. Local machines keep logged-in browser sessions and live job-site interaction.",
+          "color": "#256f55"
+        },
+        "position": {
+          "x": 2110.0,
+          "y": 0.0
+        },
+        "classes": "product review diamond"
+      },
+      {
+        "data": {
+          "id": "server:sth-repo-layout",
+          "_label": "Isolated server subpackage",
+          "name": "Isolated server subpackage",
+          "title": "Isolated server subpackage",
+          "type": "task",
+          "labelV": "task",
+          "group": "product",
+          "group_label": "Product / TZ",
+          "status": "review",
+          "owner": "l-jobapply-server",
+          "priority": "high",
+          "detail": "Keep MVP in this repo under server/telemetry_hub/{api,dashboard,graph,telegram,storage,deploy}; do not mix server handlers into src/job_apply_web.py.",
+          "comment": "Keep MVP in this repo under server/telemetry_hub/{api,dashboard,graph,telegram,storage,deploy}; do not mix server handlers into src/job_apply_web.py.",
+          "color": "#256f55"
+        },
+        "position": {
+          "x": 1590.0,
+          "y": 1.9594348786357652e-14
+        },
+        "classes": "product review box"
+      },
+      {
+        "data": {
+          "id": "server:sth-api-events",
+          "_label": "POST /api/v1/events",
+          "name": "POST /api/v1/events",
+          "title": "POST /api/v1/events",
+          "type": "api",
+          "labelV": "api",
+          "group": "api",
+          "group_label": "Server API",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Accept append-only telemetry envelopes with auth, idempotency key, body digest replay protection, safe payload validation, and no secret/private text fields.",
+          "comment": "Accept append-only telemetry envelopes with auth, idempotency key, body digest replay protection, safe payload validation, and no secret/private text fields.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 2530.0,
+          "y": 0.0
+        },
+        "classes": "api todo box"
+      },
+      {
+        "data": {
+          "id": "server:sth-api-runs",
+          "_label": "Runs and blockers API",
+          "name": "Runs and blockers API",
+          "title": "Runs and blockers API",
+          "type": "api",
+          "labelV": "api",
+          "group": "api",
+          "group_label": "Server API",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "normal",
+          "detail": "Implement POST /api/v1/job-runs, POST /api/v1/blockers, GET /api/v1/runs, and GET /api/v1/blockers for safe status summaries.",
+          "comment": "Implement POST /api/v1/job-runs, POST /api/v1/blockers, GET /api/v1/runs, and GET /api/v1/blockers for safe status summaries.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 2270.0,
+          "y": 160.0
+        },
+        "classes": "api todo box"
+      },
+      {
+        "data": {
+          "id": "server:sth-api-health",
+          "_label": "GET /api/v1/health",
+          "name": "GET /api/v1/health",
+          "title": "GET /api/v1/health",
+          "type": "api",
+          "labelV": "api",
+          "group": "api",
+          "group_label": "Server API",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "normal",
+          "detail": "Expose status, version, DB connectivity, and migration version without leaking config values.",
+          "comment": "Expose status, version, DB connectivity, and migration version without leaking config values.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 2010.0,
+          "y": 1.9594348786357652e-14
+        },
+        "classes": "api todo box"
+      },
+      {
+        "data": {
+          "id": "server:sth-local-client",
+          "_label": "Local telemetry client",
+          "name": "Local telemetry client",
+          "title": "Local telemetry client",
+          "type": "task",
+          "labelV": "task",
+          "group": "api",
+          "group_label": "Server API",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "normal",
+          "detail": "Add local append-only retry queue and safe telemetry sender. Local workflows must fail open if server telemetry is unavailable.",
+          "comment": "Add local append-only retry queue and safe telemetry sender. Local workflows must fail open if server telemetry is unavailable.",
+          "color": "#437f97"
+        },
+        "position": {
+          "x": 2270.0,
+          "y": -160.0
+        },
+        "classes": "api todo box"
+      },
+      {
+        "data": {
+          "id": "server:sth-storage-migrations",
+          "_label": "SQLite migrations",
+          "name": "SQLite migrations",
+          "title": "SQLite migrations",
+          "type": "storage",
+          "labelV": "storage",
+          "group": "storage",
+          "group_label": "Storage",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Create migration system for telemetry_events, job_runs, blockers, graph_nodes, graph_edges, graph_comments, graph_events, api_clients, and schema_migrations.",
+          "comment": "Create migration system for telemetry_events, job_runs, blockers, graph_nodes, graph_edges, graph_comments, graph_events, api_clients, and schema_migrations.",
+          "color": "#718096"
+        },
+        "position": {
+          "x": 2950.0,
+          "y": 0.0
+        },
+        "classes": "storage todo cylinder"
+      },
+      {
+        "data": {
+          "id": "server:sth-auth",
+          "_label": "Machine API auth",
+          "name": "Machine API auth",
+          "title": "Machine API auth",
+          "type": "policy",
+          "labelV": "policy",
+          "group": "safety",
+          "group_label": "Safety",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Use per-machine bearer tokens generated outside git; store token hashes only; support scopes telemetry:write, graph:read, graph:write, dashboard:read, telegram:command.",
+          "comment": "Use per-machine bearer tokens generated outside git; store token hashes only; support scopes telemetry:write, graph:read, graph:write, dashboard:read, telegram:command.",
+          "color": "#c05621"
+        },
+        "position": {
+          "x": 3370.0,
+          "y": 0.0
+        },
+        "classes": "safety todo hex"
+      },
+      {
+        "data": {
+          "id": "server:sth-privacy-validator",
+          "_label": "Privacy validator",
+          "name": "Privacy validator",
+          "title": "Privacy validator",
+          "type": "policy",
+          "labelV": "policy",
+          "group": "safety",
+          "group_label": "Safety",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Reject or redact forbidden telemetry fields: secrets, cookies, browser state, resume text, raw private messages, local private paths, and oversized payloads.",
+          "comment": "Reject or redact forbidden telemetry fields: secrets, cookies, browser state, resume text, raw private messages, local private paths, and oversized payloads.",
+          "color": "#c05621"
+        },
+        "position": {
+          "x": 2980.0,
+          "y": 138.5640646055102
+        },
+        "classes": "safety todo hex"
+      },
+      {
+        "data": {
+          "id": "server:sth-deploy-gate",
+          "_label": "Explicit deploy gate",
+          "name": "Explicit deploy gate",
+          "title": "Explicit deploy gate",
+          "type": "policy",
+          "labelV": "policy",
+          "group": "safety",
+          "group_label": "Safety",
+          "status": "todo",
+          "owner": "parent",
+          "priority": "urgent",
+          "detail": "Do not connect to VPS, request credentials, push, or deploy until parent opens an explicit deploy gate.",
+          "comment": "Do not connect to VPS, request credentials, push, or deploy until parent opens an explicit deploy gate.",
+          "color": "#c05621"
+        },
+        "position": {
+          "x": 2980.0,
+          "y": -138.56406460551017
+        },
+        "classes": "safety todo octagon"
+      },
+      {
+        "data": {
+          "id": "server:sth-graph-model",
+          "_label": "Editable graph model",
+          "name": "Editable graph model",
+          "title": "Editable graph model",
+          "type": "task",
+          "labelV": "task",
+          "group": "graph",
+          "group_label": "Editable Graph",
+          "status": "review",
+          "owner": "l-jobapply-server",
+          "priority": "high",
+          "detail": "Persist nodes, edges, comments, and graph events. Nodes support id/type/title/status/owner/priority/parent_id/timestamps. Status values: todo, in_progress, blocked, review, done, wont_do.",
+          "comment": "Persist nodes, edges, comments, and graph events. Nodes support id/type/title/status/owner/priority/parent_id/timestamps. Status values: todo, in_progress, blocked, review, done, wont_do.",
+          "color": "#805ad5"
+        },
+        "position": {
+          "x": 2110.0,
+          "y": 330.0
+        },
+        "classes": "graph review box"
+      },
+      {
+        "data": {
+          "id": "server:sth-graph-api",
+          "_label": "Graph API",
+          "name": "Graph API",
+          "title": "Graph API",
+          "type": "api",
+          "labelV": "api",
+          "group": "graph",
+          "group_label": "Editable Graph",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Implement GET /api/v1/graph and POST /api/v1/graph/updates for node edits, status changes, assignment, subtasks, edges, and comments.",
+          "comment": "Implement GET /api/v1/graph and POST /api/v1/graph/updates for node edits, status changes, assignment, subtasks, edges, and comments.",
+          "color": "#805ad5"
+        },
+        "position": {
+          "x": 1590.0,
+          "y": 330.0
+        },
+        "classes": "graph todo box"
+      },
+      {
+        "data": {
+          "id": "server:sth-dashboard",
+          "_label": "Server dashboard",
+          "name": "Server dashboard",
+          "title": "Server dashboard",
+          "type": "dashboard",
+          "labelV": "dashboard",
+          "group": "dashboard",
+          "group_label": "Dashboard",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "normal",
+          "detail": "Server web page similar to the local UI: runs, blockers, graph, task comments, task status/owner edits, and subtasks. No local browser apply actions.",
+          "comment": "Server web page similar to the local UI: runs, blockers, graph, task comments, task status/owner edits, and subtasks. No local browser apply actions.",
+          "color": "#5a67d8"
+        },
+        "position": {
+          "x": 2530.0,
+          "y": 330.0
+        },
+        "classes": "dashboard todo round"
+      },
+      {
+        "data": {
+          "id": "server:sth-telegram",
+          "_label": "Server Telegram coordination bot",
+          "name": "Server Telegram coordination bot",
+          "title": "Server Telegram coordination bot",
+          "type": "telegram",
+          "labelV": "telegram",
+          "group": "telegram",
+          "group_label": "Server Telegram",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "normal",
+          "detail": "Implement /status, /tasks, /blockers, /task <id>, /comment <id> <text>, /approve <id>, /assign <id> <agent>, /done <id>. Must not execute browser/apply workflows.",
+          "comment": "Implement /status, /tasks, /blockers, /task <id>, /comment <id> <text>, /approve <id>, /assign <id> <agent>, /done <id>. Must not execute browser/apply workflows.",
+          "color": "#2f855a"
+        },
+        "position": {
+          "x": 2950.0,
+          "y": 330.0
+        },
+        "classes": "telegram todo round"
+      },
+      {
+        "data": {
+          "id": "server:sth-deploy-layout",
+          "_label": "VPS deploy layout",
+          "name": "VPS deploy layout",
+          "title": "VPS deploy layout",
+          "type": "deployment",
+          "labelV": "deployment",
+          "group": "deployment",
+          "group_label": "Deployment",
+          "status": "review",
+          "owner": "l-jobapply-server",
+          "priority": "high",
+          "detail": "Target /var/www/vps2.happyuser.info/job_apply_automation/{app,releases,current,data,config,run,backups}; config outside git; bind locally or Unix socket behind nginx/TLS.",
+          "comment": "Target /var/www/vps2.happyuser.info/job_apply_automation/{app,releases,current,data,config,run,backups}; config outside git; bind locally or Unix socket behind nginx/TLS.",
+          "color": "#b7791f"
+        },
+        "position": {
+          "x": 3370.0,
+          "y": 330.0
+        },
+        "classes": "deployment review box"
+      },
+      {
+        "data": {
+          "id": "server:sth-tests",
+          "_label": "Server tests",
+          "name": "Server tests",
+          "title": "Server tests",
+          "type": "task",
+          "labelV": "task",
+          "group": "quality",
+          "group_label": "Quality",
+          "status": "todo",
+          "owner": "unassigned",
+          "priority": "high",
+          "detail": "Cover auth rejection, event validation, idempotency replay, graph edits/comments/subtasks, Telegram command parsing, and migrations from empty DB.",
+          "comment": "Cover auth rejection, event validation, idempotency replay, graph edits/comments/subtasks, Telegram command parsing, and migrations from empty DB.",
+          "color": "#4a5568"
+        },
+        "position": {
+          "x": 2110.0,
+          "y": 660.0
+        },
+        "classes": "quality todo hex"
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "id": "main:edge_0_main:goal_main:source_scan",
+          "source": "main:goal",
+          "target": "main:source_scan",
+          "_label": "discovers",
+          "labelE": "discovers",
+          "relation": "discovers",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_1_main:source_scan_main:djinni",
+          "source": "main:source_scan",
+          "target": "main:djinni",
+          "_label": "refreshes",
+          "labelE": "refreshes",
+          "relation": "refreshes",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_2_main:source_scan_main:workua",
+          "source": "main:source_scan",
+          "target": "main:workua",
+          "_label": "refreshes",
+          "labelE": "refreshes",
+          "relation": "refreshes",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_3_main:source_scan_main:dou",
+          "source": "main:source_scan",
+          "target": "main:dou",
+          "_label": "refreshes",
+          "labelE": "refreshes",
+          "relation": "refreshes",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_4_main:source_scan_main:robotaua",
+          "source": "main:source_scan",
+          "target": "main:robotaua",
+          "_label": "refreshes",
+          "labelE": "refreshes",
+          "relation": "refreshes",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_5_main:source_scan_main:resume_index",
+          "source": "main:source_scan",
+          "target": "main:resume_index",
+          "_label": "matches",
+          "labelE": "matches",
+          "relation": "matches",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_6_main:source_scan_main:shared_db",
+          "source": "main:source_scan",
+          "target": "main:shared_db",
+          "_label": "persists",
+          "labelE": "persists",
+          "relation": "persists",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_7_main:shared_db_main:web",
+          "source": "main:shared_db",
+          "target": "main:web",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_8_main:shared_db_main:telegram",
+          "source": "main:shared_db",
+          "target": "main:telegram",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_9_main:shared_db_main:progress",
+          "source": "main:shared_db",
+          "target": "main:progress",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_10_main:message_qa_main:approval",
+          "source": "main:message_qa",
+          "target": "main:approval",
+          "_label": "guards",
+          "labelE": "guards",
+          "relation": "guards",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_11_main:approval_main:djinni",
+          "source": "main:approval",
+          "target": "main:djinni",
+          "_label": "permits final send",
+          "labelE": "permits final send",
+          "relation": "permits final send",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_12_main:approval_main:workua",
+          "source": "main:approval",
+          "target": "main:workua",
+          "_label": "permits final send",
+          "labelE": "permits final send",
+          "relation": "permits final send",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_13_main:approval_main:dou",
+          "source": "main:approval",
+          "target": "main:dou",
+          "_label": "permits final send",
+          "labelE": "permits final send",
+          "relation": "permits final send",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_14_main:approval_main:robotaua",
+          "source": "main:approval",
+          "target": "main:robotaua",
+          "_label": "permits final send",
+          "labelE": "permits final send",
+          "relation": "permits final send",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_15_main:blockers_main:web",
+          "source": "main:blockers",
+          "target": "main:web",
+          "_label": "surfaces",
+          "labelE": "surfaces",
+          "relation": "surfaces",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_16_main:blockers_main:telegram",
+          "source": "main:blockers",
+          "target": "main:telegram",
+          "_label": "notifies",
+          "labelE": "notifies",
+          "relation": "notifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_17_main:progress_main:blockers",
+          "source": "main:progress",
+          "target": "main:blockers",
+          "_label": "tracks",
+          "labelE": "tracks",
+          "relation": "tracks",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_18_main:sent_main:web",
+          "source": "main:sent",
+          "target": "main:web",
+          "_label": "reports",
+          "labelE": "reports",
+          "relation": "reports",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_19_main:testing_main:web",
+          "source": "main:testing",
+          "target": "main:web",
+          "_label": "verifies",
+          "labelE": "verifies",
+          "relation": "verifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_20_main:testing_main:telegram",
+          "source": "main:testing",
+          "target": "main:telegram",
+          "_label": "verifies",
+          "labelE": "verifies",
+          "relation": "verifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "main:edge_21_main:graph_tz_main:goal",
+          "source": "main:graph_tz",
+          "target": "main:goal",
+          "_label": "defines",
+          "labelE": "defines",
+          "relation": "defines",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_0_server:sth-goal_server:sth-repo-layout",
+          "source": "server:sth-goal",
+          "target": "server:sth-repo-layout",
+          "_label": "contains",
+          "labelE": "contains",
+          "relation": "contains",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_1_server:sth-goal_server:sth-api-events",
+          "source": "server:sth-goal",
+          "target": "server:sth-api-events",
+          "_label": "requires",
+          "labelE": "requires",
+          "relation": "requires",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_2_server:sth-goal_server:sth-api-runs",
+          "source": "server:sth-goal",
+          "target": "server:sth-api-runs",
+          "_label": "requires",
+          "labelE": "requires",
+          "relation": "requires",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_3_server:sth-goal_server:sth-api-health",
+          "source": "server:sth-goal",
+          "target": "server:sth-api-health",
+          "_label": "requires",
+          "labelE": "requires",
+          "relation": "requires",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_4_server:sth-goal_server:sth-storage-migrations",
+          "source": "server:sth-goal",
+          "target": "server:sth-storage-migrations",
+          "_label": "requires",
+          "labelE": "requires",
+          "relation": "requires",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_5_server:sth-goal_server:sth-auth",
+          "source": "server:sth-goal",
+          "target": "server:sth-auth",
+          "_label": "guarded by",
+          "labelE": "guarded by",
+          "relation": "guarded by",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_6_server:sth-api-events_server:sth-privacy-validator",
+          "source": "server:sth-api-events",
+          "target": "server:sth-privacy-validator",
+          "_label": "guarded by",
+          "labelE": "guarded by",
+          "relation": "guarded by",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_7_server:sth-storage-migrations_server:sth-api-events",
+          "source": "server:sth-storage-migrations",
+          "target": "server:sth-api-events",
+          "_label": "depends_on",
+          "labelE": "depends_on",
+          "relation": "depends_on",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_8_server:sth-auth_server:sth-api-events",
+          "source": "server:sth-auth",
+          "target": "server:sth-api-events",
+          "_label": "guards",
+          "labelE": "guards",
+          "relation": "guards",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_9_server:sth-auth_server:sth-graph-api",
+          "source": "server:sth-auth",
+          "target": "server:sth-graph-api",
+          "_label": "guards",
+          "labelE": "guards",
+          "relation": "guards",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_10_server:sth-graph-model_server:sth-graph-api",
+          "source": "server:sth-graph-model",
+          "target": "server:sth-graph-api",
+          "_label": "defines",
+          "labelE": "defines",
+          "relation": "defines",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_11_server:sth-graph-api_server:sth-dashboard",
+          "source": "server:sth-graph-api",
+          "target": "server:sth-dashboard",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_12_server:sth-graph-api_server:sth-telegram",
+          "source": "server:sth-graph-api",
+          "target": "server:sth-telegram",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_13_server:sth-api-runs_server:sth-dashboard",
+          "source": "server:sth-api-runs",
+          "target": "server:sth-dashboard",
+          "_label": "feeds",
+          "labelE": "feeds",
+          "relation": "feeds",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_14_server:sth-api-events_server:sth-api-runs",
+          "source": "server:sth-api-events",
+          "target": "server:sth-api-runs",
+          "_label": "produces",
+          "labelE": "produces",
+          "relation": "produces",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_15_server:sth-api-events_server:sth-local-client",
+          "source": "server:sth-api-events",
+          "target": "server:sth-local-client",
+          "_label": "receives from",
+          "labelE": "receives from",
+          "relation": "receives from",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_16_server:sth-deploy-layout_server:sth-deploy-gate",
+          "source": "server:sth-deploy-layout",
+          "target": "server:sth-deploy-gate",
+          "_label": "blocked by",
+          "labelE": "blocked by",
+          "relation": "blocked by",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_17_server:sth-tests_server:sth-api-events",
+          "source": "server:sth-tests",
+          "target": "server:sth-api-events",
+          "_label": "verifies",
+          "labelE": "verifies",
+          "relation": "verifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_18_server:sth-tests_server:sth-graph-api",
+          "source": "server:sth-tests",
+          "target": "server:sth-graph-api",
+          "_label": "verifies",
+          "labelE": "verifies",
+          "relation": "verifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "server:edge_19_server:sth-tests_server:sth-telegram",
+          "source": "server:sth-tests",
+          "target": "server:sth-telegram",
+          "_label": "verifies",
+          "labelE": "verifies",
+          "relation": "verifies",
+          "weight": 1
+        }
+      },
+      {
+        "data": {
+          "id": "bridge_main_graph_tz_to_server_goal",
+          "source": "main:graph_tz",
+          "target": "server:sth-goal",
+          "_label": "expands into server hub TZ",
+          "labelE": "expands into server hub TZ",
+          "relation": "defines",
+          "weight": 2
+        }
+      }
+    ]
+  },
+  "meta": {
+    "title": "JobApply Automation requirements tree",
+    "sources": [
+      "src/function_graph.py",
+      "server_telemetry_hub_tasks.json"
+    ],
+    "generated_for": "happyuser-visual_link_analisis"
+  }
+}

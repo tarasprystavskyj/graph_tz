@@ -1,0 +1,14 @@
+{
+  "name": "job-apply-graph-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "smoke": "node tests/smoke.mjs",
+    "browser-smoke": "node tests/browser-smoke.mjs",
+    "browser-cdp-smoke": "node tests/browser-cdp-smoke.mjs",
+    "agent-cycle": "node tests/agent-cycle.mjs",
+    "export:mindmaps": "node scripts/export-mindmaps.mjs"
+  }
+}

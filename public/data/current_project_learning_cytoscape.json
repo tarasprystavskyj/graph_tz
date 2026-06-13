@@ -1,0 +1,764 @@
+{
+  "schema": "job.graph_ui.current_project_learning.v0",
+  "elements": {
+    "nodes": [
+      {
+        "data": {
+          "id": "learn:goal",
+          "_label": "Навчитись керувати TZ через граф",
+          "name": "Навчитись керувати TZ через граф",
+          "type": "diamond",
+          "group": "project",
+          "group_label": "Поточний проект",
+          "status": "active",
+          "owner": "owner",
+          "detail": "Окремий навчальний граф для поточного graph-ui проекту: фокусуватись на гілках, дивитись деталі поступово, додавати вузли, ребра, візуальні ключі та agent-branch піддерева.",
+          "color": "#256f55"
+        },
+        "position": { "x": 0, "y": 0 },
+        "classes": "project active diamond"
+      },
+      {
+        "data": {
+          "id": "learn:focus_first",
+          "_label": "1. Спочатку фокус",
+          "name": "1. Спочатку фокус",
+          "type": "hex",
+          "group": "learn",
+          "group_label": "Як користуватись",
+          "status": "active",
+          "owner": "owner",
+          "detail": "Не читати весь TZ. Відкрити граф, відфільтрувати групу або статус, вибрати один вузол і дивитись тільки його найближчі зв'язки.",
+          "color": "#2f855a"
+        },
+        "position": { "x": -360, "y": -160 },
+        "classes": "learn active hex"
+      },
+      {
+        "data": {
+          "id": "learn:inspect_node",
+          "_label": "2. Інспектувати вузол",
+          "name": "2. Інспектувати вузол",
+          "type": "round",
+          "group": "learn",
+          "group_label": "Як користуватись",
+          "status": "active",
+          "owner": "owner",
+          "detail": "Клік по вузлу показує label, group, status, owner, detail, agent branch і visual key. Це замінює довге читання документа.",
+          "color": "#2f855a"
+        },
+        "position": { "x": -360, "y": 40 },
+        "classes": "learn active round"
+      },
+      {
+        "data": {
+          "id": "learn:add_node",
+          "_label": "3. Додати вузол",
+          "name": "3. Додати вузол",
+          "type": "box",
+          "group": "learn",
+          "group_label": "Як користуватись",
+          "status": "planned",
+          "owner": "owner",
+          "detail": "Новий вузол має мати id, label, group, status, owner, detail, color. Він повинен означати одну дію, рішення, артефакт або питання.",
+          "color": "#38a169"
+        },
+        "position": { "x": -360, "y": 240 },
+        "classes": "learn planned box"
+      },
+      {
+        "data": {
+          "id": "learn:add_edge",
+          "_label": "4. Додати thread edge",
+          "name": "4. Додати thread edge",
+          "type": "box",
+          "group": "learn",
+          "group_label": "Як користуватись",
+          "status": "planned",
+          "owner": "owner",
+          "detail": "Ребро пояснює, як дані, рішення або артефакт рухається між двома вузлами. Label ребра має бути коротким: feeds, verifies, updates, blocks, explains.",
+          "color": "#38a169"
+        },
+        "position": { "x": -360, "y": 440 },
+        "classes": "learn planned box"
+      },
+      {
+        "data": {
+          "id": "ui:babylon",
+          "_label": "Variant A: Babylon 3D",
+          "name": "Variant A: Babylon 3D",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "owner": "agent",
+          "detail": "3D force graph: корисний для відчуття павутини TZ, spring attraction, repulsion, hover/click details, pause/reset/search/group controls.",
+          "color": "#5a67d8"
+        },
+        "position": { "x": 0, "y": -300 },
+        "classes": "ui active box"
+      },
+      {
+        "data": {
+          "id": "ui:cytoscape",
+          "_label": "Variant 2D: Cytoscape",
+          "name": "Variant 2D: Cytoscape",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "owner": "agent",
+          "detail": "Основний навчальний режим: filters, layouts, node focus, linked neighborhood, group/status/search. Найкращий старт для вдосконалення графа.",
+          "color": "#4c6fff"
+        },
+        "position": { "x": 0, "y": -80 },
+        "classes": "ui active box"
+      },
+      {
+        "data": {
+          "id": "ui:flow_b",
+          "_label": "Variant B: Flow cards",
+          "name": "Variant B: Flow cards",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "owner": "agent",
+          "detail": "ReactFlow-style cards without dependency: lanes, handles, SVG edges, minimap, visual preview slots. Для щільного читабельного режиму.",
+          "color": "#6d5dfc"
+        },
+        "position": { "x": 0, "y": 140 },
+        "classes": "ui active box"
+      },
+      {
+        "data": {
+          "id": "data:graph_json",
+          "_label": "Graph JSON source",
+          "name": "Graph JSON source",
+          "type": "cylinder",
+          "group": "data",
+          "group_label": "Дані",
+          "status": "active",
+          "owner": "agent",
+          "detail": "Цей навчальний граф живе в graph-ui/public/data/current_project_learning_cytoscape.json і доступний як graph id current-project-learning.",
+          "color": "#437f97"
+        },
+        "position": { "x": 360, "y": -260 },
+        "classes": "data active cylinder"
+      },
+      {
+        "data": {
+          "id": "data:model_api",
+          "_label": "Graph model API",
+          "name": "Graph model API",
+          "type": "cylinder",
+          "group": "data",
+          "group_label": "Дані",
+          "status": "active",
+          "owner": "agent",
+          "detail": "/api/graph-model/current-project-learning додає до raw graph visualKey, agentBranch, groups, dataFlow і superpower placeholder metadata.",
+          "color": "#437f97"
+        },
+        "position": { "x": 360, "y": -40 },
+        "classes": "data active cylinder"
+      },
+      {
+        "data": {
+          "id": "data:exports",
+          "_label": "Mind-map exports",
+          "name": "Mind-map exports",
+          "type": "cylinder",
+          "group": "data",
+          "group_label": "Дані",
+          "status": "active",
+          "owner": "agent",
+          "detail": "Markmap, OPML, FreeMind exports дають порівняти, чи зручніше думати через граф або mind-map формат.",
+          "color": "#437f97"
+        },
+        "position": { "x": 360, "y": 180 },
+        "classes": "data active cylinder"
+      },
+      {
+        "data": {
+          "id": "branch:owner_learning",
+          "_label": "Agent branch: навчання owner",
+          "name": "Agent branch: навчання owner",
+          "type": "octagon",
+          "group": "agent_branch",
+          "group_label": "Agent branch",
+          "status": "available",
+          "owner": "owner",
+          "detail": "Гілка для поступового навчання: owner пробує фільтри, додає вузол, додає edge, просить agent оновити visual key або export.",
+          "color": "#0f766e"
+        },
+        "position": { "x": 700, "y": -180 },
+        "classes": "agent_branch available octagon"
+      },
+      {
+        "data": {
+          "id": "branch:implementation",
+          "_label": "Agent branch: implementation",
+          "name": "Agent branch: implementation",
+          "type": "octagon",
+          "group": "agent_branch",
+          "group_label": "Agent branch",
+          "status": "active",
+          "owner": "agent",
+          "detail": "Гілка для code worker: змінює тільки graph-ui, не торкається submit/upload/secrets/private CV/browser profiles.",
+          "color": "#0f766e"
+        },
+        "position": { "x": 700, "y": 40 },
+        "classes": "agent_branch active octagon"
+      },
+      {
+        "data": {
+          "id": "visual:placeholder",
+          "_label": "Visual key placeholder",
+          "name": "Visual key placeholder",
+          "type": "round",
+          "group": "visual",
+          "group_label": "Візуальні ключі",
+          "status": "planned",
+          "owner": "agent",
+          "detail": "Поки немає тестового screenshot artifact, вузол показує placeholder. Далі release/test має оновлювати visualKey artifactRef.",
+          "color": "#b7791f"
+        },
+        "position": { "x": 700, "y": 260 },
+        "classes": "visual planned round"
+      },
+      {
+        "data": {
+          "id": "safety:boundary",
+          "_label": "Safety boundary",
+          "name": "Safety boundary",
+          "type": "hex",
+          "group": "safety",
+          "group_label": "Безпека",
+          "status": "active",
+          "owner": "system",
+          "detail": "Graph UI sidecar не читає .env, cookies, browser profiles, private CVs і не викликає submit/upload/send flows.",
+          "color": "#c05621"
+        },
+        "position": { "x": 0, "y": 360 },
+        "classes": "safety active hex"
+      },
+      {
+        "data": {
+          "id": "test:smoke",
+          "_label": "Smoke test",
+          "name": "Smoke test",
+          "type": "hex",
+          "group": "quality",
+          "group_label": "Якість",
+          "status": "active",
+          "owner": "agent",
+          "detail": "npm.cmd run smoke перевіряє routes, pages, graph-model, normalized graph, exports і тепер окремий current-project-learning graph.",
+          "color": "#805ad5"
+        },
+        "position": { "x": 360, "y": 400 },
+        "classes": "quality active hex"
+      },
+      {
+        "data": {
+          "id": "next:edit_graph",
+          "_label": "Next: редагувати граф",
+          "name": "Next: редагувати граф",
+          "type": "diamond",
+          "group": "next",
+          "group_label": "Наступні кроки",
+          "status": "planned",
+          "owner": "owner",
+          "detail": "Наступний крок: вибрати один вузол, сказати що додати/змінити, і оновити JSON + smoke test. Так owner вчиться покращувати граф через маленькі зміни.",
+          "color": "#d69e2e"
+        },
+        "position": { "x": 700, "y": 480 },
+        "classes": "next planned diamond"
+      },
+      {
+        "data": {
+          "id": "task:3d_cytoscape_underhood",
+          "_label": "Task: 3D uses Cytoscape under hood",
+          "name": "Task: 3D uses Cytoscape under hood",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "3d-agent",
+          "detail": "Add Search Filter degree, show all labels, time panel, map panel, and Re-Arrange layouts including Cola-like iterative mode through Cytoscape.js headless layout.",
+          "color": "#0ea5e9"
+        },
+        "position": { "x": 1040, "y": -260 },
+        "classes": "subagent_task active box"
+      },
+      {
+        "data": {
+          "id": "task:context_menu",
+          "_label": "Task: right-click context menu",
+          "name": "Task: right-click context menu",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "3d-agent",
+          "detail": "Right-click on a 3D node opens local context actions: focus linked branch, edit, toggle labels, copy node id.",
+          "color": "#0ea5e9"
+        },
+        "position": { "x": 1040, "y": -80 },
+        "classes": "subagent_task active box"
+      },
+      {
+        "data": {
+          "id": "task:graph_project_menu",
+          "_label": "Task: graph/project menu",
+          "name": "Task: graph/project menu",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "registry-agent",
+          "detail": "Add a general menu of all graph ids/projects and preserve the active graph through URL query parameters.",
+          "color": "#0284c7"
+        },
+        "position": { "x": 1040, "y": 100 },
+        "classes": "subagent_task active box"
+      },
+      {
+        "data": {
+          "id": "task:view_switch",
+          "_label": "Task: 2D/3D switch",
+          "name": "Task: 2D/3D switch",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "2d-agent",
+          "detail": "Add a button to switch from 3D to the 2D Cytoscape view for the same active graph.",
+          "color": "#4c6fff"
+        },
+        "position": { "x": 1040, "y": 280 },
+        "classes": "subagent_task active box"
+      },
+      {
+        "data": {
+          "id": "task:node_edit_attachments",
+          "_label": "Task: edit node + screenshots/files",
+          "name": "Task: edit node + screenshots/files",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "editor-agent",
+          "detail": "Edit title/detail from the click panel, paste screenshots from clipboard, upload files, and persist sidecar-only edit artifacts.",
+          "color": "#f59e0b"
+        },
+        "position": { "x": 1040, "y": 460 },
+        "classes": "subagent_task active box"
+      },
+      {
+        "data": {
+          "id": "task:qa_smoke",
+          "_label": "Task: QA smoke",
+          "name": "Task: QA smoke",
+          "type": "hex",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "owner": "qa-agent",
+          "detail": "Extend smoke checks for new graph routes, edit endpoint, new controls, and learning graph availability.",
+          "color": "#805ad5"
+        },
+        "position": { "x": 1040, "y": 640 },
+        "classes": "subagent_task active hex"
+      },
+      {
+        "data": {
+          "id": "task:browser_qa_agent",
+          "_label": "Task: browser QA agent",
+          "name": "Task: browser QA agent",
+          "type": "hex",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "browser-qa-agent",
+          "detail": "Automate browser smoke checks for the graph-ui sidecar: open 3D learning graph, exercise Re-Arrange modes, verify radial context menu, and capture local evidence without using private browser profiles.",
+          "color": "#eab308"
+        },
+        "position": { "x": 1320, "y": 640 },
+        "classes": "subagent_task active testing hex"
+      },
+      {
+        "data": {
+          "id": "task:work_state_glow",
+          "_label": "Task: yellow red green graph states",
+          "name": "Task: yellow red green graph states",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "done",
+          "owner": "3d-agent",
+          "detail": "Yellow outline/glow means currently tested, red means not done or changed and needs update, green means implemented and merged/main-ready. In 3D this is rendered as outline plus outer glow.",
+          "color": "#22c55e"
+        },
+        "position": { "x": 1320, "y": 460 },
+        "classes": "subagent_task active done box"
+      },
+      {
+        "data": {
+          "id": "task:visual_key_best_practices",
+          "_label": "Task: visual keys best practices",
+          "name": "Task: visual keys best practices",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "visual-ux-agent",
+          "detail": "Use short stable visual keys on every node: site logo placeholders for site work, form/screenshot placeholders for web forms, QA symbols for tests, agent badges for delegated branches. Replace placeholders with latest safe visual artifacts when available.",
+          "color": "#14b8a6"
+        },
+        "position": { "x": 1320, "y": 280 },
+        "classes": "subagent_task active testing box"
+      },
+      {
+        "data": {
+          "id": "task:keyword_icon_agent",
+          "_label": "Task: keyword icon agent",
+          "name": "Task: keyword icon agent",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "visual-ux-agent",
+          "detail": "Derive short keywords for each new node and assign a unique Font Awesome icon cue from a public icon base so the owner can recognize feature meaning without reading long text.",
+          "color": "#14b8a6"
+        },
+        "position": { "x": 1600, "y": 280 },
+        "classes": "subagent_task active testing box"
+      },
+      {
+        "data": {
+          "id": "task:development_flow_architect",
+          "_label": "Task: development flow architect",
+          "name": "Task: development flow architect",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "approved",
+          "owner": "architect-agent",
+          "detail": "Development-flow graph uses SDLC order: requirements/TZ, design/architecture, data/model/API, implementation/UI, testing/QA, review/approval, release/maintenance. The layout should show left-to-right sequence.",
+          "color": "#f97316"
+        },
+        "position": { "x": 1600, "y": 100 },
+        "classes": "subagent_task active approved box"
+      },
+      {
+        "data": {
+          "id": "task:graph_feature_rule",
+          "_label": "Task: every request becomes graph node",
+          "name": "Task: every request becomes graph node",
+          "type": "box",
+          "group": "governance",
+          "group_label": "Agent project rules",
+          "status": "active",
+          "work_state": "tested_agent",
+          "owner": "governance-agent",
+          "detail": "Project rule: every owner-requested graph-ui feature must be added to the current project graph as a node and connected to the relevant implementation or agent branch.",
+          "is_new": true,
+          "color": "#22c55e"
+        },
+        "position": { "x": 1880, "y": -420 },
+        "classes": "governance active tested_agent box"
+      },
+      {
+        "data": {
+          "id": "task:new_node_seen_blink",
+          "_label": "Task: unseen new nodes blink red",
+          "name": "Task: unseen new nodes blink red",
+          "type": "box",
+          "group": "subagent_task",
+          "group_label": "Sub-agent tasks",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "3d-agent",
+          "detail": "New feature nodes blink with a red label outline until the owner clicks them. The click saves seenAt, so the graph distinguishes newly added work from already seen work.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 1880, "y": -260 },
+        "classes": "subagent_task active testing box"
+      },
+      {
+        "data": {
+          "id": "task:image_preview_label",
+          "_label": "Task: image preview on node label",
+          "name": "Task: image preview on node label",
+          "type": "box",
+          "group": "visual",
+          "group_label": "Visual keys",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "visual-ux-agent",
+          "detail": "When the owner pastes or uploads an image, the latest image attachment becomes the visual preview badge on the node label, giving a direct visual key for that branch.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 1880, "y": -100 },
+        "classes": "visual active testing box"
+      },
+      {
+        "data": {
+          "id": "task:hybrid_text_graph_table",
+          "_label": "Task: hybrid text graph table bridge",
+          "name": "Task: hybrid text graph table bridge",
+          "type": "box",
+          "group": "ux",
+          "group_label": "Hybrid work modes",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "ux-architect-agent",
+          "detail": "Add seamless transitions between graph, text, and table. Node details expose generated text and table views of the subtree below the selected node, derived from the graph model.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 1880, "y": 60 },
+        "classes": "ux active testing box"
+      },
+      {
+        "data": {
+          "id": "task:cognitive_load_slider",
+          "_label": "Task: cognitive load slider",
+          "name": "Task: cognitive load slider",
+          "type": "box",
+          "group": "ux",
+          "group_label": "Focus controls",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "3d-agent",
+          "detail": "Right-side vertical slider controls viewport information density: low levels reduce labels and keywords; higher levels show richer label content and more keyword icon cues.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 1880, "y": 220 },
+        "classes": "ux active testing box"
+      },
+      {
+        "data": {
+          "id": "task:current_project_source_truth",
+          "_label": "Task: current graph is source of truth",
+          "name": "Task: current graph is source of truth",
+          "type": "diamond",
+          "group": "project",
+          "group_label": "Current project",
+          "status": "active",
+          "work_state": "approved",
+          "owner": "owner",
+          "detail": "Owner will use the current project graph as the practical source of truth for new graph-ui changes, rather than reading a long textual TZ first.",
+          "is_new": true,
+          "color": "#f97316"
+        },
+        "position": { "x": 1880, "y": 380 },
+        "classes": "project active approved diamond"
+      },
+      {
+        "data": {
+          "id": "task:contextual_agent_search",
+          "_label": "Task: contextual agent search",
+          "name": "Task: contextual agent search",
+          "type": "box",
+          "group": "ux",
+          "group_label": "Focus controls",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "search-agent",
+          "detail": "Add a context question search where the agent highlights graph nodes it estimates are related to the owner's question, without hiding the rest of the graph.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": -420 },
+        "classes": "ux active testing box"
+      },
+      {
+        "data": {
+          "id": "task:test_comment_form",
+          "_label": "Task: human and agent test comments",
+          "name": "Task: human and agent test comments",
+          "type": "box",
+          "group": "quality",
+          "group_label": "Testing and QA",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "qa-agent",
+          "detail": "Node details show an Add test comment action for testing states. Human or agent comments are saved as node test artifacts.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": -260 },
+        "classes": "quality active testing box"
+      },
+      {
+        "data": {
+          "id": "task:superpowers_flow_research",
+          "_label": "Task: superpowers flow research",
+          "name": "Task: superpowers flow research",
+          "type": "box",
+          "group": "agent_branch",
+          "group_label": "Agent branch",
+          "status": "active",
+          "work_state": "tested_agent",
+          "owner": "research-agent",
+          "detail": "Research obra/superpowers and compare alternative software development flows: GitHub Flow, feature branch workflow, Gitflow, Shape Up, and SAFe. Recommend a graph-native hybrid.",
+          "is_new": true,
+          "color": "#a3e635"
+        },
+        "position": { "x": 2160, "y": -100 },
+        "classes": "agent_branch active tested_agent box"
+      },
+      {
+        "data": {
+          "id": "task:labels_camera_front",
+          "_label": "Task: labels stay in front of nodes",
+          "name": "Task: labels stay in front of nodes",
+          "type": "box",
+          "group": "visual",
+          "group_label": "Visual keys",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "3d-agent",
+          "detail": "3D labels are billboard plaques positioned slightly toward the camera from each node, so labels remain visually in front of their nodes.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": 60 },
+        "classes": "visual active testing box"
+      },
+      {
+        "data": {
+          "id": "task:workflow_status_explainer",
+          "_label": "Task: workflow status explainer",
+          "name": "Task: workflow status explainer",
+          "type": "box",
+          "group": "ux",
+          "group_label": "Hybrid work modes",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "ux-agent",
+          "detail": "Clarify that the seven status labels are the development workflow ladder from not done through human verified, and expose meanings as UI hints.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": 220 },
+        "classes": "ux active testing box"
+      },
+      {
+        "data": {
+          "id": "task:left_icon_toolbar",
+          "_label": "Task: left icon toolbar",
+          "name": "Task: left icon toolbar",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "ui-agent",
+          "detail": "Move the top menu to the left, add Font Awesome icons, content-sized buttons, checkbox toggles, and a hamburger collapse/expand control.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": 380 },
+        "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:focus_camera_animation",
+          "_label": "Task: animated camera focus",
+          "name": "Task: animated camera focus",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Візуалізації",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "3d-agent",
+          "detail": "When focusing a node, animate the camera target and radius so the visual movement path is easier to follow.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2160, "y": 540 },
+        "classes": "ui active testing box"
+      }
+    ],
+    "edges": [
+      { "data": { "id": "e1", "source": "learn:goal", "target": "learn:focus_first", "label": "starts with" } },
+      { "data": { "id": "e2", "source": "learn:focus_first", "target": "learn:inspect_node", "label": "then" } },
+      { "data": { "id": "e3", "source": "learn:inspect_node", "target": "learn:add_node", "label": "learns to" } },
+      { "data": { "id": "e4", "source": "learn:add_node", "target": "learn:add_edge", "label": "connects by" } },
+      { "data": { "id": "e5", "source": "learn:goal", "target": "ui:cytoscape", "label": "practice in" } },
+      { "data": { "id": "e6", "source": "learn:goal", "target": "ui:babylon", "label": "overview in" } },
+      { "data": { "id": "e7", "source": "learn:goal", "target": "ui:flow_b", "label": "compare with" } },
+      { "data": { "id": "e8", "source": "data:graph_json", "target": "data:model_api", "label": "normalizes into" } },
+      { "data": { "id": "e9", "source": "data:model_api", "target": "ui:cytoscape", "label": "feeds" } },
+      { "data": { "id": "e10", "source": "data:model_api", "target": "ui:babylon", "label": "feeds" } },
+      { "data": { "id": "e11", "source": "data:model_api", "target": "ui:flow_b", "label": "feeds" } },
+      { "data": { "id": "e12", "source": "data:model_api", "target": "data:exports", "label": "exports" } },
+      { "data": { "id": "e13", "source": "learn:inspect_node", "target": "branch:owner_learning", "label": "attaches" } },
+      { "data": { "id": "e14", "source": "learn:add_node", "target": "branch:implementation", "label": "delegates" } },
+      { "data": { "id": "e15", "source": "branch:implementation", "target": "visual:placeholder", "label": "updates" } },
+      { "data": { "id": "e16", "source": "visual:placeholder", "target": "ui:flow_b", "label": "previews in" } },
+      { "data": { "id": "e17", "source": "safety:boundary", "target": "branch:implementation", "label": "constrains" } },
+      { "data": { "id": "e18", "source": "test:smoke", "target": "data:graph_json", "label": "validates" } },
+      { "data": { "id": "e19", "source": "learn:add_edge", "target": "next:edit_graph", "label": "leads to" } },
+      { "data": { "id": "e20", "source": "data:exports", "target": "next:edit_graph", "label": "compares usability" } },
+      { "data": { "id": "e21", "source": "branch:implementation", "target": "task:3d_cytoscape_underhood", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e22", "source": "branch:implementation", "target": "task:context_menu", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e23", "source": "branch:implementation", "target": "task:graph_project_menu", "label": "delegates to registry-agent" } },
+      { "data": { "id": "e24", "source": "branch:implementation", "target": "task:view_switch", "label": "delegates to 2d-agent" } },
+      { "data": { "id": "e25", "source": "branch:implementation", "target": "task:node_edit_attachments", "label": "delegates to editor-agent" } },
+      { "data": { "id": "e26", "source": "branch:implementation", "target": "task:qa_smoke", "label": "delegates to qa-agent" } },
+      { "data": { "id": "e27", "source": "task:qa_smoke", "target": "test:smoke", "label": "updates" } },
+      { "data": { "id": "e28", "source": "branch:implementation", "target": "task:browser_qa_agent", "label": "delegates to browser-qa-agent" } },
+      { "data": { "id": "e29", "source": "task:browser_qa_agent", "target": "task:3d_cytoscape_underhood", "label": "tests layouts" } },
+      { "data": { "id": "e30", "source": "task:browser_qa_agent", "target": "task:context_menu", "label": "tests menu" } },
+      { "data": { "id": "e31", "source": "task:context_menu", "target": "task:work_state_glow", "label": "sets states" } },
+      { "data": { "id": "e32", "source": "task:work_state_glow", "target": "ui:babylon", "label": "renders glow" } },
+      { "data": { "id": "e33", "source": "branch:implementation", "target": "task:visual_key_best_practices", "label": "delegates to visual-ux-agent" } },
+      { "data": { "id": "e34", "source": "task:visual_key_best_practices", "target": "visual:placeholder", "label": "defines visual keys" } },
+      { "data": { "id": "e35", "source": "task:visual_key_best_practices", "target": "ui:babylon", "label": "renders on labels" } },
+      { "data": { "id": "e36", "source": "task:visual_key_best_practices", "target": "ui:flow_b", "label": "renders on cards" } },
+      { "data": { "id": "e37", "source": "task:visual_key_best_practices", "target": "task:keyword_icon_agent", "label": "expands keywords" } },
+      { "data": { "id": "e38", "source": "branch:implementation", "target": "task:development_flow_architect", "label": "asks architect" } },
+      { "data": { "id": "e39", "source": "task:development_flow_architect", "target": "ui:babylon", "label": "adds mode" } },
+      { "data": { "id": "e40", "source": "task:development_flow_architect", "target": "ui:cytoscape", "label": "adds mode" } },
+      { "data": { "id": "e41", "source": "branch:implementation", "target": "task:graph_feature_rule", "label": "governs" } },
+      { "data": { "id": "e42", "source": "task:graph_feature_rule", "target": "data:graph_json", "label": "requires updates" } },
+      { "data": { "id": "e43", "source": "branch:implementation", "target": "task:new_node_seen_blink", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e44", "source": "task:new_node_seen_blink", "target": "ui:babylon", "label": "renders outline" } },
+      { "data": { "id": "e45", "source": "branch:implementation", "target": "task:image_preview_label", "label": "delegates to visual-ux-agent" } },
+      { "data": { "id": "e46", "source": "task:image_preview_label", "target": "visual:placeholder", "label": "replaces placeholder" } },
+      { "data": { "id": "e47", "source": "task:image_preview_label", "target": "ui:babylon", "label": "renders preview" } },
+      { "data": { "id": "e48", "source": "branch:implementation", "target": "task:hybrid_text_graph_table", "label": "delegates to ux-architect-agent" } },
+      { "data": { "id": "e49", "source": "task:hybrid_text_graph_table", "target": "ui:babylon", "label": "adds tree text" } },
+      { "data": { "id": "e50", "source": "task:hybrid_text_graph_table", "target": "data:exports", "label": "aligns exports" } },
+      { "data": { "id": "e51", "source": "branch:implementation", "target": "task:cognitive_load_slider", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e52", "source": "task:cognitive_load_slider", "target": "ui:babylon", "label": "controls density" } },
+      { "data": { "id": "e53", "source": "learn:goal", "target": "task:current_project_source_truth", "label": "promotes" } },
+      { "data": { "id": "e54", "source": "task:current_project_source_truth", "target": "data:graph_json", "label": "uses as truth" } },
+      { "data": { "id": "e55", "source": "branch:implementation", "target": "task:contextual_agent_search", "label": "delegates to search-agent" } },
+      { "data": { "id": "e56", "source": "task:contextual_agent_search", "target": "ui:babylon", "label": "highlights relevance" } },
+      { "data": { "id": "e57", "source": "branch:implementation", "target": "task:test_comment_form", "label": "delegates to qa-agent" } },
+      { "data": { "id": "e58", "source": "task:test_comment_form", "target": "test:smoke", "label": "adds artifact" } },
+      { "data": { "id": "e59", "source": "branch:implementation", "target": "task:superpowers_flow_research", "label": "delegates to research-agent" } },
+      { "data": { "id": "e60", "source": "task:superpowers_flow_research", "target": "task:development_flow_architect", "label": "informs" } },
+      { "data": { "id": "e61", "source": "branch:implementation", "target": "task:labels_camera_front", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e62", "source": "task:labels_camera_front", "target": "ui:babylon", "label": "updates label placement" } },
+      { "data": { "id": "e63", "source": "branch:implementation", "target": "task:workflow_status_explainer", "label": "delegates to ux-agent" } },
+      { "data": { "id": "e64", "source": "task:workflow_status_explainer", "target": "ui:babylon", "label": "adds hints" } },
+      { "data": { "id": "e65", "source": "branch:implementation", "target": "task:left_icon_toolbar", "label": "delegates to ui-agent" } },
+      { "data": { "id": "e66", "source": "task:left_icon_toolbar", "target": "ui:babylon", "label": "reworks controls" } },
+      { "data": { "id": "e67", "source": "branch:implementation", "target": "task:focus_camera_animation", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e68", "source": "task:focus_camera_animation", "target": "ui:babylon", "label": "animates focus" } }
+    ]
+  }
+}
