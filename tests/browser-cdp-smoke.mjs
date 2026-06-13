@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 
-const targetUrl = process.env.GRAPH_UI_URL || "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning";
+const targetUrl = process.env.GRAPH_UI_URL || "http://127.0.0.1:8173/babylon-3d.html?graph=current-project-learning&physics=off";
 const cdpHost = process.env.CDP_HOST || "127.0.0.1";
 const cdpPort = process.env.CDP_PORT || "9222";
 const endpoint = `http://${cdpHost}:${cdpPort}`;
@@ -81,6 +81,7 @@ try {
           hasContextSearch: !!document.getElementById("contextSearchBox"),
           hasMenuToggle: !!document.getElementById("menuToggle"),
           hasContextMenu: !!document.getElementById("contextMenu"),
+          physicsChecked: !!document.getElementById("togglePhysics")?.checked,
           hasTreeButtonsSource: [...document.scripts].some((script) => script.src.includes("babylon-3d.js")),
           babylonLoaded: !!window.BABYLON,
           cytoscapeLoaded: !!window.cytoscape,
@@ -98,6 +99,7 @@ try {
   assert.equal(result.hasContextSearch, true, "3D page should include context search");
   assert.equal(result.hasMenuToggle, true, "3D page should include menu collapse toggle");
   assert.equal(result.hasContextMenu, true, "3D page should include context menu");
+  assert.equal(result.physicsChecked, false, "browser tests should start with physics checkbox off");
   assert.equal(result.hasTreeButtonsSource, true, "3D page should load local script");
   assert.equal(result.babylonLoaded, true, "Babylon CDN should load in browser");
   assert.equal(result.cytoscapeLoaded, true, "Cytoscape CDN should load in browser");
@@ -144,6 +146,39 @@ try {
   });
   assert.equal(contextResult.result?.result?.value?.prevented, true, "right-click contextmenu should be prevented before the browser native menu");
   assert.equal(contextResult.result?.result?.value?.visible, true, "right-clicking a visible node should open the custom context menu");
+  const longPressResult = await cdp.send("Runtime.evaluate", {
+    expression: `(async () => {
+      const canvas = document.getElementById("renderCanvas");
+      const menu = document.getElementById("contextMenu");
+      const point = window.__graphUi3dTest?.firstVisibleNodePoint() || { x: ${rightClickPoint.x}, y: ${rightClickPoint.y} };
+      menu.style.display = "none";
+      canvas.dispatchEvent(new PointerEvent("pointerdown", {
+        bubbles: true,
+        cancelable: true,
+        pointerType: "touch",
+        pointerId: 7,
+        clientX: point.x,
+        clientY: point.y
+      }));
+      await new Promise((resolve) => setTimeout(resolve, 640));
+      canvas.dispatchEvent(new PointerEvent("pointerup", {
+        bubbles: true,
+        cancelable: true,
+        pointerType: "touch",
+        pointerId: 7,
+        clientX: point.x,
+        clientY: point.y
+      }));
+      return {
+        visible: getComputedStyle(menu).display === "block",
+        center: menu.querySelector(".menu-center")?.textContent || ""
+      };
+    })()`,
+    awaitPromise: true,
+    returnByValue: true,
+  });
+  assert.equal(longPressResult.result?.result?.value?.visible, true, "touch long-pressing a visible node should open the custom context menu");
+  assert.ok(longPressResult.result?.result?.value?.center, "context menu should show active node content in the center");
   await cdp.send("Runtime.evaluate", {
     expression: `(() => {
       const labels = document.getElementById("showAllLabels");

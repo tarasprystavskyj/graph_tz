@@ -124,6 +124,7 @@ try {
   assert.match(page.body, /font-awesome\/6\.7\.2/, "3D page should load Font Awesome icons from CDN");
   assert.match(page.body, /contextMenu/, "3D page should include context menu");
   assert.match(page.body, /contextWorkflowState/, "3D context menu should include workflow state selector");
+  assert.match(page.body, /cxtmenu-content/, "3D context menu should inherit cxtmenu-style command content");
   assert.doesNotMatch(page.body, /id="runLayout"/, "3D page should switch layouts directly from select");
   assert.match(page.body, /mark-testing/, "3D context menu should include testing state action");
   assert.match(page.body, /mark-needed/, "3D context menu should include needed state action");
@@ -171,6 +172,12 @@ try {
   assert.match(script.body, /generateTreeText/, "3D script should generate subtree text");
   assert.match(script.body, /showTreeTable/, "3D script should show subtree table");
   assert.match(script.body, /cognitiveLevel/, "3D script should include cognitive-load density control");
+  assert.match(script.body, /visibleLabelBudget/, "3D script should use cognitive-load label budgets");
+  assert.match(script.body, /isNodeInViewport/, "3D script should prioritize labels in the viewport");
+  assert.match(script.body, /cognitiveLevel >= 4 && node\.detail/, "3D labels should add descriptions at high density");
+  assert.match(script.body, /camera\.wheelPrecision = 24/, "3D mouse wheel zoom should be 50 percent more active");
+  assert.match(script.body, /pointerType/, "3D context menu should support touch or pen long-press");
+  assert.match(script.body, /startWithPhysicsPaused/, "3D script should allow browser tests to start with physics paused");
   assert.match(script.body, /runContextSearch/, "3D script should include contextual agent search");
   assert.match(script.body, /saveTestComment/, "3D script should save testing comments");
   assert.match(script.body, /animateCameraToNode/, "3D script should animate node focus camera movement");
@@ -248,6 +255,10 @@ try {
     "task:workflow_status_explainer",
     "task:left_icon_toolbar",
     "task:focus_camera_animation",
+    "task:cxtmenu_style_inheritance",
+    "task:mobile_long_press_menu",
+    "task:zoom_wheel_sensitivity",
+    "task:cognitive_label_density_budget",
   ]) {
     assert.ok(
       learningRawJson.elements.nodes.some((node) => node.data?.id === id && node.data?.is_new === true),

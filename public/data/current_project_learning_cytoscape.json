@@ -724,6 +724,78 @@
         },
         "position": { "x": 2440, "y": -260 },
         "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:cxtmenu_style_inheritance",
+          "_label": "Task: cxtmenu-style radial menu",
+          "name": "Task: cxtmenu-style radial menu",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "context-menu-agent",
+          "detail": "Use the local PHP/Cytoscape prototype as reference and make the Babylon right-click menu inherit the cytoscape.js-cxtmenu style: spotlight center, radial command ring, icons, labels, and workflow-state selector content.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2720, "y": -420 },
+        "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:mobile_long_press_menu",
+          "_label": "Task: mobile long-press menu",
+          "name": "Task: mobile long-press menu",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "mobile-ux-agent",
+          "detail": "For mobile and pen devices, open the same radial context menu with a long press on a graph node, while keeping desktop right-click behavior.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2720, "y": -260 },
+        "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:zoom_wheel_sensitivity",
+          "_label": "Task: 50 percent stronger wheel zoom",
+          "name": "Task: 50 percent stronger wheel zoom",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "3d-agent",
+          "detail": "Make mouse wheel zoom roughly 50 percent more active in Babylon ArcRotateCamera so graph navigation feels closer to the working PHP prototype.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2720, "y": -100 },
+        "classes": "ui active testing box"
+      },
+      {
+        "data": {
+          "id": "task:cognitive_label_density_budget",
+          "_label": "Task: cognitive label density budget",
+          "name": "Task: cognitive label density budget",
+          "type": "box",
+          "group": "ui",
+          "group_label": "Visualization",
+          "status": "active",
+          "work_state": "testing",
+          "owner": "ux-agent",
+          "detail": "Right vertical information slider controls how many labels are visible in the viewport and how much content each label contains. Above 50 percent it starts adding short descriptions to labels.",
+          "is_new": true,
+          "color": "#facc15"
+        },
+        "position": { "x": 2720, "y": 60 },
+        "classes": "ui active testing box"
       }
     ],
     "edges": [
@@ -799,7 +871,16 @@
       { "data": { "id": "e70", "source": "task:dou_article_agent", "target": "data:exports", "label": "documents" } },
       { "data": { "id": "e71", "source": "branch:implementation", "target": "task:right_click_context_fix", "label": "delegates to fixer-agent" } },
       { "data": { "id": "e72", "source": "task:right_click_context_fix", "target": "ui:babylon", "label": "fixes context menu" } },
-      { "data": { "id": "e73", "source": "task:right_click_context_fix", "target": "test:smoke", "label": "adds browser test" } }
+      { "data": { "id": "e73", "source": "task:right_click_context_fix", "target": "test:smoke", "label": "adds browser test" } },
+      { "data": { "id": "e74", "source": "branch:implementation", "target": "task:cxtmenu_style_inheritance", "label": "delegates to context-menu-agent" } },
+      { "data": { "id": "e75", "source": "task:cxtmenu_style_inheritance", "target": "ui:babylon", "label": "styles radial menu" } },
+      { "data": { "id": "e76", "source": "branch:implementation", "target": "task:mobile_long_press_menu", "label": "delegates to mobile-ux-agent" } },
+      { "data": { "id": "e77", "source": "task:mobile_long_press_menu", "target": "ui:babylon", "label": "opens menu" } },
+      { "data": { "id": "e78", "source": "branch:implementation", "target": "task:zoom_wheel_sensitivity", "label": "delegates to 3d-agent" } },
+      { "data": { "id": "e79", "source": "task:zoom_wheel_sensitivity", "target": "ui:babylon", "label": "tunes camera" } },
+      { "data": { "id": "e80", "source": "branch:implementation", "target": "task:cognitive_label_density_budget", "label": "delegates to ux-agent" } },
+      { "data": { "id": "e81", "source": "task:cognitive_label_density_budget", "target": "ui:babylon", "label": "controls labels" } },
+      { "data": { "id": "e82", "source": "task:cognitive_label_density_budget", "target": "test:smoke", "label": "adds assertions" } }
     ]
   }
 }

@@ -3,6 +3,7 @@
 
   const params = new URLSearchParams(window.location.search);
   const graphId = params.get("graph") || "job-apply-full";
+  const startWithPhysicsPaused = ["off", "paused", "false", "0"].includes(String(params.get("physics") || "").toLowerCase());
   const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
   const appUrl = (path) => `${BASE_PATH}${path}`;
   const GRAPH_URL = appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`);
@@ -75,7 +76,7 @@
   let scene;
   let camera;
   let graphState;
-  let physicsPaused = false;
+  let physicsPaused = startWithPhysicsPaused;
   let labelsVisible = false;
   let pinnedNode = null;
   let hoveredNode = null;
@@ -200,7 +201,7 @@
     plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
     plane.isPickable = true;
     plane.metadata = { kind: "node-label", node };
-    plane.setEnabled(labelsVisible);
+    plane.setEnabled(false);
     node.labelPlane = plane;
     loadPreviewImageForLabel(node);
   }
@@ -238,11 +239,14 @@
   function labelMetrics(node) {
     const key = node.visualKey || {};
     const labelLength = String(node.label || "").length;
+    const detailLength = cognitiveLevel >= 4 ? String(node.detail || "").length : 0;
     const keyLength = String(key.label || node.groupLabel || node.group || "").length;
     const keywordLength = (node.keywords || []).slice(0, 4).reduce((sum, item) => sum + String(item.term || "").length, 0);
-    const textWidth = Math.max(labelLength * 18, keyLength * 11, keywordLength * 11);
+    const textWidth = Math.max(labelLength * 18, keyLength * 11, keywordLength * 11, Math.min(80, detailLength) * 9);
     const width = Math.min(1024, Math.max(cognitiveLevel <= 1 ? 260 : 430, 188 + textWidth * (cognitiveLevel >= 4 ? 1.1 : 0.9)));
-    const height = cognitiveLevel <= 1 ? 136 : labelLength > 42 || (node.keywords || []).length ? 248 : 184;
+    const detailHeight = cognitiveLevel >= 5 ? 92 : cognitiveLevel >= 4 ? 54 : 0;
+    const baseHeight = cognitiveLevel <= 1 ? 136 : labelLength > 42 || (node.keywords || []).length ? 248 : 184;
+    const height = Math.min(372, baseHeight + detailHeight);
     return {
       width,
       height,
@@ -280,10 +284,19 @@
     const available = width - textX - 30;
     const lines = wrapText(ctx, String(node.label || node.id), available, cognitiveLevel >= 4 && height > 190 ? 2 : 1);
     lines.forEach((line, index) => ctx.fillText(line, textX, 66 + index * 36));
+    let lowerY = height - 62;
+    if (cognitiveLevel >= 4 && node.detail) {
+      ctx.fillStyle = "#334155";
+      ctx.font = "20px Arial";
+      const maxDetailLines = cognitiveLevel >= 5 ? 2 : 1;
+      const detailLines = wrapText(ctx, String(node.detail), available, maxDetailLines);
+      detailLines.forEach((line, index) => ctx.fillText(line, textX, 132 + index * 27));
+      lowerY = height - 66;
+    }
     if (cognitiveLevel >= 2) {
       ctx.fillStyle = "#475569";
       ctx.font = "22px Arial";
-      ctx.fillText(fitText(ctx, String(key.label || node.groupLabel || node.group || "visual key"), available), textX, height - 62);
+      ctx.fillText(fitText(ctx, String(key.label || node.groupLabel || node.group || "visual key"), available), textX, lowerY);
     }
     if (cognitiveLevel >= 3) drawKeywordPills(ctx, node, textX, height - 38, available);
     texture.update();
@@ -719,6 +732,53 @@
     hoverLabel.style.display = "block";
   }
 
+  function visibleLabelBudget() {
+    if (!labelsVisible) return 0;
+    if (cognitiveLevel <= 1) return 0;
+    if (cognitiveLevel === 2) return 8;
+    if (cognitiveLevel === 3) return 18;
+    if (cognitiveLevel === 4) return 36;
+    return Number.POSITIVE_INFINITY;
+  }
+
+  function isNodeInViewport(node) {
+    if (!node?.mesh?.isEnabled?.()) return false;
+    const point = screenPointFor(node.mesh);
+    return point.x >= 0 && point.x <= window.innerWidth && point.y >= 0 && point.y <= window.innerHeight;
+  }
+
+  function labelPriority(node) {
+    let score = node.degree || 0;
+    if (node === pinnedNode) score += 1000;
+    if (node === hoveredNode) score += 600;
+    if (node.contextScore > 0) score += 120 + node.contextScore * 20;
+    if (isUnseenNewNode(node)) score += 90;
+    if (["testing", "needed"].includes(node.workState)) score += 55;
+    if (["ready_for_test", "testing_agent"].includes(node.workflowState)) score += 45;
+    if (isNodeInViewport(node)) score += 25;
+    return score;
+  }
+
+  function updateLabelVisibility() {
+    if (!graphState) return;
+    const budget = visibleLabelBudget();
+    const visibleLabels = new Set();
+    if (budget > 0) {
+      const visibleNodes = graphState.nodes.filter((node) => node.visibleByFilter && node.labelPlane);
+      const inViewport = visibleNodes.filter(isNodeInViewport);
+      const pool = inViewport.length >= Math.min(budget, visibleNodes.length) ? inViewport : visibleNodes;
+      pool
+        .sort((a, b) => labelPriority(b) - labelPriority(a))
+        .slice(0, budget)
+        .forEach((node) => visibleLabels.add(node.id));
+      if (pinnedNode?.visibleByFilter) visibleLabels.add(pinnedNode.id);
+      if (hoveredNode?.visibleByFilter) visibleLabels.add(hoveredNode.id);
+    }
+    for (const node of graphState.nodes) {
+      if (node.labelPlane) node.labelPlane.setEnabled(visibleLabels.has(node.id));
+    }
+  }
+
   function applyFilters() {
     const search = activeSearch.trim().toLowerCase();
     for (const node of graphState.nodes) {
@@ -728,7 +788,6 @@
         && node.degree >= activeDegree
         && (!search || text.includes(search));
       node.mesh.setEnabled(node.visibleByFilter);
-      if (node.labelPlane) node.labelPlane.setEnabled(labelsVisible && node.visibleByFilter);
       if (node.visibleByFilter && node.contextScore > 0) {
         node.material.emissiveColor = hexToColor3(node.contextScore >= 4 ? "#facc15" : "#2563eb").scale(0.62);
         node.mesh.renderOutline = true;
@@ -740,6 +799,7 @@
         applyNodeWorkState(node);
       }
     }
+    updateLabelVisibility();
 
     for (const edge of graphState.edges) {
       const source = graphState.nodeById.get(edge.source);
@@ -803,6 +863,7 @@
 
   function refreshLabels() {
     for (const node of graphState.nodes) refreshLabel(node);
+    updateLabelVisibility();
   }
 
   function resetGraphLayout() {
@@ -856,8 +917,8 @@
     for (const item of graphState.nodes) {
       item.visibleByFilter = linked.has(item.id);
       item.mesh.setEnabled(item.visibleByFilter);
-      if (item.labelPlane) item.labelPlane.setEnabled(labelsVisible && item.visibleByFilter);
     }
+    updateLabelVisibility();
     for (const edge of graphState.edges) {
       edge.mesh.setEnabled(linked.has(edge.source) && linked.has(edge.target));
     }
@@ -1101,7 +1162,7 @@
     camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2.45, Math.PI / 2.9, 128, BABYLON.Vector3.Zero(), scene);
     camera.lowerRadiusLimit = 18;
     camera.upperRadiusLimit = 260;
-    camera.wheelPrecision = 36;
+    camera.wheelPrecision = 24;
     camera.panningSensibility = 70;
     camera.attachControl(canvas, true);
     new BABYLON.HemisphericLight("hemispheric", new BABYLON.Vector3(0.2, 1, 0.3), scene).intensity = 0.82;
@@ -1109,6 +1170,7 @@
     engine.runRenderLoop(() => {
       frameTick += 1;
       if (frameTick % 18 === 0) refreshAnimatedLabels();
+      if (labelsVisible && frameTick % 45 === 0) updateLabelVisibility();
       updateCameraTween();
       stepPhysics();
       updateLabelPositions();
@@ -1140,6 +1202,12 @@
     event?.stopPropagation?.();
     contextNode = node;
     contextWorkflowState.value = node.workflowState || "not_done";
+    const center = contextMenu.querySelector(".menu-center");
+    if (center) {
+      const title = String(node.label || node.id);
+      const state = workflowStateFor(node.workflowState);
+      center.textContent = `${title.slice(0, 34)}${title.length > 34 ? "..." : ""}\n${state?.label || node.status || "node"}`;
+    }
     const x = Math.min(Math.max(event.clientX, 112), window.innerWidth - 112);
     const y = Math.min(Math.max(event.clientY, 112), window.innerHeight - 112);
     contextMenu.style.left = `${x}px`;
@@ -1174,6 +1242,32 @@
   }
 
   function wirePointerEvents() {
+    let longPressTimer = null;
+    let longPressStart = null;
+    const clearLongPress = () => {
+      if (longPressTimer) window.clearTimeout(longPressTimer);
+      longPressTimer = null;
+      longPressStart = null;
+    };
+    canvas.addEventListener("pointerdown", (event) => {
+      if (!["touch", "pen"].includes(event.pointerType)) return;
+      const node = pickNodeAtClientPoint(event.clientX, event.clientY);
+      if (!node) return;
+      longPressStart = { x: event.clientX, y: event.clientY, node };
+      longPressTimer = window.setTimeout(() => {
+        event.preventDefault();
+        showContextMenu(event, node);
+        longPressTimer = null;
+      }, 560);
+    }, true);
+    canvas.addEventListener("pointermove", (event) => {
+      if (!longPressStart) return;
+      const dx = event.clientX - longPressStart.x;
+      const dy = event.clientY - longPressStart.y;
+      if (Math.hypot(dx, dy) > 14) clearLongPress();
+    }, true);
+    canvas.addEventListener("pointerup", clearLongPress, true);
+    canvas.addEventListener("pointercancel", clearLongPress, true);
     const suppressNativeContextMenu = (event) => {
       if (event.target === canvas || event.target?.id === "renderCanvas") {
         event.preventDefault();
@@ -1356,7 +1450,8 @@
       if (event.key === "Enter") runContextSearch();
     });
     contextMenu.addEventListener("click", async (event) => {
-      const action = event.target?.dataset?.action;
+      const actionButton = event.target?.closest?.("button[data-action]");
+      const action = actionButton?.dataset?.action;
       contextMenu.style.display = "none";
       if (!contextNode || !action) return;
       if (action === "focus") focusLinkedBranch(contextNode);
@@ -1428,6 +1523,7 @@
       details.innerHTML = `<h1>Babylon.js unavailable</h1><p>This prototype uses the Babylon.js CDN. Start the Node sidecar and allow that CDN script, or vendor Babylon locally later.</p>`;
       return;
     }
+    togglePhysics.checked = !physicsPaused;
     initScene();
     await populateGraphSelect();
     wireControls();
