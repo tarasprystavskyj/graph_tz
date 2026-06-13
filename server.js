@@ -17,6 +17,7 @@ const modulePath = fileURLToPath(import.meta.url);
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const publicDir = resolve(__dirname, "public");
 const dataDir = resolve(__dirname, "data");
+const docsDir = resolve(__dirname, "docs");
 const port = Number(process.env.PORT || 8173);
 const host = process.env.HOST || "127.0.0.1";
 const basePath = normalizeBasePath(process.env.BASE_PATH || "");
@@ -26,6 +27,7 @@ const contentTypes = {
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".md": "text/markdown; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
 };
@@ -188,6 +190,12 @@ function safePublicPath(urlPath) {
   }
 
   const relative = decoded === "/" ? "/babylon-3d.html" : decoded;
+  if (relative === "/README.md") return resolve(__dirname, "README.md");
+  if (relative.startsWith("/docs/")) {
+    const target = resolve(docsDir, "." + normalize(relative.replace("/docs/", "/")));
+    if (target === docsDir || !target.startsWith(docsDir + sep)) return null;
+    return target;
+  }
   const target = resolve(publicDir, "." + normalize(relative));
   if (target !== publicDir && !target.startsWith(publicDir + sep)) {
     return null;
