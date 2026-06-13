@@ -19,6 +19,7 @@ const publicDir = resolve(__dirname, "public");
 const dataDir = resolve(__dirname, "data");
 const port = Number(process.env.PORT || 8173);
 const host = process.env.HOST || "127.0.0.1";
+const basePath = normalizeBasePath(process.env.BASE_PATH || "");
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",
@@ -39,6 +40,19 @@ function sendJson(res, status, payload) {
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store",
   });
+}
+
+function normalizeBasePath(value) {
+  const clean = String(value || "").trim().replace(/\/+$/g, "");
+  if (!clean || clean === "/") return "";
+  return clean.startsWith("/") ? clean : `/${clean}`;
+}
+
+function stripBasePath(pathname) {
+  if (!basePath) return pathname;
+  if (pathname === basePath) return "/";
+  if (pathname.startsWith(`${basePath}/`)) return pathname.slice(basePath.length) || "/";
+  return pathname;
 }
 
 function readRequestBody(req, limit = 10 * 1024 * 1024) {
@@ -356,8 +370,9 @@ async function serveExport(res, format) {
 export function createServer() {
   return createHttpServer(async (req, res) => {
     const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+    const routePath = stripBasePath(requestUrl.pathname);
 
-    const editMatch = requestUrl.pathname.match(/^\/api\/graph-edits\/([a-z0-9-]+)\/(.+)$/);
+    const editMatch = routePath.match(/^\/api\/graph-edits\/([a-z0-9-]+)\/(.+)$/);
     if (req.method === "POST" && editMatch) {
       await saveGraphEdit(res, req, editMatch[1], decodeURIComponent(editMatch[2]));
       return;
@@ -368,8 +383,8 @@ export function createServer() {
       return;
     }
 
-    if (requestUrl.pathname.startsWith("/graph-data/uploads/")) {
-      const target = resolve(dataDir, "." + normalize(requestUrl.pathname.replace("/graph-data/", "/")));
+    if (routePath.startsWith("/graph-data/uploads/")) {
+      const target = resolve(dataDir, "." + normalize(routePath.replace("/graph-data/", "/")));
       if (!target.startsWith(dataDir + sep)) {
         send(res, 403, "Forbidden", { "content-type": "text/plain; charset=utf-8" });
         return;
@@ -387,7 +402,7 @@ export function createServer() {
       return;
     }
 
-    if (requestUrl.pathname === "/api/graphs") {
+    if (routePath === "/api/graphs") {
       sendJson(
         res,
         200,
@@ -401,42 +416,42 @@ export function createServer() {
       return;
     }
 
-    if (requestUrl.pathname === "/api/superpower-flow") {
+    if (routePath === "/api/superpower-flow") {
       sendJson(res, 200, defaultSuperpowerFlow);
       return;
     }
 
-    const modelMatch = requestUrl.pathname.match(/^\/api\/graph-model\/([a-z0-9-]+)$/);
+    const modelMatch = routePath.match(/^\/api\/graph-model\/([a-z0-9-]+)$/);
     if (modelMatch) {
       await serveGraphModel(res, modelMatch[1]);
       return;
     }
 
-    const graphExportMatch = requestUrl.pathname.match(/^\/api\/exports\/([a-z0-9-]+)\/(markmap|opml|freemind)$/);
+    const graphExportMatch = routePath.match(/^\/api\/exports\/([a-z0-9-]+)\/(markmap|opml|freemind)$/);
     if (graphExportMatch) {
       await serveMindmapExport(res, graphExportMatch[1], graphExportMatch[2]);
       return;
     }
 
-    const graphMatch = requestUrl.pathname.match(/^\/api\/graphs\/([a-z0-9-]+)$/);
+    const graphMatch = routePath.match(/^\/api\/graphs\/([a-z0-9-]+)$/);
     if (graphMatch) {
       await serveGraph(res, graphMatch[1]);
       return;
     }
 
-    const normalizedGraphMatch = requestUrl.pathname.match(/^\/api\/normalized-graphs\/([a-z0-9-]+)$/);
+    const normalizedGraphMatch = routePath.match(/^\/api\/normalized-graphs\/([a-z0-9-]+)$/);
     if (normalizedGraphMatch) {
       await serveNormalizedGraph(res, normalizedGraphMatch[1]);
       return;
     }
 
-    const fileExportMatch = requestUrl.pathname.match(/^\/api\/exports\/([a-z0-9.-]+)$/);
+    const fileExportMatch = routePath.match(/^\/api\/exports\/([a-z0-9.-]+)$/);
     if (fileExportMatch) {
       await serveExport(res, fileExportMatch[1]);
       return;
     }
 
-    await serveStatic(res, requestUrl.pathname);
+    await serveStatic(res, routePath);
   });
 }
 
@@ -445,7 +460,7 @@ export function startServer(listenPort = port, listenHost = host) {
   server.listen(listenPort, listenHost, () => {
     const address = server.address();
     const actualPort = typeof address === "object" && address ? address.port : listenPort;
-    console.log(`Graph UI server listening on http://${listenHost}:${actualPort}/babylon-3d.html`);
+    console.log(`Graph UI server listening on http://${listenHost}:${actualPort}${basePath}/babylon-3d.html`);
   });
   return server;
 }

@@ -2,7 +2,9 @@
   "use strict";
 
   const graphId = new URLSearchParams(window.location.search).get("graph") || "job-apply-full";
-  const model = await fetch(`/api/graph-model/${encodeURIComponent(graphId)}`, { cache: "no-store" }).then((res) => res.json());
+  const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
+  const appUrl = (path) => `${BASE_PATH}${path}`;
+  const model = await fetch(appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" }).then((res) => res.json());
   const board = document.getElementById("board");
   const svg = document.getElementById("edges");
   const minimap = document.getElementById("minimap");

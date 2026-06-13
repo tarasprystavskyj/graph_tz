@@ -49,6 +49,9 @@
     <strong>Readable branch cards</strong>
     This variant tests dense cards, handles, preview keys, and branch metadata before committing to a React Flow dependency.
   </aside>
-  <script src="/js/flow-variant-b.js"></script>
+  <script>
+    window.GRAPH_UI_BASE_PATH = location.pathname.includes("/job_apply_automation/") ? "/job_apply_automation" : "";
+  </script>
+  <script src="./js/flow-variant-b.js"></script>
 </body>
 </html>

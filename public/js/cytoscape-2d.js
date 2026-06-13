@@ -2,7 +2,9 @@
   "use strict";
 
   const graphId = new URLSearchParams(window.location.search).get("graph") || "job-apply-full";
-  const response = await fetch(`/api/graph-model/${encodeURIComponent(graphId)}`, { cache: "no-store" });
+  const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
+  const appUrl = (path) => `${BASE_PATH}${path}`;
+  const response = await fetch(appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`), { cache: "no-store" });
   const model = await response.json();
   const details = document.getElementById("details");
   const status = document.getElementById("status");
@@ -14,7 +16,7 @@
   const searchBox = document.getElementById("searchBox");
   const encodedGraphId = encodeURIComponent(graphId);
 
-  fetch("/api/graphs", { cache: "no-store" })
+  fetch(appUrl("/api/graphs"), { cache: "no-store" })
     .then((res) => res.json())
     .then((graphs) => {
       graphSelect.innerHTML = Object.entries(graphs)
@@ -22,15 +24,15 @@
         .join("");
     });
   graphSelect.addEventListener("change", () => {
-    window.location.href = `/cytoscape-2d.html?graph=${encodeURIComponent(graphSelect.value)}`;
+    window.location.href = appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphSelect.value)}`);
   });
   switch3d.addEventListener("click", () => {
-    window.location.href = `/babylon-3d.html?graph=${encodedGraphId}`;
+    window.location.href = appUrl(`/babylon-3d.html?graph=${encodedGraphId}`);
   });
 
   document.querySelectorAll("[data-export]").forEach((link) => {
     const kind = link.getAttribute("data-export");
-    link.href = kind === "model" ? `/api/graph-model/${encodedGraphId}` : `/api/exports/${encodedGraphId}/${kind}`;
+    link.href = kind === "model" ? appUrl(`/api/graph-model/${encodedGraphId}`) : appUrl(`/api/exports/${encodedGraphId}/${kind}`);
   });
 
   const groups = Object.values(model.groups || {}).sort((a, b) => a.label.localeCompare(b.label));

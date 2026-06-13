@@ -3,7 +3,9 @@
 
   const params = new URLSearchParams(window.location.search);
   const graphId = params.get("graph") || "job-apply-full";
-  const GRAPH_URL = `/api/graph-model/${encodeURIComponent(graphId)}`;
+  const BASE_PATH = window.GRAPH_UI_BASE_PATH || "";
+  const appUrl = (path) => `${BASE_PATH}${path}`;
+  const GRAPH_URL = appUrl(`/api/graph-model/${encodeURIComponent(graphId)}`);
   const INITIAL_SPREAD = 0.044;
   const Z_SPREAD = 46;
   const CENTER_GRAVITY = 0.0035;
@@ -219,13 +221,18 @@
       node.previewImage = image;
       redrawLabelTexture(node);
     };
-    image.src = ref;
+    image.src = assetUrl(ref);
   }
 
   function imagePreviewRef(node) {
     if (node.visualKey?.artifactRef && String(node.visualKey.type || "").startsWith("image/")) return node.visualKey.artifactRef;
     const latestImage = [...(node.attachments || [])].reverse().find((item) => String(item.type || "").startsWith("image/"));
     return latestImage?.url || "";
+  }
+
+  function assetUrl(ref) {
+    if (!ref || /^https?:\/\//i.test(ref)) return ref || "";
+    return ref.startsWith("/") ? appUrl(ref) : ref;
   }
 
   function labelMetrics(node) {
@@ -488,7 +495,7 @@
       node.owner ? `owner: ${node.owner}` : "",
     ].filter(Boolean);
     const attachments = (node.attachments || [])
-      .map((item) => `<a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">${escapeHtml(item.name)}</a>`)
+      .map((item) => `<a href="${escapeHtml(assetUrl(item.url))}" target="_blank" rel="noreferrer">${escapeHtml(item.name)}</a>`)
       .join("");
     const comments = (node.testComments || [])
       .map((item) => `<p><strong>${escapeHtml(item.role || "human")}:</strong> ${escapeHtml(item.text)} <span class="muted">${escapeHtml(item.createdAt || "")}</span></p>`)
@@ -571,7 +578,7 @@
       attachments: [],
       testComments: [{ text: clean, role }],
     };
-    const response = await fetch(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`, {
+    const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
@@ -663,7 +670,7 @@
         seenAt: node.seenAt || "",
         attachments,
       };
-      const response = await fetch(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`, {
+      const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
@@ -809,13 +816,13 @@
   }
 
   async function populateGraphSelect() {
-    const response = await fetch("/api/graphs", { cache: "no-store" });
+    const response = await fetch(appUrl("/api/graphs"), { cache: "no-store" });
     const graphs = await response.json();
     graphSelect.innerHTML = Object.entries(graphs)
       .map(([id, graph]) => `<option value="${escapeHtml(id)}"${id === graphId ? " selected" : ""}>${escapeHtml(graph.label)}</option>`)
       .join("");
     graphSelect.addEventListener("change", () => {
-      window.location.href = `/babylon-3d.html?graph=${encodeURIComponent(graphSelect.value)}`;
+      window.location.href = appUrl(`/babylon-3d.html?graph=${encodeURIComponent(graphSelect.value)}`);
     });
   }
 
@@ -1145,7 +1152,7 @@
     applyNodeWorkState(node);
     refreshLabel(node);
     showNodeDetails(node);
-    const response = await fetch(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`, {
+    const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -1271,7 +1278,7 @@
       topbar.classList.toggle("collapsed");
     });
     switchView.addEventListener("click", () => {
-      window.location.href = `/cytoscape-2d.html?graph=${encodeURIComponent(graphId)}`;
+      window.location.href = appUrl(`/cytoscape-2d.html?graph=${encodeURIComponent(graphId)}`);
     });
     layoutSelect.addEventListener("change", runCytoscapeLayout);
     togglePhysics.addEventListener("change", () => {
@@ -1360,7 +1367,7 @@
     node.workflowState = workflowState;
     refreshLabel(node);
     showNodeDetails(node);
-    const response = await fetch(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`, {
+    const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -1378,7 +1385,7 @@
   async function markNodeSeen(node) {
     node.seenAt = new Date().toISOString();
     refreshLabel(node);
-    const response = await fetch(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`, {
+    const response = await fetch(appUrl(`/api/graph-edits/${encodeURIComponent(graphId)}/${encodeURIComponent(node.id)}`), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

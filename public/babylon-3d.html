@@ -564,6 +564,9 @@
 
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script src="https://unpkg.com/cytoscape@3.34.0/dist/cytoscape.min.js"></script>
-  <script src="/js/babylon-3d.js"></script>
+  <script>
+    window.GRAPH_UI_BASE_PATH = location.pathname.includes("/job_apply_automation/") ? "/job_apply_automation" : "";
+  </script>
+  <script src="./js/babylon-3d.js"></script>
 </body>
 </html>

@@ -47,14 +47,17 @@
       Filter first, then inspect one node or its linked neighborhood.
     </div>
     <div class="exports">
-      <a data-export="markmap" href="/api/exports/job-apply-full/markmap">Markmap MD</a>
-      <a data-export="opml" href="/api/exports/job-apply-full/opml">OPML</a>
-      <a data-export="freemind" href="/api/exports/job-apply-full/freemind">FreeMind MM</a>
-      <a data-export="model" href="/api/graph-model/job-apply-full">Graph model JSON</a>
+      <a data-export="markmap" href="./api/exports/job-apply-full/markmap">Markmap MD</a>
+      <a data-export="opml" href="./api/exports/job-apply-full/opml">OPML</a>
+      <a data-export="freemind" href="./api/exports/job-apply-full/freemind">FreeMind MM</a>
+      <a data-export="model" href="./api/graph-model/job-apply-full">Graph model JSON</a>
     </div>
   </section>
   <div id="status" class="status">Loading graph.</div>
   <script src="https://unpkg.com/cytoscape@3.34.0/dist/cytoscape.min.js"></script>
-  <script src="/js/cytoscape-2d.js"></script>
+  <script>
+    window.GRAPH_UI_BASE_PATH = location.pathname.includes("/job_apply_automation/") ? "/job_apply_automation" : "";
+  </script>
+  <script src="./js/cytoscape-2d.js"></script>
 </body>
 </html>
