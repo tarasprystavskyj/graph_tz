@@ -260,6 +260,7 @@
   function drawLabelTexture(texture, node, metrics) {
     const ctx = texture.getContext();
     const key = node.visualKey || {};
+    const level = Math.max(1, Math.min(cognitiveLevel, node.detailLevel || cognitiveLevel));
     const width = metrics.width;
     const height = metrics.height;
     const unseen = isUnseenNewNode(node);
@@ -284,23 +285,23 @@
     ctx.textBaseline = "alphabetic";
     const textX = badgeX + badgeSize + 24;
     const available = width - textX - 30;
-    const lines = wrapText(ctx, String(node.label || node.id), available, cognitiveLevel >= 4 && height > 190 ? 2 : 1);
+    const lines = wrapText(ctx, String(node.label || node.id), available, level >= 4 && height > 190 ? 2 : 1);
     lines.forEach((line, index) => ctx.fillText(line, textX, 66 + index * 36));
     let lowerY = height - 62;
-    if (cognitiveLevel >= 4 && node.detail) {
+    if (level >= 4 && node.detail) {
       ctx.fillStyle = "#334155";
       ctx.font = "20px Arial";
-      const maxDetailLines = cognitiveLevel >= 5 ? 2 : 1;
+      const maxDetailLines = level >= 5 ? 2 : 1;
       const detailLines = wrapText(ctx, String(node.detail), available, maxDetailLines);
       detailLines.forEach((line, index) => ctx.fillText(line, textX, 132 + index * 27));
       lowerY = height - 66;
     }
-    if (cognitiveLevel >= 2) {
+    if (level >= 2) {
       ctx.fillStyle = "#475569";
       ctx.font = "22px Arial";
       ctx.fillText(fitText(ctx, String(key.label || node.groupLabel || node.group || "visual key"), available), textX, lowerY);
     }
-    if (cognitiveLevel >= 3) drawKeywordPills(ctx, node, textX, height - 38, available);
+    if (level >= 3) drawKeywordPills(ctx, node, textX, height - 38, available, level);
     texture.update();
   }
 
@@ -328,8 +329,8 @@
     ctx.stroke();
   }
 
-  function drawKeywordPills(ctx, node, x, y, maxWidth) {
-    const keywords = (node.keywords || []).slice(0, Math.max(1, cognitiveLevel));
+  function drawKeywordPills(ctx, node, x, y, maxWidth, level) {
+    const keywords = (node.keywords || []).slice(0, Math.max(1, level));
     let cursor = x;
     ctx.font = "bold 17px Arial";
     for (const keyword of keywords) {
@@ -1171,6 +1172,7 @@
     engine.runRenderLoop(() => {
       frameTick += 1;
       if (frameTick % 18 === 0) refreshAnimatedLabels();
+      if (labelsVisible && frameTick % 18 === 0) updateLabelDetailLevels();
       if (labelsVisible && frameTick % 45 === 0) updateLabelVisibility();
       updateCameraTween();
       stepPhysics();
@@ -1185,6 +1187,26 @@
       const state = workflowStateFor(node.workflowState);
       if ((state?.animateTo || isUnseenNewNode(node) || node.contextScore > 0) && node.labelPlane?.isEnabled()) redrawLabelTexture(node);
     }
+  }
+
+  function updateLabelDetailLevels() {
+    if (!camera || !graphState) return;
+    const visible = graphState.nodes.filter((node) => node.labelPlane?.isEnabled());
+    if (!visible.length) return;
+    const maxLevel = Math.max(1, cognitiveLevel);
+    const byDistance = visible
+      .map((node) => ({ node, distance: BABYLON.Vector3.Distance(camera.position, node.position) }))
+      .sort((a, b) => a.distance - b.distance);
+    const count = byDistance.length;
+    byDistance.forEach(({ node, distance }, index) => {
+      const proximity = count > 1 ? 1 - index / (count - 1) : 1;
+      const level = Math.max(1, Math.min(maxLevel, Math.round(1 + proximity * (maxLevel - 1))));
+      if (node.detailLevel !== level) {
+        node.detailLevel = level;
+        node.cameraDistance = distance;
+        redrawLabelTexture(node);
+      }
+    });
   }
 
   function updateLabelPositions() {
@@ -1538,6 +1560,12 @@
       },
       cxtmenuReady() {
         return Boolean(cxtmenuCy && cxtmenuProxy && cxtmenuBridge.querySelector(".cxtmenu"));
+      },
+      labelDetailLevels() {
+        return graphState.nodes
+          .filter((node) => node.labelPlane?.isEnabled())
+          .map((node) => ({ id: node.id, distance: node.cameraDistance, level: node.detailLevel }))
+          .sort((a, b) => a.distance - b.distance);
       },
     };
   }

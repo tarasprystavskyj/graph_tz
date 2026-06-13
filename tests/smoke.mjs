@@ -171,7 +171,8 @@ try {
   assert.match(script.body, /cognitiveLevel/, "3D script should include cognitive-load density control");
   assert.match(script.body, /visibleLabelBudget/, "3D script should use cognitive-load label budgets");
   assert.match(script.body, /isNodeInViewport/, "3D script should prioritize labels in the viewport");
-  assert.match(script.body, /cognitiveLevel >= 4 && node\.detail/, "3D labels should add descriptions at high density");
+  assert.match(script.body, /level >= 4 && node\.detail/, "3D labels should add descriptions at high density");
+  assert.match(script.body, /updateLabelDetailLevels/, "3D script should scale label detail by camera distance");
   assert.match(script.body, /camera\.wheelPrecision = 24/, "3D mouse wheel zoom should be 50 percent more active");
   assert.match(script.body, /initCxtmenuBridge/, "3D script should initialise the cytoscape-cxtmenu bridge");
   assert.match(script.body, /cxttapstart/, "3D script should open cxtmenu on press start");
