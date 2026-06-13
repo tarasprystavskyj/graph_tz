@@ -244,7 +244,11 @@ try {
   }, 5000);
   assert.equal(labelClicked, labelPointResponse.label, "clicking a visible label should load that node's details");
   const consoleErrors = cdp.events.filter((event) => event.method === "Runtime.exceptionThrown");
-  assert.equal(consoleErrors.length, 0, "browser should not report runtime exceptions");
+  assert.equal(
+    consoleErrors.length,
+    0,
+    `browser should not report runtime exceptions: ${consoleErrors.map((event) => event.params?.exceptionDetails?.text || event.params?.exceptionDetails?.exception?.description || "unknown").join(" | ")}`,
+  );
   console.log(`browser CDP smoke ok: ${result.title}; ${result.status}`);
 } finally {
   cdp.close();
